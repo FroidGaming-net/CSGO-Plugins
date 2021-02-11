@@ -6,12 +6,15 @@
 #include <PTaH>
 #include <autoexecconfig>
 #include <multicolors>
+#undef REQUIRE_PLUGIN
+#include <updater>
 
 #pragma newdecls required
 #pragma semicolon 1
 
 #define AUTHOR "ESK0"
-#define VERSION "3.2"
+#define VERSION "3.3"
+#define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -142,8 +145,18 @@ public void OnPluginStart()
 
     AutoExecConfig_ExecuteFile();
     AutoExecConfig_CleanFile();
+
+    if (LibraryExists("updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
+public void OnLibraryAdded(const char[] name)
+{
+    if (StrEqual(name, "updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
+}
 
 public void OnClientPostAdminCheck(int client)
 {

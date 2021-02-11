@@ -13,7 +13,7 @@
 
 #undef REQUIRE_PLUGIN
 #include "include/updater.inc"
-#define UPDATE_URL "https://sys.froidgaming.net/PUGSetup/updatefile.txt"
+#define UPDATE_URL "https://sys.froidgaming.net/PUG/updatefile.txt"
 
 #define ALIAS_LENGTH 64
 #define COMMAND_LENGTH 64
@@ -35,7 +35,6 @@ ConVar g_AllowCustomReadyMessageCvar;
 ConVar g_AnnounceCountdownCvar;
 ConVar g_AutoRandomizeCaptainsCvar;
 ConVar g_AutoSetupCvar;
-ConVar g_AutoUpdateCvar;
 ConVar g_CvarVersionCvar;
 ConVar g_DemoNameFormatCvar;
 ConVar g_DemoTimeFormatCvar;
@@ -233,9 +232,6 @@ public void OnPluginStart() {
   g_AutoSetupCvar =
       CreateConVar("sm_pugsetup_autosetup", "1",
                    "Whether a pug is automatically setup using the default setup options or not.");
-  g_AutoUpdateCvar = CreateConVar(
-      "sm_pugsetup_autoupdate", "0",
-      "Whether the plugin may (if the \"Updater\" plugin is loaded) automatically update.");
   g_DemoNameFormatCvar = CreateConVar(
       "sm_pugsetup_demo_name_format", "pug_{TIME}_{MAP}",
       "Naming scheme for demos. You may use {MAP}, {TIME}, and {TEAMSIZE}. Make sure there are no spaces or colons in this.");
@@ -251,7 +247,7 @@ public void OnPluginStart() {
   g_EchoReadyMessagesCvar = CreateConVar("sm_pugsetup_echo_ready_messages", "1",
                                          "Whether to print to chat when clients ready/unready.");
   g_ExcludedMaps = CreateConVar(
-      "sm_pugsetup_excluded_maps", "0",
+      "sm_pugsetup_excluded_maps", "1",
       "Number of past maps to exclude from map votes. Setting this to 0 disables this feature.");
   g_ExcludeSpectatorsCvar = CreateConVar(
       "sm_pugsetup_exclude_spectators", "1",
@@ -283,7 +279,7 @@ public void OnPluginStart() {
       "sm_pugsetup_message_prefix", "[{YELLOW}FroidGaming.net{NORMAL}]",
       "The tag applied before plugin messages. If you want no tag, you can set an empty string here.");
   g_MutualUnpauseCvar = CreateConVar(
-      "sm_pugsetup_mutual_unpausing", "1",
+      "sm_pugsetup_mutual_unpausing", "0",
       "Whether an unpause command requires someone from both teams to fully unpause the match. Note that this forces the pause/unpause commands to be unrestricted (so anyone can use them).");
   g_PausingEnabledCvar =
       CreateConVar("sm_pugsetup_pausing_enabled", "0", "Whether pausing is allowed.");
@@ -457,10 +453,14 @@ public void OnPluginStart() {
   Format(g_CacheFile, sizeof(g_CacheFile), "%s/cache.cfg", g_DataDir);
 
   /** Updater support **/
-  if (GetConVarInt(g_AutoUpdateCvar) != 0) {
-    if (LibraryExists("updater")) {
-      Updater_AddPlugin(UPDATE_URL);
-    }
+  // if (GetConVarInt(g_AutoUpdateCvar) != 0) {
+  //   if (LibraryExists("updater")) {
+  //     Updater_AddPlugin(UPDATE_URL);
+  //   }
+  // }
+
+  if (LibraryExists("updater")) {
+    Updater_AddPlugin(UPDATE_URL);
   }
 }
 
@@ -496,10 +496,13 @@ public void OnConfigsExecuted() {
 }
 
 public void OnLibraryAdded(const char[] name) {
-  if (GetConVarInt(g_AutoUpdateCvar) != 0) {
-    if (LibraryExists("updater")) {
-      Updater_AddPlugin(UPDATE_URL);
-    }
+  // if (GetConVarInt(g_AutoUpdateCvar) != 0) {
+  //   if (LibraryExists("updater")) {
+  //     Updater_AddPlugin(UPDATE_URL);
+  //   }
+  // }
+  if (LibraryExists("updater")) {
+    Updater_AddPlugin(UPDATE_URL);
   }
 }
 
@@ -1724,7 +1727,7 @@ public int TeamVote_Callback(Menu hMenu, MenuAction mAction, int iClient, int iS
       case MenuAction_End:
       {
         hMenu.Close();
-      } 
+      }
     }
 }
 

@@ -1,7 +1,14 @@
 /* SM Includes */
 #include <sourcemod>
 #include <cstrike>
+#include <sdkhooks>
+#include <sdktools>
+#include <sdktools_functions>
+#include <PTaH>
 #include <ripext>
+#include <eItems>
+#include <multicolors>
+#include <geoip>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -10,7 +17,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidAgents/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -30,6 +37,8 @@ public Plugin myinfo =
 	url = "https://froidgaming.net"
 };
 
+static const char sCEconEntity[] = "CEconEntity";
+
 public void OnPluginStart()
 {
 	RegConsoleCmd("sm_agent", Call_MenuAgents);
@@ -38,16 +47,57 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_operators", Call_MenuAgents);
 	RegConsoleCmd("sm_sff", Call_MenuAgents);
 
-    // HookEvent("player_spawn", Event_PlayerSpawn);
+	HookEvent("player_spawn", Event_PlayerSpawn);
+
+	PTaH(PTaH_InventoryUpdatePost, Hook, OnInventoryUpdatePost);
+
+	m_Item = FindSendPropInfo(sCEconEntity, "m_Item");
+	m_iItemDefinitionIndex = FindSendPropInfo(sCEconEntity, "m_iItemDefinitionIndex") - m_Item;
+	GameData hGameData = new GameData("agent_chooser.game.csgo");
+
+	if(!hGameData)
+	{
+		SetFailState("Couldn't find \"agent_chooser.game.csgo.txt\" gamedata");
+	}
+
+	// m_LoadoutItems = hGameData.GetOffset("CCSPlayerInventory::m_LoadoutItems");		// Clear agent item id - not work!!!
+
+	StartPrepSDKCall(SDKCall_Raw);		// CPlayerInventory
+	PrepSDKCall_SetFromConf(hGameData, SDKConf_Signature, "SetDefaultEquippedDefinitionItemBySlot");		// void
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);		// int iClass
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);		// int iSlot
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);		// unsigned __int16 iDefIndex
+
+	if(!(g_hSetDefaultEquippedDefinitionItemBySlot = EndPrepSDKCall()))
+	{
+		SetFailState("Failed to get \"SetDefaultEquippedDefinitionItemBySlot\" function");
+	}
+
+	hGameData.Close();
 
 	httpClient = new HTTPClient("https://froidgaming.net");
 
 	reloadPlugins();
+
+	if (eItems_AreItemsSynced()) {
+		eItems_OnItemsSynced();
+	}
+
     CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
 
 	if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
+}
+
+/// Reload Detected
+public void reloadPlugins()
+{
+	for (int i = 1; i < MAXPLAYERS; i++) {
+		if (IsValidClient(i)) {
+			OnClientPostAdminCheck(i);
+		}
+	}
 }
 
 public void OnLibraryAdded(const char[] name)
@@ -69,20 +119,9 @@ public Action Timer_Repeat(Handle hTimer)
     }
 }
 
-/// Reload Detected
-public void reloadPlugins() {
-	for (int i = 1; i < MAXPLAYERS; i++) {
-		if (IsValidClient(i)) {
-			OnClientPostAdminCheck(i);
-		}
-	}
-}
-
-public void OnMapStart() {
-	char sModel[PLATFORM_MAX_PATH] = "models/weapons/v_models/arms/glove_hardknuckle/v_glove_hardknuckle_black.mdl";
-	if (!IsModelPrecached(sModel)) {
-		PrecacheModel(sModel);
-	}
+public void eItems_OnItemsSynced()
+{
+    g_iAgentsCount = eItems_GetAgentsCount();
 }
 
 public void OnClientPostAdminCheck(int iClient)
@@ -92,6 +131,13 @@ public void OnClientPostAdminCheck(int iClient)
     }
 
 	g_PlayerData[iClient].Reset();
+	g_PlayerData[iClient].pInventory = PTaH_GetPlayerInventory(iClient);
+
+	// GeoIP
+    char sIP[64], sCountryCode[3];
+    GetClientIP(iClient, sIP, sizeof(sIP));
+    GeoipCode2(sIP, sCountryCode);
+    Format(g_PlayerData[iClient].sCountryCode, sizeof(g_PlayerData[].sCountryCode), sCountryCode);
 
 	// API
 	char sAuthID[64], sUrl[128];
@@ -107,15 +153,14 @@ public void OnClientDisconnect(int iClient)
     }
 
 	// Update Agents
-	if(g_PlayerData[iClient].iAgentLoaded == 1)
-	{
+	if (g_PlayerData[iClient].iAgentLoaded == 1) {
 		char sAuthID[64], sUrl[128];
 		GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
 		Format(sUrl, sizeof(sUrl), "api/agent/%s", sAuthID);
 
 		JSONObject jsondata = new JSONObject();
-		jsondata.SetInt("ct_agent", g_PlayerData[iClient].iAgentCT);
-		jsondata.SetInt("t_agent", g_PlayerData[iClient].iAgentT);
+		jsondata.SetInt("t_agent", g_PlayerData[iClient].iAgent[0]);
+		jsondata.SetInt("ct_agent", g_PlayerData[iClient].iAgent[1]);
 		httpClient.Put(sUrl, jsondata, OnUpdateAgent);
 
 		delete jsondata;
@@ -124,53 +169,23 @@ public void OnClientDisconnect(int iClient)
 	g_PlayerData[iClient].Reset();
 }
 
-public Action MdlCh_PlayerSpawn(int iClient, bool bCustom, char[] sModel, int iModel_maxlen, char[] sVo_prefix, int iPrefix_maxlen)
+void OnInventoryUpdatePost(int iClient, CCSPlayerInventory pInventory)
 {
-	if (bCustom) {
-		return Plugin_Continue;
-	}
+	g_PlayerData[iClient].SetAgentSkin(iClient, CS_TEAM_T);
+	g_PlayerData[iClient].SetAgentSkin(iClient, CS_TEAM_CT);
+}
 
-	int iTeams = GetClientTeam(iClient);
-	if (iTeams == CS_TEAM_CT) {						
-		if(strlen(GetAgentModelFromId(g_PlayerData[iClient].iAgentCT)) > 1) {
-			strcopy(sModel, iModel_maxlen, GetAgentModelFromId(g_PlayerData[iClient].iAgentCT));
-			strcopy(sVo_prefix, iPrefix_maxlen, GetAgentModelFromId(g_PlayerData[iClient].iAgentCT, 1));
-			SetEntPropString(iClient, Prop_Send, "m_szArmsModel", "models/weapons/v_models/arms/glove_hardknuckle/v_glove_hardknuckle_black.mdl");
-			return Plugin_Changed;
-		}
-	} else if(iTeams == CS_TEAM_T) {
-		if(strlen(GetAgentModelFromId(g_PlayerData[iClient].iAgentT)) > 1) {
-			strcopy(sModel, iModel_maxlen, GetAgentModelFromId(g_PlayerData[iClient].iAgentT));
-			strcopy(sVo_prefix, iPrefix_maxlen, GetAgentModelFromId(g_PlayerData[iClient].iAgentT, 1));
+public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
+{
+	int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
 
-			return Plugin_Changed;
+	if (IsValidClient(iClient)) {
+		int iTeam = event.GetInt("teamnum");
+
+		if(iTeam < 2) {
+			g_PlayerData[iClient].pInventory = PTaH_GetPlayerInventory(iClient);
 		}
-	}
+    }
 
 	return Plugin_Continue;
 }
-
-// public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
-// {
-// 	int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
-// 	if (!IsValidClient(iClient)) {
-//         return Plugin_Continue;
-//     }
-
-// 	char sModel[PLATFORM_MAX_PATH];
-// 	int iTeams = GetClientTeam(iClient);
-// 	if (iTeams == 3) {
-// 		if (!StrEqual(sModel, GetAgentModelFromId(g_PlayerData[iClient].iAgentCT))) {
-// 			if(strlen(GetAgentModelFromId(g_PlayerData[iClient].iAgentCT)) > 1) {
-// 				SetEntityModel(iClient, GetAgentModelFromId(g_PlayerData[iClient].iAgentCT));
-// 			}
-// 		}
-// 	} else if(iTeams == 2) {
-// 		if (!StrEqual(sModel, GetAgentModelFromId(g_PlayerData[iClient].iAgentT))) {
-// 			if(strlen(GetAgentModelFromId(g_PlayerData[iClient].iAgentT)) > 1) {
-// 				SetEntityModel(iClient, GetAgentModelFromId(g_PlayerData[iClient].iAgentT));
-// 			}
-// 		}
-// 	}
-// 	return Plugin_Continue;
-// }

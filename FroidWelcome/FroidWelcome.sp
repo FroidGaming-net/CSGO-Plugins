@@ -8,7 +8,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidWelcome/updatefile.txt"
 
 #include "files/globals.sp"
@@ -51,14 +51,14 @@ public void OnClientPutInServer(int iClient)
     if (iClient == 0 || IsFakeClient(iClient) || IsClientSourceTV(iClient)) {
         return;
     }
-    
+
     //Data
     // g_bMessagesShown[iClient] = false;
 
     //Get Server Name
     char sServerName[64];
     cServerName.GetString(sServerName, sizeof(sServerName));
-    
+
     if (g_bGetData == false) {
         //Get Server IP and Port
         char Status[1024];
@@ -86,7 +86,7 @@ public void OnClientPutInServer(int iClient)
     //Get Current Map
     char sMap[64];
     GetCurrentMap(sMap, sizeof(sMap));
-    
+
     //Get Current datetime
     char sTime[64];
     FormatTime(sTime, sizeof(sTime), "%I:%M:%S %p %d/%m/%Y %Z", GetTime());
@@ -116,19 +116,19 @@ public void OnClientPutInServer(int iClient)
 // public void Event_OnPlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 // {
 // 	int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
-	
+
 // 	if (iClient == 0 || IsFakeClient(iClient) || IsClientSourceTV(iClient))
 // 	{
 // 		return;
 // 	}
-	
+
 // 	CreateTimer(0.2, Timer_DelaySpawn, GetClientUserId(iClient), TIMER_FLAG_NO_MAPCHANGE);
 // }
 
 // public Action Timer_DelaySpawn(Handle timer, any data)
 // {
 // 	int iClient = GetClientOfUserId(data);
-	
+
 // 	if (iClient == 0 || !IsPlayerAlive(iClient) || g_bMessagesShown[iClient])
 // 	{
 // 		return Plugin_Continue;

@@ -24,8 +24,11 @@ void OnGetAgent(HTTPResponse response, any value)
         g_PlayerData[iClient].iAgentLoaded = 1;
 
         JSONObject jsondata2 = view_as<JSONObject>(jsondata.Get("data"));
-        g_PlayerData[iClient].iAgentCT = jsondata2.GetInt("ct_agent");
-        g_PlayerData[iClient].iAgentT = jsondata2.GetInt("t_agent");
+        g_PlayerData[iClient].iAgent[0] = jsondata2.GetInt("t_agent");
+        g_PlayerData[iClient].iAgent[1] = jsondata2.GetInt("ct_agent");
+		g_PlayerData[iClient].SetAgentSkin(iClient, CS_TEAM_T);
+		g_PlayerData[iClient].SetAgentSkin(iClient, CS_TEAM_CT);
+
         delete jsondata2;
     } else if (bStatus == false) {
         g_PlayerData[iClient].iAgentLoaded = 0;

@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.3"
+#define VERSION "1.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDefuse/updatefile.txt"
 
 #include "files/globals.sp"
@@ -134,7 +134,7 @@ void AttemptInstantDefuse(int client, int exemptNade = 0)
 	}
 
 	if (!g_bWouldMakeIt)
-	{		
+	{
 		if (hasDefuseKitTeam == true && hasDefuseKit == false) {
 			return;
 		}

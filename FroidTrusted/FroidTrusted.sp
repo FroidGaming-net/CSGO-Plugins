@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidTrusted/updatefile.txt"
 
 #include "files/globals.sp"

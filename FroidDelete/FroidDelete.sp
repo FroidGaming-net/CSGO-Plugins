@@ -8,7 +8,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDelete/updatefile.txt"
 
 #include "files/globals.sp"
@@ -40,7 +40,7 @@ public void OnConfigsExecuted()
 {
 	g_cHostname = FindConVar("hostname");
 	g_cHostname.GetString(g_sHostname, sizeof(g_sHostname));
-	
+
 	if (StrContains(g_sHostname, "PUG") > -1 || StrContains(g_sHostname, "5v5") > -1 || StrContains(g_sHostname, "Retakes") > -1 || StrContains(g_sHostname, "Executes") > -1 || StrContains(g_sHostname, "AWP") > -1 || StrContains(g_sHostname, "Arena") > -1) {
 		/// BOT
 		if (FileExists("botchatter.db")) {

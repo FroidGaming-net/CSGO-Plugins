@@ -1,6 +1,6 @@
 /* SM Includes */
 #include <sourcemod>
-#include <PTaH> 
+#include <PTaH>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidBlock/updatefile.txt"
 
 #include "files/client.sp"
@@ -35,7 +35,7 @@ public void OnPluginStart()
 	AddCommandListener(Command_Block, "explode");
     AddCommandListener(Command_Block, "explodevector");
 	AddCommandListener(Command_Block, "demos");
-	
+
 	AddCommandListener(Command_Block, "ent_create");
     AddCommandListener(Command_Block, "ent_fire");
     AddCommandListener(Command_Block, "ent_teleport");
@@ -69,44 +69,44 @@ public Action ConsolePrint(int iClient, char message[512])
 	if (iClient == 0) {
         return Plugin_Continue;
     }
-	
+
 	if (IsClientValid(iClient) && GetUserFlagBits(iClient) & ADMFLAG_ROOT) {
         return Plugin_Continue;
     }
-		
+
 	if (StrContains(message, ".smx\" ") != -1) {
         return Plugin_Handled;
     } else if(StrContains(message, "To see more, type \"sm plugins", false) != -1 || StrContains(message, "To see more, type \"sm exts", false) != -1) {
 		return Plugin_Handled;
 	}
-	
+
 	return Plugin_Continue;
-	
+
 }
 
-public Action ExecuteStringCommand(int iClient, char message[512]) 
+public Action ExecuteStringCommand(int iClient, char message[512])
 {
 	if (iClient == 0) {
         return Plugin_Continue;
     }
-	
+
 	static char sMessage[512];
 	sMessage = message;
 	TrimString(sMessage);
-		
+
 	if (IsClientValid(iClient) && GetUserFlagBits(iClient) & ADMFLAG_ROOT) {
         return Plugin_Continue;
     }
-		
+
 	if(StrContains(sMessage, "sm ") == 0 || StrEqual(sMessage, "sm", false))
 	{
 		return Plugin_Handled;
 	}
-		
+
 	if(StrContains(sMessage, "meta ") == 0 || StrEqual(sMessage, "meta", false))
 	{
 		return Plugin_Handled;
 	}
-	
+
 	return Plugin_Continue;
 }

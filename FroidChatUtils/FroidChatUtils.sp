@@ -10,7 +10,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidChatUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -29,11 +29,11 @@ public void OnPluginStart()
     AddCommandListener(OnSay, "say_team");
 }
 
-Action OnSay(int iClient, const char[] sCommand, int iArgs) 
-{ 
+Action OnSay(int iClient, const char[] sCommand, int iArgs)
+{
     if (IsValidClient(iClient)) {
-        char sText[4096]; 
-        GetCmdArgString(sText, sizeof(sText)); 
+        char sText[4096];
+        GetCmdArgString(sText, sizeof(sText));
         StripQuotes(sText);
 
         if (GetClientTeam(iClient) == CS_TEAM_NONE) {

@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidHats/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -49,7 +49,7 @@ public void OnPluginStart()
     mp_forcecamera = FindConVar("mp_forcecamera");
 
     Handle hGameConf;
-	
+
 	hGameConf = LoadGameConfigFile("sdktools.games");
 	if (hGameConf == INVALID_HANDLE) {
         SetFailState("Gamedata file sdktools.games.txt is missing.");
@@ -60,7 +60,7 @@ public void OnPluginStart()
 	if (iOffset == -1) {
         SetFailState("Gamedata is missing the \"SetEntityModel\" offset.");
     }
-		
+
 	hSetModel = DHookCreate(iOffset, HookType_Entity, ReturnType_Void, ThisPointer_CBaseEntity, SetModel);
 	DHookAddParam(hSetModel, HookParamType_CharPtr);
 
@@ -169,7 +169,7 @@ public void OnClientDisconnect(int iClient)
 }
 
 public Action Event_PlayerSpawn(Handle hEvent, char[] sName, bool bDontBroadcast)
-{	
+{
 	int iClient = GetClientOfUserId(GetEventInt(hEvent, "userid"));
 
 	if(IsValidClient(iClient))

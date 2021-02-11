@@ -10,7 +10,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.6"
+#define VERSION "1.7"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidPlant/updatefile.txt"
 
 #include "files/globals.sp"
@@ -28,8 +28,8 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    HookEventEx("bomb_beginplant", Event_BombBeginPlant);
-    HookEventEx("bomb_planted", Event_BombPlanted, EventHookMode_Pre);
+    HookEvent("bomb_beginplant", Event_BombBeginPlant);
+    HookEvent("bomb_planted", Event_BombPlanted, EventHookMode_Pre);
 
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
@@ -89,7 +89,7 @@ public void Event_BombBeginPlant(Event event, const char[] name, bool dontBroadc
 public Action Timer_DelayPlant(Handle timer, any data)
 {
 	int iClient = GetClientOfUserId(data);
-	
+
 	if (!IsValidClient(iClient)) {
         return;
     }
@@ -138,7 +138,7 @@ public void Retakes_OnFailToPlant(int iClient)
     }
 
     g_PlayerData[iClient].iFailedToPlant++;
-    
+
     if (g_PlayerData[iClient].iFailedToPlant >= 3) {
         Retakes_MessageToAll("%N was kicked for fail to plant 3 times.", iClient);
 		KickClient(iClient, "You'r not plant the bomb 3 times");

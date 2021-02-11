@@ -1,0 +1,15 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.1"
+	}
+
+	"Notes"	"Plugin release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/FroidApp/FroidAgents.smx"
+    "Plugin"	"Path_SM/gamedata/agent_chooser.game.csgo.txt"
+}

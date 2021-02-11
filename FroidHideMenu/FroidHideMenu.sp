@@ -8,7 +8,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0"
+#define VERSION "1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidHideMenu/updatefile.txt"
 
 #include "files/globals.sp"
@@ -51,21 +51,21 @@ public void OnPlayerRunCmdPost(int iClient, int buttons, int impulse, const floa
 		if(tickcount % 32 == 0)
 		{
 			bool bMenuOpened = GetClientMenu(iClient) != MenuSource_None;
-			
+
 			if(g_bMenuOpened[iClient] != bMenuOpened)
 			{
 				char sMoney[2] = "1";
 				char sRadar[2] = "0";
-				
+
 				if(bMenuOpened)
 				{
 					sMoney = "0";
 					sRadar = "1";
 				}
-				
+
 				g_cMoney.ReplicateToClient(iClient, sMoney);
 				g_cRadar.ReplicateToClient(iClient, sRadar);
-				
+
 				g_bMenuOpened[iClient] = bMenuOpened;
 			}
 		}

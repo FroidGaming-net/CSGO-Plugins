@@ -1,0 +1,14 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"3.3"
+	}
+
+	"Notes"	"Plugin release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/eTweaker.smx"
+}
