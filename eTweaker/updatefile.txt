@@ -2,7 +2,7 @@
 {
 	"Version"
 	{
-		"Latest"	"3.4.1"
+		"Latest"	"3.4.2"
 	}
 
 	"Notes"	"Added auto updater gamedata."

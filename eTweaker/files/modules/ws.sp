@@ -88,8 +88,8 @@ public void Ws_BuildMainMenu(int client)
     menu.AddItem("#0", "• Weapon skins\n ❯ Change the skin of any weapon.");
     menu.AddItem("#1", "• Weapon tweaks\n ❯ Change the stickers, wear, etc.");
     menu.AddItem("#2", "• Knife selection\n ❯ Equip any knife.");
-    // menu.AddItem("#3", "• Glove selection\n ❯ Equip any pair of gloves.");
-    // menu.AddItem("#4", "• Music Kit selection\n ❯ Equip any music kit.");
+    menu.AddItem("#3", "• Glove selection\n ❯ Equip any pair of gloves.");
+    menu.AddItem("#4", "• Music Kit selection\n ❯ Equip any music kit.");
     menu.ExitButton = true;
     menu.Display(client, MENU_TIME_FOREVER);
 }
@@ -111,8 +111,8 @@ public int m_Ws(Menu menu, MenuAction action, int client, int option)
                 case 0: Skins_BuildMainMenu(client);
                 case 1: Tweaks_BuildMainMenu(client);
                 case 2: Knife_BuildMainMenu(client);
-                // case 3: Gloves_BuildMainMenu(client);
-                // case 4: MusicKits_BuildMainMenu(client);
+                case 3: Gloves_BuildMainMenu(client);
+                case 4: MusicKits_BuildMainMenu(client);
             }
         }
         case MenuAction_End:
