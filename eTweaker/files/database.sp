@@ -14,13 +14,13 @@ public void Database_OnConnect(Database db, const char[] error, any data)
 
 public void Database_CreateTables()
 {
-    g_hDatabase.Query(_Database_DoNothing, "CREATE TABLE IF NOT EXISTS `etweaker_users` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `steamid` VARCHAR(18) NOT NULL ,\
+    g_hDatabase.Query(_Database_DoNothing, "CREATE TABLE IF NOT EXISTS `etweaker_users_2` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT , `steamid` VARCHAR(18) NOT NULL ,\
     `knife_ct` INT NOT NULL DEFAULT '-1' , `knife_t` INT NOT NULL DEFAULT '-1' , `gloves_ct_def` INT NOT NULL DEFAULT '-1' , `gloves_ct_skin` INT NOT NULL DEFAULT '-1' ,\
     `gloves_t_def` INT NOT NULL DEFAULT '-1' , `gloves_t_skin` INT NOT NULL DEFAULT '-1' , `music_kit` INT UNSIGNED NOT NULL DEFAULT '0' ,\
     `rare_inspect` BOOLEAN NOT NULL DEFAULT FALSE , `rare_draw` BOOLEAN NOT NULL DEFAULT FALSE , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,`updated_at` TIMESTAMP NULL,\
     PRIMARY KEY (`id`), UNIQUE `steamid_unique` (`steamid`)) ENGINE = InnoDB;");
 
-    g_hDatabase.Query(_Database_DoNothing, "CREATE TABLE IF NOT EXISTS `etweaker_user_weapons`(`fk_user` INT UNSIGNED NOT NULL,`def_index` INT UNSIGNED NOT NULL,`skin_id` INT UNSIGNED NOT NULL DEFAULT 0,\
+    g_hDatabase.Query(_Database_DoNothing, "CREATE TABLE IF NOT EXISTS `etweaker_user_weapons_2`(`fk_user` INT UNSIGNED NOT NULL,`def_index` INT UNSIGNED NOT NULL,`skin_id` INT UNSIGNED NOT NULL DEFAULT 0,\
     `wear` INT UNSIGNED NOT NULL DEFAULT  0,`rarity` INT UNSIGNED NOT NULL DEFAULT 0,`pattern` INT UNSIGNED NOT NULL DEFAULT 0, `nametag` VARCHAR(192) NOT NULL DEFAULT '',\
     `stattrak_kills` INT UNSIGNED NOT NULL DEFAULT 0,`stattrak_enabled` BOOLEAN NOT NULL DEFAULT FALSE, `stickers` VARCHAR(128) NOT NULL DEFAULT '', `rare_inspect` BOOLEAN NOT NULL DEFAULT FALSE,\
     `rare_draw` BOOLEAN NOT NULL DEFAULT FALSE, PRIMARY KEY (`fk_user`, `def_index`),UNIQUE INDEX `UNIQUE1` (`fk_user` ASC, `def_index` ASC, `skin_id` ASC)) ENGINE = InnoDB;");
@@ -56,7 +56,7 @@ public void Database_CheckVersion()
 
     if(g_iDatabaseVersion < 2)
     {
-        g_hDatabase.Query(_Database_OnDatabaseUpdated, "ALTER TABLE `etweaker_user_weapons` ADD CONSTRAINT `user_weapons` FOREIGN KEY (`fk_user`) REFERENCES `etweaker_users`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;", 2);
+        g_hDatabase.Query(_Database_OnDatabaseUpdated, "ALTER TABLE `etweaker_user_weapons_2` ADD CONSTRAINT `user_weapons` FOREIGN KEY (`fk_user`) REFERENCES `etweaker_users_2`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;", 2);
         return;
     }
 
@@ -117,7 +117,7 @@ public void Database_OnClientConnect(int client)
     GetClientAuthId(client, AuthId_SteamID64, ClientInfo[client].SteamID64, sizeof(eClientInfo::SteamID64));
     char szDatabaseQuery[256];
 
-    g_hDatabase.Format(szDatabaseQuery, sizeof(szDatabaseQuery), "INSERT INTO `etweaker_users` (`steamid`) VALUES ('%s') ON DUPLICATE KEY UPDATE updated_at = NOW()", ClientInfo[client].SteamID64);
+    g_hDatabase.Format(szDatabaseQuery, sizeof(szDatabaseQuery), "INSERT INTO `etweaker_users_2` (`steamid`) VALUES ('%s') ON DUPLICATE KEY UPDATE updated_at = NOW()", ClientInfo[client].SteamID64);
     g_hDatabase.Query(_Database_OnClientConnect, szDatabaseQuery, GetClientUserId(client));
 }
 
@@ -138,7 +138,7 @@ public void _Database_OnClientConnect(Database db, DBResultSet dbResult, const c
 
     char szQuery[128];
 
-    g_hDatabase.Format(szQuery, sizeof(szQuery), "SELECT * FROM `etweaker_users` WHERE `steamid` = '%s'", ClientInfo[client].SteamID64);
+    g_hDatabase.Format(szQuery, sizeof(szQuery), "SELECT * FROM `etweaker_users_2` WHERE `steamid` = '%s'", ClientInfo[client].SteamID64);
     g_hDatabase.Query(_Database_OnClientInfoFetched, szQuery, GetClientUserId(client));
 }
 
@@ -200,7 +200,7 @@ public void _Database_OnClientInfoFetched(Database db, DBResultSet dbResult, con
 
     char szQuery[128];
 
-    g_hDatabase.Format(szQuery, sizeof(szQuery), "SELECT * FROM `etweaker_user_weapons` WHERE `fk_user` = '%i'", ClientInfo[client].Key);
+    g_hDatabase.Format(szQuery, sizeof(szQuery), "SELECT * FROM `etweaker_user_weapons_2` WHERE `fk_user` = '%i'", ClientInfo[client].Key);
     g_hDatabase.Query(_Database_OnClientWeaponSettingsFetched, szQuery, GetClientUserId(client));
 }
 
@@ -288,7 +288,7 @@ public void Databse_SaveClientData(int client)
 
     char szQuery[1024];
 
-    g_hDatabase.Format(szQuery, sizeof(szQuery), "UPDATE `etweaker_users` SET `knife_ct` = '%i', `knife_t` = '%i', `gloves_ct_def` = '%i', `gloves_ct_skin` = '%i', `gloves_t_def` = '%i',\
+    g_hDatabase.Format(szQuery, sizeof(szQuery), "UPDATE `etweaker_users_2` SET `knife_ct` = '%i', `knife_t` = '%i', `gloves_ct_def` = '%i', `gloves_ct_skin` = '%i', `gloves_t_def` = '%i',\
      `gloves_t_skin` = '%i', `music_kit` = '%i', `rare_inspect` = '%i', `rare_draw` = '%i' WHERE `id` = '%i'",\
     ClientInfo[client].Knife.CT, ClientInfo[client].Knife.T, ClientInfo[client].GlovesCT.GloveDefIndex, ClientInfo[client].GlovesCT.SkinDefIndex, ClientInfo[client].GlovesT.GloveDefIndex,\
      ClientInfo[client].GlovesT.SkinDefIndex, ClientInfo[client].MusicKit, view_as<int>(ClientInfo[client].RareInspect), view_as<int>(ClientInfo[client].RareDraw), ClientInfo[client].Key);
@@ -319,7 +319,7 @@ public void Databse_SaveClientData(int client)
         Format(szStickers, sizeof(szStickers), "%i;%i;%i;%i;%i;%i", WeaponSettings.Sticker[0], WeaponSettings.Sticker[1], WeaponSettings.Sticker[2], WeaponSettings.Sticker[3], WeaponSettings.Sticker[4],\
          WeaponSettings.Sticker[5]);
 
-        g_hDatabase.Format(szQuery, sizeof(szQuery), "INSERT INTO `etweaker_user_weapons` (`fk_user`, `def_index`, `skin_id`, `wear`, `rarity`, `pattern`, `nametag`,\
+        g_hDatabase.Format(szQuery, sizeof(szQuery), "INSERT INTO `etweaker_user_weapons_2` (`fk_user`, `def_index`, `skin_id`, `wear`, `rarity`, `pattern`, `nametag`,\
          `stattrak_kills`, `stattrak_enabled`, `stickers`, `rare_inspect`, `rare_draw`) VALUES ('%i', '%i', '%i', '%i', '%i', '%i', '%s', '%i', '%i', '%s', '%i', '%i')\
           ON DUPLICATE KEY UPDATE `fk_user` = '%i', `def_index` = '%i', `skin_id` = '%i', `wear` = '%i', `rarity` = '%i', `pattern` = '%i', `nametag` = '%s',\
            `stattrak_kills` = '%i', `stattrak_enabled` = '%i', `stickers` = '%s', `rare_inspect` = '%i', `rare_draw` = '%i'",\
