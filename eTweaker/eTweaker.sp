@@ -12,8 +12,8 @@
 #pragma newdecls required
 #pragma semicolon 1
 
-#define AUTHOR "ESK0"
-#define VERSION "3.3"
+#define AUTHOR "ESK0, FroidGaming.net"
+#define VERSION "3.4"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
