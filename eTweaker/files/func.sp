@@ -442,7 +442,7 @@ stock void eTwekaer_SetClientTeamGloves(int client, int iGlovesDefIndex, int iSk
     return;
 }
 
-stock void eTweaker_AttachGloveSkin(int client, int iGlovesDefIndex, int iSkinDefIndex)
+stock void eTweaker_AttachGloveSkin(int client, int iGlovesDefIndex, int iSkinDefIndex, int iGlovesWear)
 {
     eTweaker_RemoveClientGloves(client);
 
@@ -462,7 +462,7 @@ stock void eTweaker_AttachGloveSkin(int client, int iGlovesDefIndex, int iSkinDe
         SetEntProp(iGloves, Prop_Send, "m_iItemIDLow", -1);
         SetEntProp(iGloves, Prop_Send, "m_nFallbackPaintKit", iSkinDefIndex);
         SetEntProp(iGloves, Prop_Send, "m_iEntityQuality", 4);
-        SetEntPropFloat(iGloves, Prop_Send, "m_flFallbackWear", 0.0001);
+        SetEntPropFloat(iGloves, Prop_Send, "m_flFallbackWear", g_fWeaponWear[iGlovesWear]); // Default 0.0001
         SetEntPropEnt(iGloves, Prop_Send, "m_hOwnerEntity", client);
         SetEntProp(iGloves, Prop_Send, "m_nModelIndex", iGloveModelIndex);
         SetEntPropEnt(iGloves, Prop_Data, "m_hParent", client);
@@ -533,17 +533,20 @@ stock void eTweaker_EquipGloves(int client, bool bRemoveGloves = false)
 
     int iGloveDefIndex = -1;
     int iSkinDefIndex = -1;
+    int iGloveWear = -1;
     switch(ClientInfo[client].Team())
     {
         case CS_TEAM_CT:
         {
             iGloveDefIndex = ClientInfo[client].GlovesCT.GloveDefIndex;
             iSkinDefIndex = ClientInfo[client].GlovesCT.SkinDefIndex;
+            iGloveWear = ClientInfo[client].GlovesCT.GloveWear;
         }
         case CS_TEAM_T:
         {
             iGloveDefIndex = ClientInfo[client].GlovesT.GloveDefIndex;
             iSkinDefIndex = ClientInfo[client].GlovesT.SkinDefIndex;
+            iGloveWear = ClientInfo[client].GlovesT.GloveWear;
         }
     }
 
@@ -551,7 +554,7 @@ stock void eTweaker_EquipGloves(int client, bool bRemoveGloves = false)
     {
         return;
     }
-    eTweaker_AttachGloveSkin(client, iGloveDefIndex, iSkinDefIndex);
+    eTweaker_AttachGloveSkin(client, iGloveDefIndex, iSkinDefIndex, iGloveWear);
     return;
 }
 

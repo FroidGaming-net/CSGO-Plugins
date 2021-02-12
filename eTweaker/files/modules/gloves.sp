@@ -23,8 +23,146 @@ public Action Command_Gloves(int client, int args)
         return Plugin_Handled;
     }
 
-    Gloves_BuildMainMenu(client);
+    Gloves_BuildMenu(client);
     return Plugin_Handled;
+}
+
+stock void Gloves_BuildMenu(int client, int iPosition = 0)
+{
+    if(eTweaker_IsClientSpectating(client))
+    {
+        eTweaker_PrintNotAvailableInSpec(client);
+        return;
+    }
+
+    char szTranslation[256];
+
+    Menu menu = new Menu(m_BuildGlovesMenu);
+
+    Format(szTranslation, sizeof(szTranslation), "★ Gloves Menu - Main Menu ★");
+    menu.SetTitle(szTranslation);
+
+    Format(szTranslation, sizeof(szTranslation), "• Glove selection\n ❯ Equip any pair of gloves.");
+    menu.AddItem("#0", szTranslation);
+    Format(szTranslation, sizeof(szTranslation), "• Glove wear\n ❯ Change wear.");
+    menu.AddItem("#1", szTranslation);
+
+    menu.ExitBackButton = false;
+
+    switch(iPosition)
+    {
+        case 0: menu.Display(client, MENU_TIME_FOREVER);
+        default: menu.DisplayAt(client, iPosition, MENU_TIME_FOREVER);
+    }
+}
+
+public int m_BuildGlovesMenu(Menu menu, MenuAction action, int client, int option)
+{
+    switch(action)
+    {
+        case MenuAction_Select:
+        {
+            switch(option)
+            {
+                case 0:
+                {
+                    Gloves_BuildMainMenu(client);
+                }
+                case 1:
+                {
+                    Gloves_BuildTweakMenu(client);
+                }
+            }
+        }
+        case MenuAction_Cancel:
+        {
+            if(option == MenuCancel_ExitBack)
+            {
+                Ws_BuildMainMenu(client);
+            }
+        }
+        case MenuAction_End:
+        {
+            delete menu;
+        }
+    }
+}
+
+stock void Gloves_BuildTweakMenu(int client, int iPosition = 0)
+{
+    if(eTweaker_IsClientSpectating(client))
+    {
+        eTweaker_PrintNotAvailableInSpec(client);
+        return;
+    }
+
+    int iGloveWear = 0;
+    switch(ClientInfo[client].Team())
+    {
+        case CS_TEAM_CT:
+        {
+            iGloveWear = ClientInfo[client].GlovesCT.GloveWear;
+        }
+        case CS_TEAM_T:
+        {
+            iGloveWear = ClientInfo[client].GlovesT.GloveWear;
+        }
+    }
+
+    char szTranslation[256];
+
+    Menu menu = new Menu(m_BuildTweakMenu);
+
+    Format(szTranslation, sizeof(szTranslation), "★ Tweaks Menu - Glove Wear ★");
+    menu.SetTitle(szTranslation);
+
+    for(int iWear = 0; iWear <= 5; iWear++)
+    {
+        Format(szTranslation, sizeof(szTranslation), "» %s", g_szWeaponWear[iWear]);
+        menu.AddItem("", szTranslation, iGloveWear == iWear ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT);
+    }
+
+    menu.ExitBackButton = false;
+
+    switch(iPosition)
+    {
+        case 0: menu.Display(client, MENU_TIME_FOREVER);
+        default: menu.DisplayAt(client, iPosition, MENU_TIME_FOREVER);
+    }
+}
+
+public int m_BuildTweakMenu(Menu menu, MenuAction action, int client, int option)
+{
+    switch(action)
+    {
+        case MenuAction_Select:
+        {
+            switch(ClientInfo[client].Team())
+            {
+                case CS_TEAM_CT:
+                {
+                    ClientInfo[client].GlovesCT.GloveWear = option;
+                }
+                case CS_TEAM_T:
+                {
+                    ClientInfo[client].GlovesT.GloveWear = option;
+                }
+            }
+            eTweaker_EquipGloves(client);
+            Gloves_BuildTweakMenu(client, GetMenuSelectionPosition());
+        }
+        case MenuAction_Cancel:
+        {
+            if(option == MenuCancel_ExitBack)
+            {
+                Gloves_BuildMenu(client);
+            }
+        }
+        case MenuAction_End:
+        {
+            delete menu;
+        }
+    }
 }
 
 stock void Gloves_BuildMainMenu(int client, int iPosition = 0)
@@ -226,8 +364,8 @@ stock void Gloves_BuildTeamSelectionMenu(int client, int iSkinDefIndex)
 
     Menu menu = new Menu(m_BuildTeamSelectionMenu_Gloves);
 
-    char szSkinDefIndex[12];
     char szTranslation[256];
+    char szSkinDefIndex[12];
     IntToString(iSkinDefIndex, szSkinDefIndex, sizeof(szSkinDefIndex));
 
     Format(szTranslation, sizeof(szTranslation), "★ Gloves Menu - %s ★ \n \nSelect Team:\n ", szSkinDisplayName);

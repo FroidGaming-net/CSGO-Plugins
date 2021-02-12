@@ -88,7 +88,7 @@ public void Ws_BuildMainMenu(int client)
     menu.AddItem("#0", "• Weapon skins\n ❯ Change the skin of any weapon.");
     menu.AddItem("#1", "• Weapon tweaks\n ❯ Change the stickers, wear, etc.");
     menu.AddItem("#2", "• Knife selection\n ❯ Equip any knife.");
-    menu.AddItem("#3", "• Glove selection\n ❯ Equip any pair of gloves.");
+    menu.AddItem("#3", "• Gloves menu\n ❯ Opens gloves menu.");
     menu.AddItem("#4", "• Music Kit selection\n ❯ Equip any music kit.");
     menu.ExitButton = true;
     menu.Display(client, MENU_TIME_FOREVER);
