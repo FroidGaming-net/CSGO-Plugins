@@ -167,8 +167,10 @@ public void _Database_OnClientInfoFetched(Database db, DBResultSet dbResult, con
     int iKnifeT;
     int iGlovesCTdef;
     int iGlovesCTskin;
+    int iGlovesCTwear;
     int iGlovesTdef;
     int iGlovesTskin;
+    int iGlovesTwear;
     int iMusickit;
     int iRareInspectGlobal;
     int iRareDrawGlobal;
@@ -177,8 +179,10 @@ public void _Database_OnClientInfoFetched(Database db, DBResultSet dbResult, con
     dbResult.FieldNameToNum("knife_t", iKnifeT);
     dbResult.FieldNameToNum("gloves_ct_def", iGlovesCTdef);
     dbResult.FieldNameToNum("gloves_ct_skin", iGlovesCTskin);
+    dbResult.FieldNameToNum("gloves_ct_wear", iGlovesCTwear);
     dbResult.FieldNameToNum("gloves_t_def", iGlovesTdef);
     dbResult.FieldNameToNum("gloves_t_skin", iGlovesTskin);
+    dbResult.FieldNameToNum("gloves_t_wear", iGlovesTwear);
     dbResult.FieldNameToNum("music_kit", iMusickit);
     dbResult.FieldNameToNum("rare_inspect", iRareInspectGlobal);
     dbResult.FieldNameToNum("rare_draw", iRareDrawGlobal);
@@ -189,8 +193,10 @@ public void _Database_OnClientInfoFetched(Database db, DBResultSet dbResult, con
 
     ClientInfo[client].GlovesCT.GloveDefIndex = dbResult.FetchInt(iGlovesCTdef);
     ClientInfo[client].GlovesCT.SkinDefIndex = dbResult.FetchInt(iGlovesCTskin);
+    ClientInfo[client].GlovesCT.GloveWear = dbResult.FetchInt(iGlovesCTwear);
     ClientInfo[client].GlovesT.GloveDefIndex = dbResult.FetchInt(iGlovesTdef);
     ClientInfo[client].GlovesT.SkinDefIndex = dbResult.FetchInt(iGlovesTskin);
+    ClientInfo[client].GlovesT.GloveWear = dbResult.FetchInt(iGlovesTwear);
 
     ClientInfo[client].MusicKit = dbResult.FetchInt(iMusickit);
 
@@ -288,10 +294,10 @@ public void Databse_SaveClientData(int client)
 
     char szQuery[1024];
 
-    g_hDatabase.Format(szQuery, sizeof(szQuery), "UPDATE `etweaker_users_2` SET `knife_ct` = '%i', `knife_t` = '%i', `gloves_ct_def` = '%i', `gloves_ct_skin` = '%i', `gloves_t_def` = '%i',\
-     `gloves_t_skin` = '%i', `music_kit` = '%i', `rare_inspect` = '%i', `rare_draw` = '%i' WHERE `id` = '%i'",\
-    ClientInfo[client].Knife.CT, ClientInfo[client].Knife.T, ClientInfo[client].GlovesCT.GloveDefIndex, ClientInfo[client].GlovesCT.SkinDefIndex, ClientInfo[client].GlovesT.GloveDefIndex,\
-     ClientInfo[client].GlovesT.SkinDefIndex, ClientInfo[client].MusicKit, view_as<int>(ClientInfo[client].RareInspect), view_as<int>(ClientInfo[client].RareDraw), ClientInfo[client].Key);
+    g_hDatabase.Format(szQuery, sizeof(szQuery), "UPDATE `etweaker_users_2` SET `knife_ct` = '%i', `knife_t` = '%i', `gloves_ct_def` = '%i', `gloves_ct_skin` = '%i', `gloves_ct_wear` = '%i', `gloves_t_def` = '%i',\
+     `gloves_t_skin` = '%i', `gloves_t_wear` = '%i', `music_kit` = '%i', `rare_inspect` = '%i', `rare_draw` = '%i' WHERE `id` = '%i'",\
+    ClientInfo[client].Knife.CT, ClientInfo[client].Knife.T, ClientInfo[client].GlovesCT.GloveDefIndex, ClientInfo[client].GlovesCT.SkinDefIndex, ClientInfo[client].GlovesCT.GloveWear, ClientInfo[client].GlovesT.GloveDefIndex,\
+     ClientInfo[client].GlovesT.SkinDefIndex, ClientInfo[client].GlovesT.GloveWear, ClientInfo[client].MusicKit, view_as<int>(ClientInfo[client].RareInspect), view_as<int>(ClientInfo[client].RareDraw), ClientInfo[client].Key);
 
     g_hDatabase.Query(_Database_OnClientDataSaved, szQuery);
 

@@ -114,11 +114,13 @@ enum struct eGloves
 {
     int GloveDefIndex;
     int SkinDefIndex;
+    int GloveWear;
 
     bool Reset()
     {
         this.GloveDefIndex = -1;
         this.SkinDefIndex = -1;
+        this.GloveWear = 0;
     }
 }
 enum struct eClientInfo
