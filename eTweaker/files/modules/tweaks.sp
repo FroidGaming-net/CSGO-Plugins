@@ -163,7 +163,7 @@ public void Tweaks_BuildWeaponSelection(int client, int iSlot)
             continue;
         }
 
-        if(g_cvDangerZoneKnives.BoolValue && eTweaker_IsDangerZoneKnife(iWeaponDefIndex))
+        if(!g_cvDangerZoneKnives.BoolValue && eTweaker_IsDangerZoneKnife(iWeaponDefIndex))
         {
             continue;
         }
