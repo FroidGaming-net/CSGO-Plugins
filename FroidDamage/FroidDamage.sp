@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -84,6 +84,8 @@ public Action OnTakeDamage(int iClient, int &iAttacker, int &iInflictor, float &
 {
 	if (iClient != iAttacker && IsValidClient(iAttacker)) {
 		if (GetClientTeam(iClient) == GetClientTeam(iAttacker)) {
+            SetEntPropVector(iClient, Prop_Send, "m_aimPunchAngle", NULL_VECTOR);
+            SetEntPropVector(iClient, Prop_Send, "m_aimPunchAngleVel", NULL_VECTOR);
             if (iDamagetype != 32) {
                 char sWeapon[255];
                 GetClientWeapon(iAttacker, sWeapon, sizeof(sWeapon));
