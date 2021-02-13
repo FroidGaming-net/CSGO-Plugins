@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -108,7 +108,7 @@ public Action OnTakeDamageAlive(int iClient, int &iAttacker, int &iInflictor, fl
         if (GetClientTeam(iClient) == GetClientTeam(iAttacker)) {
             g_PlayerData[iAttacker].iTeamDamage = g_PlayerData[iAttacker].iTeamDamage + RoundToNearest(fDamage);
 
-            if (g_PlayerData[iAttacker].iTeamDamage >= 30 && g_PlayerData[iAttacker].iTeamDamage < 250) {
+            if (g_PlayerData[iAttacker].iTeamDamage >= 5 && g_PlayerData[iAttacker].iTeamDamage < 150) {
                 CPrintToChat(iAttacker, "{darkred}WARNING: You will be banned from the server if you attack your teammate!!!");
             }
 
