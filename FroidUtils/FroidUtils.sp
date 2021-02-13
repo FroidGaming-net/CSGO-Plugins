@@ -12,13 +12,14 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
 #include "files/globals.sp"
 #include "files/client.sp"
 #include "files/commands.sp"
+#include "files/custom_functions.sp"
 
 public Plugin myinfo =
 {
@@ -32,6 +33,7 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
     PlayerCooldown = new StringMap();
+    PlayerConnect = new StringMap();
 
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
@@ -82,6 +84,13 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
                             if (g_PlayerData[iClient].iReplaced == 0) {
                                 g_PlayerData[iClient].iRoundSpectator++;
                                 if (g_PlayerData[iClient].iRoundSpectator >= 2) {
+                                    int iCooldown;
+                                    char sAuthID[64];
+                                    GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
+                                    if (!PlayerConnect.GetValue(sAuthID, iCooldown)) {
+                                        PlayerConnect.SetValue(sAuthID, 1);
+                                    }
+
                                     if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
                                         KickClient(iClient, "Kamu tidak bisa masuk Spectator saat PUG sudah LIVE! Kamu hanya bisa masuk Spectator saat WARMUP atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
                                     } else {
@@ -218,6 +227,13 @@ Action Timer_DelayJoin(Handle timer, any data)
         } else {
             if (GetClientTeam(iClient) == CS_TEAM_SPECTATOR) {
                 if (!CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5)) {
+                    int iCooldown;
+                    char sAuthID[64];
+                    GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
+                    if (!PlayerConnect.GetValue(sAuthID, iCooldown)) {
+                        PlayerConnect.SetValue(sAuthID, 1);
+                    }
+
                     if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
 						KickClient(iClient, "Kamu tidak bisa masuk Spectator saat PUG sudah LIVE! Kamu hanya bisa masuk Spectator saat WARMUP atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
 					}else{
@@ -232,11 +248,13 @@ Action Timer_DelayJoin(Handle timer, any data)
 public void OnMapStart()
 {
 	PlayerCooldown.Clear();
+    PlayerConnect.Clear();
 }
 
 public void OnMapEnd()
 {
 	PlayerCooldown.Clear();
+    PlayerConnect.Clear();
 }
 
 public void OnClientPostAdminCheck(int iClient)
@@ -261,6 +279,22 @@ public void FroidVIP_OnClientLoadedPost(int iClient)
     }
 
     g_PlayerData[iClient].iVIPLoaded = 1;
+
+    if (!CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5)) {
+        if (IsFullTeam()) {
+            int iCooldown;
+            char sAuthID[64];
+            GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
+            if (PlayerConnect.GetValue(sAuthID, iCooldown)) {
+                if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
+                    KickClient(iClient, "Jika kamu sudah terkena kick sebelumnya kamu tidak bisa join lagi! Silahkan masuk kembali ketika kedua team tidak full atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
+                }else{
+                    KickClient(iClient, "If you've been kicked before you can't join again! Please reconnect when both team are not full or buy Premium/Premium Plus now at froidgaming.net/store");
+                }
+                return;
+            }
+        }
+    }
 }
 
 public void OnClientDisconnect(int iClient)

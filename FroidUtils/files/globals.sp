@@ -2,6 +2,7 @@ ConVar g_cServerName = null;
 char g_sServerName[64];
 
 StringMap PlayerCooldown;
+StringMap PlayerConnect;
 
 enum struct PlayerData
 {
