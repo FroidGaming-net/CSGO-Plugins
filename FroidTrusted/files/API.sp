@@ -207,9 +207,9 @@ void OnCheckHours(HTTPResponse response, any value)
     if(!hResponseRoot.HasKey("games"))
     {
         if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
-            KickClient(iClient, "Ubah Pengaturan Privasi Profil kamu ke Publik yaa!\n1. Pastikan \"Game details\" diubah ke Public!\n2. Pastikan untuk tidak mencentang \"Always keep my total playtime private\" yang posisinya berada di bawah \"Game details\"\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming");
+            KickClient(iClient, "Ubah Pengaturan Privasi Profil kamu ke Publik yaa!\n1. Pastikan `Game details` diubah ke Public!\n2. Pastikan untuk tidak mencentang `Always keep my total playtime private` yang posisinya berada di bawah `Game details`\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming");
         }else{
-            KickClient(iClient, "Change your Profile Privacy Settings to Public!\n1. Make sure \"Game details\" is changed to Public!\n2. Make sure to UNCHECK \"Always keep my total playtime private\" which is under \"Game details\"\nNeed help? please contact us at https://discord.io/froidgaming");
+            KickClient(iClient, "Change your Profile Privacy Settings to Public!\n1. Make sure `Game details` is changed to Public!\n2. Make sure to UNCHECK `Always keep my total playtime private` which is under `Game details`\nNeed help? please contact us at https://discord.io/froidgaming");
         }
         delete hResponseRoot;
         delete hResponse;
@@ -224,9 +224,9 @@ void OnCheckHours(HTTPResponse response, any value)
     if(iPlaytime == 0)
     {
         if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
-            KickClient(iClient, "Kamu tidak memenuhi persyaratan jam minimum untuk bermain di sini! (%i/100)\n1. Pastikan \"Game details\" diubah ke Public!\n2. Pastikan untuk tidak mencentang \"Always keep my total playtime private\" yang posisinya berada di bawah \"Game details\"\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming", (iPlaytime / 60));
+            KickClient(iClient, "Kamu tidak memenuhi persyaratan jam minimum untuk bermain di sini! (%i/100)\n1. Pastikan `Game details` diubah ke Public!\n2. Pastikan untuk tidak mencentang `Always keep my total playtime private` yang posisinya berada di bawah `Game details`\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming", (iPlaytime / 60));
         }else{
-            KickClient(iClient, "You do not meet the minimum hour requirement to play here! (%i/100)\n1. Make sure \"Game details\" is changed to Public!\n2. Make sure to UNCHECK \"Always keep my total playtime private\" which is under \"Game details\"\nNeed help? please contact us at https://discord.io/froidgaming", (iPlaytime / 60));
+            KickClient(iClient, "You do not meet the minimum hour requirement to play here! (%i/100)\n1. Make sure `Game details` is changed to Public!\n2. Make sure to UNCHECK `Always keep my total playtime private` which is under `Game details`\nNeed help? please contact us at https://discord.io/froidgaming", (iPlaytime / 60));
         }
         delete hGame;
         delete hResponseGames;
@@ -238,9 +238,9 @@ void OnCheckHours(HTTPResponse response, any value)
     if(100 > (iPlaytime / 60))
     {
         if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
-            KickClient(iClient, "Kamu tidak memenuhi persyaratan jam minimum untuk bermain di sini! (%i/100)\n1. Pastikan \"Game details\" diubah ke Public!\n2. Pastikan untuk tidak mencentang \"Always keep my total playtime private\" yang posisinya berada di bawah \"Game details\"\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming", (iPlaytime / 60));
+            KickClient(iClient, "Kamu tidak memenuhi persyaratan jam minimum untuk bermain di sini! (%i/100)\n1. Pastikan `Game details` diubah ke Public!\n2. Pastikan untuk tidak mencentang `Always keep my total playtime private` yang posisinya berada di bawah `Game details`\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming", (iPlaytime / 60));
         }else{
-            KickClient(iClient, "You do not meet the minimum hour requirement to play here! (%i/100)\n1. Make sure \"Game details\" is changed to Public!\n2. Make sure to UNCHECK \"Always keep my total playtime private\" which is under \"Game details\"\nNeed help? please contact us at https://discord.io/froidgaming", (iPlaytime / 60));
+            KickClient(iClient, "You do not meet the minimum hour requirement to play here! (%i/100)\n1. Make sure `Game details` is changed to Public!\n2. Make sure to UNCHECK `Always keep my total playtime private` which is under `Game details`\nNeed help? please contact us at https://discord.io/froidgaming", (iPlaytime / 60));
         }
         delete hGame;
         delete hResponseGames;
@@ -289,9 +289,9 @@ void OnCheckCreateAt(HTTPResponse response, any value)
     if(!hPlayers.HasKey("timecreated"))
     {
         if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
-            KickClient(iClient, "Ubah Pengaturan Privasi Profil kamu ke Publik yaa!\n1. Ubah Pengaturan Privasi Profil kamu ke Publik yaa!\n2. Pastikan untuk tidak mencentang \"Always keep my total playtime private\" yang posisinya berada di bawah \"Game details\"\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming");
+            KickClient(iClient, "Ubah Pengaturan Privasi Profil kamu ke Publik yaa!\n1. Ubah Pengaturan Privasi Profil kamu ke Publik yaa!\n2. Pastikan untuk tidak mencentang `Always keep my total playtime private` yang posisinya berada di bawah `Game details`\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming");
         }else{
-            KickClient(iClient, "Change your Profile Privacy Settings to Public!\n1. Change your Profile Privacy Settings to Public!\n2. Make sure to UNCHECK \"Always keep my total playtime private\" which is under \"Game details\"\nNeed help? please contact us at https://discord.io/froidgaming");
+            KickClient(iClient, "Change your Profile Privacy Settings to Public!\n1. Change your Profile Privacy Settings to Public!\n2. Make sure to UNCHECK `Always keep my total playtime private` which is under `Game details`\nNeed help? please contact us at https://discord.io/froidgaming");
         }
         delete hPlayers;
         delete hResponsePlayers;
@@ -304,9 +304,9 @@ void OnCheckCreateAt(HTTPResponse response, any value)
     if(iTimeCreated > (GetTime()-(86400*31)))
     {
         if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
-            KickClient(iClient, "Akun Kamu harus sudah lebih dari 31 hari!\n1. Ubah Pengaturan Privasi Profil kamu ke Publik yaa!\n2. Pastikan untuk tidak mencentang \"Always keep my total playtime private\" yang posisinya berada di bawah \"Game details\"\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming");
+            KickClient(iClient, "Akun Kamu harus sudah lebih dari 31 hari!\n1. Ubah Pengaturan Privasi Profil kamu ke Publik yaa!\n2. Pastikan untuk tidak mencentang `Always keep my total playtime private` yang posisinya berada di bawah `Game details`\nButuh bantuan? silahkan hubungi kami di https://discord.io/froidgaming");
         }else{
-            KickClient(iClient, "Your account must be more than 31 days old!\n1. Change your Profile Privacy Settings to Public!\n2. Make sure to UNCHECK \"Always keep my total playtime private\" which is under \"Game details\"\nNeed help? please contact us at https://discord.io/froidgaming");
+            KickClient(iClient, "Your account must be more than 31 days old!\n1. Change your Profile Privacy Settings to Public!\n2. Make sure to UNCHECK `Always keep my total playtime private` which is under `Game details`\nNeed help? please contact us at https://discord.io/froidgaming");
         }
         delete hPlayers;
         delete hResponsePlayers;
