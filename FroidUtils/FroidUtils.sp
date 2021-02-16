@@ -6,13 +6,14 @@
 #undef REQUIRE_PLUGIN
 #include <updater>
 #include <pugsetup>
+#include <lvl_ranks>
 
 #pragma semicolon 1
 #pragma newdecls required
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.3"
+#define VERSION "1.1.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -55,6 +56,7 @@ public Action Timer_Setting(Handle hTimer)
     g_cServerName.GetString(g_sServerName, sizeof(g_sServerName));
 
     if(StrContains(g_sServerName, "PUG") > -1 || StrContains(g_sServerName, "5v5") > -1){
+        HookEvent("round_start", Event_RoundStart, EventHookMode_PostNoCopy);
         RegConsoleCmd("sm_start", Command_Start, "Forcestart PUG");
         AddCommandListener(altJoin, "jointeam");
         // CreateTimer(120.0, Timer_Repeat, _, TIMER_REPEAT);
@@ -113,6 +115,13 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
             }
 		}
 	}
+}
+
+Action Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
+{
+    if (PugSetup_GetGameState() != GameState_Live) {
+        LR_RoundWithoutValue();
+    }
 }
 
 // public Action Timer_Repeat(Handle hTimer)
