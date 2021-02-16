@@ -1,0 +1,14 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"3.1.6"
+	}
+
+	"Notes"	"Plugin release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/LevelsRanks/levelsranks.smx"
+}
