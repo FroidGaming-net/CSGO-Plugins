@@ -13,9 +13,8 @@ enum struct PlayerData
     int iAgent[2];
     int iCacheTeam;
     char sCountryCode[2];
-	char iTempSearching[128];
     CCSPlayerInventory pInventory;
-    
+
     void SetAgent(int iAgent, int iTeam)
 	{
 		this.iAgent[view_as<int>(iTeam)] = iAgent;
@@ -55,7 +54,7 @@ enum struct PlayerData
 
         return false;
     }
-    
+
     void Reset()
 	{
 		this.iAgentLoaded = 0;
@@ -63,8 +62,6 @@ enum struct PlayerData
 		this.iAgent[1] = -1;
         this.iCacheTeam = 0;
         this.sCountryCode = "EN";
-		// Searching
-        this.iTempSearching = "";
 	}
 }
 
