@@ -61,6 +61,7 @@ public void Database_CheckVersion()
     }
 
     g_bDatabaseReady = true;
+    reloadPlugins();
 }
 
 public void _Database_OnDatabaseUpdated(Database db, DBResultSet dbResult, const char[] error, any data)

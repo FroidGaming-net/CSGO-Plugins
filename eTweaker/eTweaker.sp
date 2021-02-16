@@ -13,7 +13,7 @@
 #pragma semicolon 1
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.4.2"
+#define VERSION "3.4.3"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
@@ -66,16 +66,6 @@ public void OnPluginStart()
         else if(!eItems_AreItemsSyncing())
         {
             eItems_ReSync();
-        }
-
-        for(int client = 1; client <= MaxClients; client++)
-        {
-            if(!IsValidClient(client))
-            {
-                continue;
-            }
-
-            OnClientPostAdminCheck(client);
         }
     }
 
@@ -148,6 +138,18 @@ public void OnPluginStart()
 
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
+    }
+}
+
+/// Reload Detected
+public void reloadPlugins()
+{
+	for(int client = 1; client <= MaxClients; client++)
+    {
+        if(IsValidClient(client))
+        {
+            OnClientPostAdminCheck(client);
+        }
     }
 }
 
