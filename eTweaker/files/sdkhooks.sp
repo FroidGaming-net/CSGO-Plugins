@@ -29,35 +29,35 @@ public void SDK_OnWeaponSwitchPost(int client, int iWeapon)
         }
     }
 
-    if(ClientInfo[client].PreviousWeapon != INVALID_ENT_REFERENCE)
-    {
-        int iPreviousWeapon = EntRefToEntIndex(ClientInfo[client].PreviousWeapon);
-        if(eItems_IsValidWeapon(iPreviousWeapon))
-        {
-            int iPreviousWeaponDefIndex = eItems_GetWeaponDefIndexByWeapon(iPreviousWeapon);
-            char szPreviousWeaponDefIndex[12];
-            IntToString(iPreviousWeaponDefIndex, szPreviousWeaponDefIndex, sizeof(szPreviousWeaponDefIndex));
+    // if(ClientInfo[client].PreviousWeapon != INVALID_ENT_REFERENCE)
+    // {
+    //     int iPreviousWeapon = EntRefToEntIndex(ClientInfo[client].PreviousWeapon);
+    //     if(eItems_IsValidWeapon(iPreviousWeapon))
+    //     {
+    //         int iPreviousWeaponDefIndex = eItems_GetWeaponDefIndexByWeapon(iPreviousWeapon);
+    //         char szPreviousWeaponDefIndex[12];
+    //         IntToString(iPreviousWeaponDefIndex, szPreviousWeaponDefIndex, sizeof(szPreviousWeaponDefIndex));
 
-            eWeaponSettings WeaponSettings;
-            if(g_smWeaponSettings[client].GetArray(szPreviousWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings)))
-            {
-                if(WeaponSettings.StatTrak_Enabled)
-                {
-                    int iHasPreviousWeapon = eItems_FindWeaponByWeaponNum(client, iPreviousWeapon);
-                    int iCurrentStatTrackKills = GetEntProp(iPreviousWeapon, Prop_Send, "m_nFallbackStatTrak");
-                    if(iPreviousWeapon == iHasPreviousWeapon && iCurrentStatTrackKills != WeaponSettings.StatTrak_Kills)
-                    {
-                        if(eItems_IsDefIndexKnife(iPreviousWeaponDefIndex))
-                        {
-                            eTweaker_EquipKnife(client);
-                        }else{
-                            eItems_RespawnWeapon(client, iPreviousWeapon);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //         eWeaponSettings WeaponSettings;
+    //         if(g_smWeaponSettings[client].GetArray(szPreviousWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings)))
+    //         {
+    //             if(WeaponSettings.StatTrak_Enabled)
+    //             {
+    //                 int iHasPreviousWeapon = eItems_FindWeaponByWeaponNum(client, iPreviousWeapon);
+    //                 int iCurrentStatTrackKills = GetEntProp(iPreviousWeapon, Prop_Send, "m_nFallbackStatTrak");
+    //                 if(iPreviousWeapon == iHasPreviousWeapon && iCurrentStatTrackKills != WeaponSettings.StatTrak_Kills)
+    //                 {
+    //                     if(eItems_IsDefIndexKnife(iPreviousWeaponDefIndex))
+    //                     {
+    //                         eTweaker_EquipKnife(client);
+    //                     }else{
+    //                         eItems_RespawnWeapon(client, iPreviousWeapon);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     ClientInfo[client].PreviousWeapon = EntIndexToEntRef(iWeapon);
 
     char szWeaponDefIndex[12];
