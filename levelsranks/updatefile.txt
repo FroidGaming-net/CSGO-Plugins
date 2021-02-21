@@ -11,4 +11,7 @@
 "Files"
 {
 	"Plugin"	"Path_SM/plugins/LevelsRanks/levelsranks.smx"
+	"Plugin"	"Path_SM/translations/lr_core.phrases"
+	"Plugin"	"Path_SM/translations/lr_core_old.phrases"
+	"Plugin"	"Path_SM/translations/lr_core_ranks.phrases"
 }
