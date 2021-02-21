@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.2"
+		"Latest"	"1.2.2"
 	}
 
-	"Notes"	"Removed Warmup Method 2."
+	"Notes"	"Update new method."
 }
 
 "Files"

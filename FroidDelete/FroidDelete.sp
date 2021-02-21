@@ -10,7 +10,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2"
+#define VERSION "1.2.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDelete/updatefile.txt"
 
 #include "files/globals.sp"
@@ -76,13 +76,13 @@ public void OnEntityCreated(int entity, const char[] classname)
 {
 	if (StrEqual(classname, "logic_script", true) || StrEqual(classname, "trigger_multiple", true))
 	{
-		SDKHook(entity, SDKHook_SpawnPost, SDK_OnEntitySpawn_Post);
+		SDKHook(entity, SDKHook_Spawn, SDK_OnEntitySpawn);
 	}
 }
 
-public void SDK_OnEntitySpawn_Post(int entity)
+public void SDK_OnEntitySpawn(int entity)
 {
-	if (entity < -1)
+	if (entity < 0)
 	{
 		entity = EntRefToEntIndex(entity);
 		if (entity == INVALID_ENT_REFERENCE)
@@ -91,23 +91,13 @@ public void SDK_OnEntitySpawn_Post(int entity)
 		}
 	}
 
-	char vscripts[256];
-	GetEntPropString(entity, Prop_Data, "m_iszVScripts", vscripts, sizeof(vscripts));
+	char scripts[256];
+	GetEntPropString(entity, Prop_Data, "m_iszVScripts", scripts, sizeof(scripts));
 
 	// remove this entity
-	if (StrEqual(vscripts, "warmup/warmup_arena.nut", true) || StrEqual(vscripts, "warmup/warmup_teleport.nut", true))
+	if (StrEqual(scripts, "warmup/warmup_arena.nut", true) || StrEqual(scripts, "warmup/warmup_teleport.nut", true))
 	{
-		RequestFrame(Frame_RemoveEntity, EntIndexToEntRef(entity));
+		DispatchKeyValue(entity, "vscripts", "");
+		DispatchKeyValue(entity, "targetname", "");
 	}
-}
-
-public void Frame_RemoveEntity(int reference)
-{
-	int entity = EntRefToEntIndex(reference);
-	if (entity == INVALID_ENT_REFERENCE)
-	{
-		return;
-	}
-
-	RemoveEntity(entity);
 }
