@@ -111,7 +111,7 @@ LIMIT 1;"
 ) AS `timepos` \
 LIMIT 1;"
 
-static const char s_sDBConfigName[] = "levels_ranks";
+static const char s_sDBConfigName[] = "default";
 
 void ConnectDB()
 {
