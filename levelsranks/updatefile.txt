@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"3.1.6"
+		"Latest"	"3.1.7"
 	}
 
-	"Notes"	"Plugin release."
+	"Notes"	"Add !mm command."
 }
 
 "Files"

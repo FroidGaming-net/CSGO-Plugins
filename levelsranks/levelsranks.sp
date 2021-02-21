@@ -129,6 +129,7 @@ public void OnPluginStart()
 
 	RegConsoleCmd("sm_rank", Call_MainMenu, "Opens the statistics menu");
 	RegConsoleCmd("sm_lvl", Call_MainMenu, "Opens the statistics menu");
+	RegConsoleCmd("sm_mm", Call_MainMenu, "Opens the statistics menu");
 	RegAdminCmd("sm_lvl_reload", Call_ReloadSettings, ADMFLAG_ROOT, "Reloads core and module configuration files");
 	RegConsoleCmd("sm_resetrank", Call_ResetRank, "Resets your own rank");
 
