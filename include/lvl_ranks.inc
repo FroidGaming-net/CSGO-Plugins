@@ -3,9 +3,8 @@
 #endif
 #define _levelsranks_included_
 
-#define PLUGIN_VERSION "3.1.7"
+#define PLUGIN_VERSION "3.1.8"
 #define PLUGIN_INT_VERSION 03010600
-#define UPDATE_URL "https://sys.froidgaming.net/levelsranks/updatefile.txt"
 
 enum LR_HookType
 {
