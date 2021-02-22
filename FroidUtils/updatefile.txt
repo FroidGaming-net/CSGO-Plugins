@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.1.4"
+		"Latest"	"1.1.5"
 	}
 
-	"Notes"	"Disable Rank System when PUG is not LIVE."
+	"Notes"	"Update Translation."
 }
 
 "Files"
