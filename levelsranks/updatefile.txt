@@ -2,16 +2,16 @@
 {
 	"Version"
 	{
-		"Latest"	"3.1.7"
+		"Latest"	"3.1.8"
 	}
 
-	"Notes"	"Add !mm command."
+	"Notes"	"Update Include and Translation."
 }
 
 "Files"
 {
 	"Plugin"	"Path_SM/plugins/LevelsRanks/levelsranks.smx"
-	"Plugin"	"Path_SM/translations/lr_core.phrases"
-	"Plugin"	"Path_SM/translations/lr_core_old.phrases"
-	"Plugin"	"Path_SM/translations/lr_core_ranks.phrases"
+	"Plugin"	"Path_SM/translations/lr_core.phrases.txt"
+	"Plugin"	"Path_SM/translations/lr_core_old.phrases.txt"
+	"Plugin"	"Path_SM/translations/lr_core_ranks.phrases.txt"
 }
