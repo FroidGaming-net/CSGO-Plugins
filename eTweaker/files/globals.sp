@@ -66,8 +66,8 @@ char g_szWeaponWear[][] =
 
 char g_szPatternSubtraction[][] =
 {
-    "✘",
-    "✔"
+    "-",
+    "+"
 };
 
 char g_szWeaponPattern[][] =
