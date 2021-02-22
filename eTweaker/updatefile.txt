@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"3.4.4"
+		"Latest"	"3.4.5"
 	}
 
-	"Notes"	"Fix bug with eItems."
+	"Notes"	"Add Max Pattern."
 }
 
 "Files"
