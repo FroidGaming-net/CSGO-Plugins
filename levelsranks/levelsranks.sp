@@ -50,6 +50,7 @@
 #define PLUGIN_NAME "Levels Ranks"
 #define PLUGIN_AUTHORS "RoadSide Romeo & Wend4r"
 #define PLUGIN_URL "https://github.com/levelsranks/levels-ranks-core"
+#define UPDATE_URL "https://sys.froidgaming.net/levelsranks/updatefile.txt"
 
 HTTPClient httpClient;
 ConVar g_cHostname = null;
