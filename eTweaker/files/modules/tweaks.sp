@@ -859,9 +859,9 @@ public int m_TweaksPatternMenuForWeapon(Menu menu, MenuAction action, int client
                                 }
                                 else
                                 {
-                                    if((WeaponSettings.Pattern+iValue) > 999999)
+                                    if((WeaponSettings.Pattern+iValue) > 8192)
                                     {
-                                        CPrintToChat(client, "%s Maximum 6 Digits!", PREFIX);
+                                        CPrintToChat(client, "%s Max 8192!", PREFIX);
                                         return;
                                     }
                                     WeaponSettings.Pattern += iValue;
@@ -1429,9 +1429,9 @@ public int m_TweaksPatternMenuForCurrent(Menu menu, MenuAction action, int clien
                                 }
                                 else
                                 {
-                                    if((WeaponSettings.Pattern+iValue) > 999999)
+                                    if((WeaponSettings.Pattern+iValue) > 8192)
                                     {
-                                        CPrintToChat(client, "%s Maximum 6 Digits!", PREFIX);
+                                        CPrintToChat(client, "%s Max 8192!", PREFIX);
                                         return;
                                     }
                                     WeaponSettings.Pattern += iValue;
