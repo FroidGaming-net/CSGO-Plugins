@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.4"
+#define VERSION "1.1.5"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -296,9 +296,9 @@ public void FroidVIP_OnClientLoadedPost(int iClient)
             GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
             if (PlayerConnect.GetValue(sAuthID, iCooldown)) {
                 if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
-                    KickClient(iClient, "Jika kamu sudah terkena kick sebelumnya kamu tidak bisa join lagi! Silahkan masuk kembali ketika kedua team tidak full atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
+                    KickClient(iClient, "Jika kamu sudah terkena kick sebelumnya, kamu tidak bisa join lagi! Silahkan masuk kembali ketika kedua team tidak full atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
                 }else{
-                    KickClient(iClient, "If you've been kicked before you can't join again! Please reconnect when both team are not full or buy Premium/Premium Plus now at froidgaming.net/store");
+                    KickClient(iClient, "If you've been kicked before, you can't join again! Please reconnect when both team are not full or buy Premium/Premium Plus now at froidgaming.net/store");
                 }
                 return;
             }
