@@ -2,6 +2,7 @@
 #include <sourcemod>
 #include <retakes>
 #include <sdktools>
+#include <geoip>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -10,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.7"
+#define VERSION "1.7.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidPlant/updatefile.txt"
 
 #include "files/globals.sp"
@@ -28,6 +29,8 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
+    PlayerConnect = new StringMap();
+
     HookEvent("bomb_beginplant", Event_BombBeginPlant);
     HookEvent("bomb_planted", Event_BombPlanted, EventHookMode_Pre);
 
@@ -57,6 +60,16 @@ public void reloadPlugins() {
 	}
 }
 
+public void OnMapStart()
+{
+    PlayerConnect.Clear();
+}
+
+public void OnMapEnd()
+{
+    PlayerConnect.Clear();
+}
+
 public void OnClientPostAdminCheck(int iClient)
 {
     if (!IsValidClient(iClient)) {
@@ -64,6 +77,24 @@ public void OnClientPostAdminCheck(int iClient)
     }
 
 	g_PlayerData[iClient].Reset();
+
+    // GeoIP
+    char sIP[64], sCountryCode[3];
+    GetClientIP(iClient, sIP, sizeof(sIP));
+    GeoipCode2(sIP, sCountryCode);
+    Format(g_PlayerData[iClient].sCountryCode, sizeof(g_PlayerData[].sCountryCode), sCountryCode);
+
+    int iCooldown;
+    char sAuthID[64];
+    GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
+    if (PlayerConnect.GetValue(sAuthID, iCooldown)) {
+        if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
+            KickClient(iClient, "Kamu tidak diizinkan untuk masuk! Mohon tunggu map berikutnya atau masuk ke server retakes kami yang lain.");
+        }else{
+            KickClient(iClient, "You`r not allowed to connect! Please wait for the next map or connect to our other retakes server.");
+        }
+        return;
+    }
 }
 
 public void OnClientDisconnect(int iClient)
@@ -140,6 +171,13 @@ public void Retakes_OnFailToPlant(int iClient)
     g_PlayerData[iClient].iFailedToPlant++;
 
     if (g_PlayerData[iClient].iFailedToPlant >= 3) {
+        int iCooldown;
+        char sAuthID[64];
+        GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
+        if (!PlayerConnect.GetValue(sAuthID, iCooldown)) {
+            PlayerConnect.SetValue(sAuthID, 1);
+        }
+
         Retakes_MessageToAll("%N was kicked for fail to plant 3 times.", iClient);
 		KickClient(iClient, "You'r not plant the bomb 3 times");
     }
