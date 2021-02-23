@@ -1,10 +1,14 @@
+StringMap PlayerConnect;
+
 enum struct PlayerData
 {
     int iFailedToPlant;
+    char sCountryCode[3];
 
     void Reset()
 	{
 		this.iFailedToPlant = 0;
+        this.sCountryCode = "EN";
 	}
 }
 
