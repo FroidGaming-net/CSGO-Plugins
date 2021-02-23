@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.7"
+		"Latest"	"1.7.2"
 	}
 
-	"Notes"	"Plugin release."
+	"Notes"	"Connect cooldown."
 }
 
 "Files"
