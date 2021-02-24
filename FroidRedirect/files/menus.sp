@@ -55,6 +55,7 @@ int MenuServers_Callback(Menu hMenu, MenuAction mAction, int iClient, int iSlot)
 
 			char sInfo[128];
 			hMenu.GetItem(iSlot, sInfo, sizeof(sInfo));
+			CPrintToChatAll("%s {lightred}%N {default}switched to {lightred}%s{default} via !servers", PREFIX, iClient, sInfo);
 			RedirectClientOnServerEx(iClient, sInfo);
 		}
 		case MenuAction_Cancel:
