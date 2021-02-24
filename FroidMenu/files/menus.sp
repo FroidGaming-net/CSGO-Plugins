@@ -6,45 +6,49 @@ void MenuFeatures(int iClient)
 
     Menu hMenu = new Menu(MenuFeatures_Callback);
     hMenu.SetTitle("★ FroidGaming.net Menu ★");
-    
+
+	if(CommandExists("sm_servers")) {
+		hMenu.AddItem("0", "• Servers Menu");
+	}
+
 	if(CommandExists("sm_agents")) {
-		hMenu.AddItem("0", "• Agents");
+		hMenu.AddItem("1", "• Agents");
 	}
 
 	if(CommandExists("sm_guns")) {
-		hMenu.AddItem("1", "• Weapons");
+		hMenu.AddItem("2", "• Weapons");
 	}
 
 	if(CommandExists("sm_ws")) {
-		hMenu.AddItem("2", "• Weapon Skins");
+		hMenu.AddItem("3", "• Weapon Skins");
 	}
 
 	if(CommandExists("sm_sticker")) {
-		hMenu.AddItem("3", "• Weapon Stickers");
+		hMenu.AddItem("4", "• Weapon Stickers");
 	}
 
 	if(CommandExists("sm_tweak")) {
-		hMenu.AddItem("4", "• Weapon Tweaks");
+		hMenu.AddItem("5", "• Weapon Tweaks");
 	}
 
 	if(CommandExists("sm_gloves")) {
-		hMenu.AddItem("5", "• Gloves");
+		hMenu.AddItem("6", "• Gloves");
 	}
 
 	if(CommandExists("sm_knife")) {
-		hMenu.AddItem("6", "• Knives");
+		hMenu.AddItem("7", "• Knives");
 	}
-    
+
 	if(CommandExists("sm_music")) {
-		hMenu.AddItem("7", "• Music Kits");
+		hMenu.AddItem("8", "• Music Kits");
 	}
 
 	if (CommandExists("sm_hats")) {
-		hMenu.AddItem("8", "• Masks/Hats");
+		hMenu.AddItem("9", "• Masks/Hats");
 	}
 
 	if (CommandExists("sm_tag")) {
-		hMenu.AddItem("9", "• Chat Apperance");
+		hMenu.AddItem("10", "• Chat Apperance");
 	}
 
 	hMenu.ExitBackButton = false;
@@ -61,49 +65,49 @@ int MenuFeatures_Callback(Menu hMenu, MenuAction mAction, int iClient, int iSlot
 				return;
 			}
 
-			char sInfo[30];
-
-			hMenu.GetItem(iSlot, sInfo, sizeof(sInfo));
-
-			switch(sInfo[0])
+			switch(iSlot)
 			{
-                case '0':
+                case 0:
+				{
+					FakeClientCommand(iClient, "sm_servers");
+				}
+                case 1:
 				{
 					FakeClientCommand(iClient, "sm_agents");
 				}
-				case '1':
+				case 2:
 				{
 					FakeClientCommand(iClient, "sm_guns");
 				}
-				case '2':
+				case 3:
 				{
 					FakeClientCommand(iClient, "sm_ws");
 				}
-				case '3':
+				case 4:
 				{
 					FakeClientCommand(iClient, "sm_sticker");
 				}
-				case '4':
+				case 5:
 				{
 					FakeClientCommand(iClient, "sm_tweak");
 				}
-				case '5':
+				case 6:
 				{
 					FakeClientCommand(iClient, "sm_gloves");
 				}
-				case '6':
+				case 7:
 				{
 					FakeClientCommand(iClient, "sm_knife");
 				}
-				case '7':
+				case 8:
 				{
 					FakeClientCommand(iClient, "sm_music");
 				}
-				case '8':
+				case 9:
 				{
 					FakeClientCommand(iClient, "sm_hats");
 				}
-				case '9':
+				case 10:
 				{
 					FakeClientCommand(iClient, "sm_tag");
 				}
@@ -168,6 +172,6 @@ int MenuRules_Callback(Menu hMenu, MenuAction mAction, int iClient, int iSlot)
 		case MenuAction_End:
 		{
 			hMenu.Close();
-		} 
+		}
 	}
 }
