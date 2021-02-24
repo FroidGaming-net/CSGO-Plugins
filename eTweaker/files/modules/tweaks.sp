@@ -698,7 +698,10 @@ public void Tweaks_BuildStatTrakMenuForWeapon(int client, int iWeaponDefIndex)
     char szStatTrakToggle[32];
     Format(szStatTrakToggle, sizeof(szStatTrakToggle), "» %s StatTrak™", WeaponSettings.StatTrak_Enabled ? "Disable" : "Enable");
     menu.AddItem("0#", szStatTrakToggle);
-    menu.AddItem("1#", "» Reset", WeaponSettings.StatTrak_Kills > 0 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
+    menu.AddItem("1#", "-", ITEMDRAW_DISABLED);
+    menu.AddItem("2#", "-", ITEMDRAW_DISABLED);
+    menu.AddItem("3#", "-", ITEMDRAW_DISABLED);
+    menu.AddItem("4#", "» Reset", WeaponSettings.StatTrak_Kills > 0 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 
     menu.ExitBackButton = true;
     menu.Display(client, MENU_TIME_FOREVER);
@@ -732,7 +735,7 @@ public int m_TweaksStatTrakMenuForWeapon(Menu menu, MenuAction action, int clien
                     WeaponSettings.StatTrak_Enabled = !WeaponSettings.StatTrak_Enabled;
                     CPrintToChat(client, "%s You have %s StatTrak™ for \x06%s\x01.", PREFIX, WeaponSettings.StatTrak_Enabled ? "\x06enabled\x01" : "\x07disabled\x01", szWeaponDisplayName);
                 }
-                case 1:
+                case 4:
                 {
                     WeaponSettings.StatTrak_Kills = 0;
                     CPrintToChat(client, "%s You have reseted StatTrak™ for \x06%s\x01.", PREFIX, szWeaponDisplayName);
@@ -1749,7 +1752,10 @@ public void Tweaks_BuildStatTrakMenuForCurrent(int client)
     char szStatTrakToggle[32];
     Format(szStatTrakToggle, sizeof(szStatTrakToggle), "» %s StatTrak™", WeaponSettings.StatTrak_Enabled ? "Disable" : "Enable");
     menu.AddItem("0#", szStatTrakToggle);
-    menu.AddItem("1#", "» Reset", WeaponSettings.StatTrak_Kills > 0 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
+    menu.AddItem("1#", "-", ITEMDRAW_DISABLED);
+    menu.AddItem("2#", "-", ITEMDRAW_DISABLED);
+    menu.AddItem("3#", "-", ITEMDRAW_DISABLED);
+    menu.AddItem("4#", "» Reset", WeaponSettings.StatTrak_Kills > 0 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 
     menu.ExitBackButton = true;
     menu.Display(client, MENU_TIME_FOREVER);
@@ -1792,7 +1798,7 @@ public int m_TweaksStatTrakMenuForCurrent(Menu menu, MenuAction action, int clie
                     WeaponSettings.StatTrak_Enabled = !WeaponSettings.StatTrak_Enabled;
                     CPrintToChat(client, "%s You have %s StatTrak™ for \x06%s\x01.", PREFIX, WeaponSettings.StatTrak_Enabled ? "\x06enabled\x01" : "\x07disabled\x01", szWeaponDisplayName);
                 }
-                case 1:
+                case 4:
                 {
                     WeaponSettings.StatTrak_Kills = 0;
                     CPrintToChat(client, "%s You have reseted StatTrak™ for \x06%s\x01.", PREFIX, szWeaponDisplayName);
