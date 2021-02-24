@@ -1,0 +1,15 @@
+"Games"
+{
+	"csgo"
+	{
+		"Signatures"
+		{
+			"CBaseServer::ProcessConnectionlessPacket"
+			{
+				"library"		"engine"
+				"windows"		"\x55\x8B\xEC\xB8\xCC\x12\x00\x00"
+				"linux"			"\x55\x89\xE5\x57\x56\x53\x81\xEC\x5C\x11\x00\x00"
+			}
+		}
+	}
+}
