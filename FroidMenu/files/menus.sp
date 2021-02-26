@@ -65,52 +65,32 @@ int MenuFeatures_Callback(Menu hMenu, MenuAction mAction, int iClient, int iSlot
 				return;
 			}
 
-			switch(iSlot)
-			{
-                case 0:
-				{
-					FakeClientCommand(iClient, "sm_servers");
-				}
-                case 1:
-				{
-					FakeClientCommand(iClient, "sm_agents");
-				}
-				case 2:
-				{
-					FakeClientCommand(iClient, "sm_guns");
-				}
-				case 3:
-				{
-					FakeClientCommand(iClient, "sm_ws");
-				}
-				case 4:
-				{
-					FakeClientCommand(iClient, "sm_sticker");
-				}
-				case 5:
-				{
-					FakeClientCommand(iClient, "sm_tweak");
-				}
-				case 6:
-				{
-					FakeClientCommand(iClient, "sm_gloves");
-				}
-				case 7:
-				{
-					FakeClientCommand(iClient, "sm_knife");
-				}
-				case 8:
-				{
-					FakeClientCommand(iClient, "sm_music");
-				}
-				case 9:
-				{
-					FakeClientCommand(iClient, "sm_hats");
-				}
-				case 10:
-				{
-					FakeClientCommand(iClient, "sm_tag");
-				}
+			char sInfo[30];
+
+			hMenu.GetItem(iSlot, sInfo, sizeof(sInfo));
+
+			if (StrEqual(sInfo, "0", false)) {
+				FakeClientCommand(iClient, "sm_servers");
+			} else if (StrEqual(sInfo, "1", false)) {
+				FakeClientCommand(iClient, "sm_agents");
+			} else if (StrEqual(sInfo, "2", false)) {
+				FakeClientCommand(iClient, "sm_guns");
+			} else if (StrEqual(sInfo, "3", false)) {
+				FakeClientCommand(iClient, "sm_ws");
+			} else if (StrEqual(sInfo, "4", false)) {
+				FakeClientCommand(iClient, "sm_sticker");
+			} else if (StrEqual(sInfo, "5", false)) {
+				FakeClientCommand(iClient, "sm_tweak");
+			} else if (StrEqual(sInfo, "6", false)) {
+				FakeClientCommand(iClient, "sm_gloves");
+			} else if (StrEqual(sInfo, "7", false)) {
+				FakeClientCommand(iClient, "sm_knife");
+			} else if (StrEqual(sInfo, "8", false)) {
+				FakeClientCommand(iClient, "sm_music");
+			} else if (StrEqual(sInfo, "9", false)) {
+				FakeClientCommand(iClient, "sm_hats");
+			} else if (StrEqual(sInfo, "10", false)) {
+				FakeClientCommand(iClient, "sm_tag");
 			}
 		}
 		case MenuAction_End:
