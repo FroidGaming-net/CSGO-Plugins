@@ -13,7 +13,7 @@
 #pragma semicolon 1
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.4.6"
+#define VERSION "3.4.7"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
@@ -245,6 +245,11 @@ public Action Event_OnWeaponInspect(Event event, const char[] name, bool dontBro
     if(!IsValidClient(client, true))
     {
        return Plugin_Continue;
+    }
+
+    if(ClientInfo[client].Key == -1)
+    {
+        return Plugin_Continue;
     }
 
     int iWeaponDefIndex = eItems_GetActiveWeaponDefIndex(client);
