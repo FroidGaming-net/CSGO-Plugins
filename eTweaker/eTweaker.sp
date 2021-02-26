@@ -32,7 +32,6 @@
 #include "files/modules/tweaks.sp"
 #include "files/modules/musickits.sp"
 
-
 public Plugin myinfo =
 {
     name = "eTweaker",
