@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.1"
+		"Latest"	"1.1.2"
 	}
 
-	"Notes"	"Plugin release."
+	"Notes"	"Set sv_damage_print_enable to 0 for PUG/Retakes/Executes."
 }
 
 "Files"
