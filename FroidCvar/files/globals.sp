@@ -12,7 +12,8 @@ ConVar 	g_Cvar_AllowVotes,
         g_Cvar_GrenadeRadio,
         g_Cvar_PlayerCash,
         g_Cvar_TeamCash,
-        g_Cvar_Radar;
+        g_Cvar_Radar,
+        g_Cvar_DamageInfo;
 
 // All FFA Deathmatch
 ConVar 	g_Cvar_IgnoreWin,

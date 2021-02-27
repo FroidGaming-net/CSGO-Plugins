@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -47,6 +47,7 @@ public void OnPluginStart()
     g_Cvar_WarmupTime = FindConVar("mp_warmuptime");
     g_Cvar_SolidTeam = FindConVar("mp_solid_teammates");
     g_Cvar_Radar = FindConVar("sv_disable_radar");
+    g_Cvar_DamageInfo = FindConVar("sv_damage_print_enable");
 
     CreateTimer(60.0, Timer_Repeat, _, TIMER_REPEAT);
 
@@ -96,6 +97,7 @@ public Action Timer_Setting(Handle hTimer)
         SetConVarFloat(g_Cvar_Damage3, 0.85, true);
         SetConVarInt(g_Cvar_Damage4, 1, true);
         SetConVarFloat(g_Cvar_Damage5, 0.4, true);
+        SetConVarInt(g_Cvar_DamageInfo, 0, true);
     }
 
     // Practice
