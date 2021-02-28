@@ -1,0 +1,16 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.0"
+	}
+
+	"Notes"	"Plugin release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/API/GeoIP2.smx"
+    "Plugin"	"Path_SM/config/geoip/GeoLite2-City.mmdb"
+    "Plugin"	"Path_SM/config/geoip/GeoLite2-Country.mmdb"
+}
