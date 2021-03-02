@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.4"
+		"Latest"	"1.4.2"
 	}
 
-	"Notes"	"Plugin release."
+	"Notes"	"Improve Auto Defuse."
 }
 
 "Files"
