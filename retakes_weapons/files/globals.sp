@@ -76,6 +76,8 @@ int g_iSmokegrenade_CT = 0;
 int g_iSmokegrenade_T = 0;
 int g_iMolotov_CT = 0;
 int g_iMolotov_T = 0;
+int g_iDeagle_CT = 0;
+int g_iDeagle_T = 0;
 int g_iAWP_CT = 0;
 int g_iAWP_T = 0;
 int g_iAWP_CT_Premium = 0;
@@ -85,4 +87,4 @@ int g_iScout_T = 0;
 int g_iRounds_Pistol = 0;
 int g_iRounds_Force = 0;
 
-bool g_bChance = true; 
+bool g_bChance = true;
