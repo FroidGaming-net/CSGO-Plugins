@@ -56,6 +56,8 @@ void EquipAllPlayerWeapon()
 	g_iSmokegrenade_T = 0;
 	g_iMolotov_CT = 0;
 	g_iMolotov_T = 0;
+	g_iDeagle_CT = 0;
+	g_iDeagle_T = 0;
 	g_iAWP_CT = 0;
 	g_iAWP_CT_Premium = 0;
 	g_iAWP_T = 0;
@@ -175,8 +177,27 @@ void EquipWeapons(int iClient)
 				iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
 			}
 
-			GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
-			iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_CT);
+			if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_deagle")) {
+				if (iRandom == 1 || iRandom == 2 || iRandom == 4) {
+					if (g_iDeagle_CT < 2) {
+						GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
+						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_CT);
+						g_iDeagle_CT++;
+					} else {
+						if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_hkp2000")) {
+							GivePlayerItem(iClient, "weapon_hkp2000");
+						} else {
+							GivePlayerItem(iClient, "weapon_usp_silencer");
+						}
+					}
+				}
+			} else {
+				if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_hkp2000")) {
+					GivePlayerItem(iClient, "weapon_hkp2000");
+				} else {
+					GivePlayerItem(iClient, "weapon_usp_silencer");
+				}
+			}
         } else if (GetClientTeam(iClient) == CS_TEAM_T) {
             int iRandom = RoundToNearest(GetRandomFloat(1.0, 5.0));
 
@@ -220,8 +241,19 @@ void EquipWeapons(int iClient)
 				iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
 			}
 
-			GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_T);
-			iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_T);
+			if (StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_deagle")) {
+				if (iRandom == 1 || iRandom == 2 || iRandom == 4) {
+					if (g_iDeagle_T < 2) {
+						GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_T);
+						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_T);
+						g_iDeagle_T++;
+					} else {
+						GivePlayerItem(iClient, "weapon_glock");
+					}
+				}
+			} else {
+				GivePlayerItem(iClient, "weapon_glock");
+			}
 		}
     } else if (g_iRoundType == PISTOL_ROUND) {
         // ============================
@@ -411,7 +443,7 @@ void GiveNades(int client, int money, int order)
 		}
 	} else if (GetClientTeam(client) == CS_TEAM_CT) {
 		GivePlayerItem(client, "weapon_knife");
-		
+
 		if (iRandom == 1) {
 			if (g_iMolotov_CT < 1 && money >= 600) {
 				GivePlayerItem(client, "weapon_incgrenade");
