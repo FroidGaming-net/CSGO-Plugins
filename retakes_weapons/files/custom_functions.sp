@@ -190,6 +190,12 @@ void EquipWeapons(int iClient)
 							GivePlayerItem(iClient, "weapon_usp_silencer");
 						}
 					}
+				} else {
+					if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_hkp2000")) {
+						GivePlayerItem(iClient, "weapon_hkp2000");
+					} else {
+						GivePlayerItem(iClient, "weapon_usp_silencer");
+					}
 				}
 			} else {
 				if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_hkp2000")) {
@@ -250,6 +256,8 @@ void EquipWeapons(int iClient)
 					} else {
 						GivePlayerItem(iClient, "weapon_glock");
 					}
+				} else {
+					GivePlayerItem(iClient, "weapon_glock");
 				}
 			} else {
 				GivePlayerItem(iClient, "weapon_glock");
