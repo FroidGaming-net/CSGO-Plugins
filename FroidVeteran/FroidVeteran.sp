@@ -28,8 +28,23 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
+    CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
+
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
+    }
+}
+
+public Action Timer_Repeat(Handle hTimer)
+{
+	for (int i = 1; i < MAXPLAYERS; i++) {
+		if (IsValidClient(i)) {
+			if (g_PlayerData[i].iPlayersLoaded == -1) {
+                if (LR_IsLoaded()) {
+                    OnCheckPlayer(i);
+                }
+			}
+        }
     }
 }
 
@@ -40,12 +55,7 @@ public void OnLibraryAdded(const char[] name)
     }
 }
 
-public void LR_OnCoreIsReady()
-{
-    LR_Hook(LR_OnPlayerLoaded, Event_OnPlayerLoaded);
-}
-
-void Event_OnPlayerLoaded(int iClient, int iAccountID)
+public void OnClientPostAdminCheck(int iClient)
 {
     if (!IsValidClient(iClient)) {
         return;
@@ -59,15 +69,34 @@ void Event_OnPlayerLoaded(int iClient, int iAccountID)
     GeoipCode2(sIP, sCountryCode);
     Format(g_PlayerData[iClient].sCountryCode, sizeof(g_PlayerData[].sCountryCode), sCountryCode);
 
+    if (LR_IsLoaded()) {
+        OnCheckPlayer(iClient);
+    } else {
+        g_PlayerData[iClient].iPlayersLoaded = -1;
+    }
+}
+
+void OnCheckPlayer(int iClient)
+{
     // LevelsRanks
-	g_PlayerData[iClient].iRank = LR_GetClientInfo(iClient, ST_RANK);
+    g_PlayerData[iClient].iPlayersLoaded = 1;
+    g_PlayerData[iClient].iRank = LR_GetClientInfo(iClient, ST_RANK);
     g_PlayerData[iClient].iEXP = LR_GetClientInfo(iClient, ST_EXP);
 
     if (g_PlayerData[iClient].iRank <= 13) {
         if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
-            KickClient(iClient, "Kamu membutuhkan minimal 1800 EXP (DMG) untuk bermain di server ini.\n EXP Kamu sekarang : %i EXP\nKamu masih bisa bermain di PUG #1, PUG #2 dan PUG #3", g_PlayerData[iClient].iEXP);
+            KickClient(iClient, "Kamu membutuhkan minimal 1800 EXP (DMG) untuk bermain di server ini.\nEXP Kamu sekarang : %i EXP\nKamu masih bisa bermain di PUG 1, PUG 2 dan PUG 3", g_PlayerData[iClient].iEXP);
         } else {
-            KickClient(iClient, "You need minimum 1800 EXP (DMG) to play on this server.\n Your current EXP : %I EXP\nYou can still play on PUG # 1, PUG # 2 and PUG # 3", g_PlayerData[iClient].iEXP);
+            KickClient(iClient, "You need minimum 1800 EXP (DMG) to play on this server.\nYour current EXP : %I EXP\nYou can still play on PUG 1, PUG 2 and PUG 3", g_PlayerData[iClient].iEXP);
         }
     }
+}
+
+public void OnClientDisconnect(int iClient)
+{
+    if (!IsValidClient(iClient)) {
+        return;
+    }
+
+    g_PlayerData[iClient].Reset();
 }
