@@ -198,11 +198,7 @@ void EquipWeapons(int iClient)
 					}
 				}
 			} else {
-				if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_hkp2000")) {
-					GivePlayerItem(iClient, "weapon_hkp2000");
-				} else {
-					GivePlayerItem(iClient, "weapon_usp_silencer");
-				}
+				GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
 			}
         } else if (GetClientTeam(iClient) == CS_TEAM_T) {
             int iRandom = RoundToNearest(GetRandomFloat(1.0, 5.0));
@@ -260,7 +256,7 @@ void EquipWeapons(int iClient)
 					GivePlayerItem(iClient, "weapon_glock");
 				}
 			} else {
-				GivePlayerItem(iClient, "weapon_glock");
+				GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_T);
 			}
 		}
     } else if (g_iRoundType == PISTOL_ROUND) {
