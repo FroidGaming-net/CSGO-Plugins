@@ -177,7 +177,7 @@ void EquipWeapons(int iClient)
 				iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
 			}
 
-			if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_deagle")) {
+			if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_deagle") || StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_revolver")) {
 				if (iRandom == 1 || iRandom == 2 || iRandom == 4) {
 					if (g_iDeagle_CT < 2) {
 						GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
@@ -244,7 +244,7 @@ void EquipWeapons(int iClient)
 				iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
 			}
 
-			if (StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_deagle")) {
+			if (StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_deagle") || StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_revolver")) {
 				if (iRandom == 1 || iRandom == 2 || iRandom == 4) {
 					if (g_iDeagle_T < 2) {
 						GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_T);
