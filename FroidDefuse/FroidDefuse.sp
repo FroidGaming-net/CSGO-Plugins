@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.4.2"
+#define VERSION "1.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDefuse/updatefile.txt"
 
 #include "files/globals.sp"
@@ -36,7 +36,6 @@ public void OnPluginStart()
 
     HookEvent("player_death", Event_AttemptInstantDefuse, EventHookMode_PostNoCopy);
     HookEvent("round_start", Event_RoundStart, EventHookMode_PostNoCopy);
-    HookEvent("round_freeze_end", Event_RoundFreezeEnd, EventHookMode_PostNoCopy);
 
     // Added the forwards to allow other plugins to call this one.
     fw_OnInstantDefusePre = CreateGlobalForward("FroidDefuse_OnInstantDefusePre", ET_Event, Param_Cell, Param_Cell);
@@ -57,12 +56,6 @@ public void OnLibraryAdded(const char[] name)
 public void OnMapStart()
 {
     hTimer_MolotovThreatEnd = null;
-	g_bHasDefuseKitTeam = false;
-}
-
-public void OnMapEnd()
-{
-	g_bHasDefuseKitTeam = false;
 }
 
 public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadcast)
@@ -73,20 +66,6 @@ public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadca
 	if (hTimer_MolotovThreatEnd != null)
 	{
 		delete hTimer_MolotovThreatEnd;
-	}
-}
-
-public Action Event_RoundFreezeEnd(Handle event, const char[] name, bool dontBroadcast)
-{
-	g_bHasDefuseKitTeam = false;
-	for (int i = 1; i < MAXPLAYERS; i++) {
-		if (IsPlayerAlive(i)) {
-			if (GetClientTeam(i) == CS_TEAM_T) {
-				if (HasDefuseKit(i)) {
-					g_bHasDefuseKitTeam = true;
-				}
-			}
-		}
 	}
 }
 
@@ -135,34 +114,28 @@ void AttemptInstantDefuse(int client, int exemptNade = 0)
 	    return;
 	}
 
-	bool bHasDefuseKitTeam = false;
+	bool hasDefuseKitTeam = false;
 
 	for (int i = 1; i < MAXPLAYERS; i++) {
-		if (IsPlayerAlive(i)) {
-			if (GetClientTeam(i) == CS_TEAM_T) {
-				if (HasDefuseKit(i)) {
-					bHasDefuseKitTeam = true;
-				}
+		if (IsValidClient(i)) {
+			if (HasDefuseKit(i)) {
+				hasDefuseKitTeam = true;
 			}
 		}
 	}
 
-	bool bHasDefuseKit = HasDefuseKit(client);
+	bool hasDefuseKit = HasDefuseKit(client);
 
 	float c4TimeLeft = GetConVarFloat(FindConVar("mp_c4timer")) - (GetGameTime() - g_c4PlantTime);
 
 	if (!g_bWouldMakeIt)
 	{
-		g_bWouldMakeIt = (c4TimeLeft >= 10.0 && !bHasDefuseKit) || (c4TimeLeft >= 5.0 && bHasDefuseKit);
+		g_bWouldMakeIt = (c4TimeLeft >= 10.0 && !hasDefuseKit) || (c4TimeLeft >= 5.0 && hasDefuseKit);
 	}
 
 	if (!g_bWouldMakeIt)
 	{
-		if (bHasDefuseKitTeam == true && bHasDefuseKit == false) {
-			return;
-		}
-
-		if (g_bHasDefuseKitTeam == true && bHasDefuseKit == false) {
+		if (hasDefuseKitTeam == true && hasDefuseKit == false) {
 			return;
 		}
 
