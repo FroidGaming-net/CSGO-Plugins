@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.4"
+#define VERSION "1.4.3"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDefuse/updatefile.txt"
 
 #include "files/globals.sp"
@@ -55,7 +55,13 @@ public void OnLibraryAdded(const char[] name)
 
 public void OnMapStart()
 {
+	g_bHasDefuseKitTeam = false;
     hTimer_MolotovThreatEnd = null;
+}
+
+public void OnMapEnd()
+{
+	g_bHasDefuseKitTeam = false;
 }
 
 public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadcast)
@@ -98,6 +104,19 @@ public void Event_BombBeginDefusePlusFrame(int userId)
     }
 }
 
+public Action Event_RoundFreezeEnd(Handle event, const char[] name, bool dontBroadcast)
+{
+	g_bHasDefuseKitTeam = false;
+	for (int i = 1; i < MAXPLAYERS; i++) {
+		if (IsValidClient(i)) {
+			if (HasDefuseKit(i)) {
+				g_bHasDefuseKitTeam = true;
+			}
+		}
+	}
+}
+
+
 void AttemptInstantDefuse(int client, int exemptNade = 0)
 {
 	if (g_bAlreadyComplete || !GetEntProp(client, Prop_Send, "m_bIsDefusing") || HasAlivePlayer(CS_TEAM_T))
@@ -136,6 +155,10 @@ void AttemptInstantDefuse(int client, int exemptNade = 0)
 	if (!g_bWouldMakeIt)
 	{
 		if (hasDefuseKitTeam == true && hasDefuseKit == false) {
+			return;
+		}
+
+		if (g_bHasDefuseKitTeam == true && hasDefuseKit == false) {
 			return;
 		}
 
