@@ -47,6 +47,12 @@ public Action Command_Ws(int client, int args)
                 case 0:     CPrintToChat(client, "%s No skin found.", PREFIX);
                 default:
                 {
+                    if(!eItems_IsSkinnableDefIndex(iActiveWeaponDefIndex))
+                    {
+                        CPrintToChat(client, "%s This weapon is not skinnable!.", PREFIX);
+                        return Plugin_Handled;
+                    }
+
                     char szWeaponDefIndex[12];
                     char szSkinDisplayName[48];
 
@@ -166,6 +172,12 @@ public Action Command_WsAll(int client, int args)
         case 0:     CPrintToChat(client, "%s No skin found.", PREFIX);
         default:
         {
+            if(!eItems_IsSkinnableDefIndex(iActiveWeaponDefIndex))
+            {
+                CPrintToChat(client, "%s This weapon is not skinnable!.", PREFIX);
+                return Plugin_Handled;
+            }
+
             char szWeaponDefIndex[12];
             char szSkinDisplayName[48];
 
