@@ -441,9 +441,26 @@ stock void Tweaks_BuildStickersCategoryMenuForWeapon(int client, int iWeaponDefI
     char szStickerSetDisplayName[48];
     char szStickerSetNum[12];
     char szTranslation[256];
+
     for(int iStickerSetNum = 0; iStickerSetNum < eTweaker_GetStickersSetsCount(); iStickerSetNum++)
     {
         eItems_GetStickerSetDisplayNameByStickerSetNum(iStickerSetNum, szStickerSetDisplayName, sizeof(szStickerSetDisplayName));
+        if (StrContains(szStickerSetDisplayName, "valve", false) != -1) {
+            IntToString(iStickerSetNum, szStickerSetNum, sizeof(szStickerSetNum));
+            Format(szTranslation, sizeof(szTranslation), "» %s", szStickerSetDisplayName);
+            menu.AddItem(szStickerSetNum, szTranslation);
+            break;
+        }
+    }
+
+    for(int iStickerSetNum = 0; iStickerSetNum < eTweaker_GetStickersSetsCount(); iStickerSetNum++)
+    {
+        eItems_GetStickerSetDisplayNameByStickerSetNum(iStickerSetNum, szStickerSetDisplayName, sizeof(szStickerSetDisplayName));
+
+        if (StrContains(szStickerSetDisplayName, "valve", false) == -1) {
+            continue;
+        }
+
         IntToString(iStickerSetNum, szStickerSetNum, sizeof(szStickerSetNum));
         Format(szTranslation, sizeof(szTranslation), "» %s", szStickerSetDisplayName);
         menu.AddItem(szStickerSetNum, szTranslation);
@@ -1976,6 +1993,24 @@ stock void Tweaks_BuildStickersCategoryMenuForCurrent(int client, int iPosition 
     for(int iStickerSetNum = 0; iStickerSetNum < eTweaker_GetStickersSetsCount(); iStickerSetNum++)
     {
         eItems_GetStickerSetDisplayNameByStickerSetNum(iStickerSetNum, szStickerSetDisplayName, sizeof(szStickerSetDisplayName));
+
+        if (StrContains(szStickerSetDisplayName, "valve", false) == -1) {
+            continue;
+        }
+
+        IntToString(iStickerSetNum, szStickerSetNum, sizeof(szStickerSetNum));
+        Format(szTranslation, sizeof(szTranslation), "» %s", szStickerSetDisplayName);
+        menu.AddItem(szStickerSetNum, szTranslation);
+    }
+
+    for(int iStickerSetNum = 0; iStickerSetNum < eTweaker_GetStickersSetsCount(); iStickerSetNum++)
+    {
+        eItems_GetStickerSetDisplayNameByStickerSetNum(iStickerSetNum, szStickerSetDisplayName, sizeof(szStickerSetDisplayName));
+
+        if (StrContains(szStickerSetDisplayName, "valve", false) != -1) {
+            continue;
+        }
+
         IntToString(iStickerSetNum, szStickerSetNum, sizeof(szStickerSetNum));
         Format(szTranslation, sizeof(szTranslation), "» %s", szStickerSetDisplayName);
         menu.AddItem(szStickerSetNum, szTranslation);
