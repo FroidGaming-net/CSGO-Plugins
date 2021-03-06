@@ -445,19 +445,21 @@ stock void Tweaks_BuildStickersCategoryMenuForWeapon(int client, int iWeaponDefI
     for(int iStickerSetNum = 0; iStickerSetNum < eTweaker_GetStickersSetsCount(); iStickerSetNum++)
     {
         eItems_GetStickerSetDisplayNameByStickerSetNum(iStickerSetNum, szStickerSetDisplayName, sizeof(szStickerSetDisplayName));
-        if (StrContains(szStickerSetDisplayName, "valve", false) != -1) {
-            IntToString(iStickerSetNum, szStickerSetNum, sizeof(szStickerSetNum));
-            Format(szTranslation, sizeof(szTranslation), "» %s", szStickerSetDisplayName);
-            menu.AddItem(szStickerSetNum, szTranslation);
-            break;
+
+        if (StrContains(szStickerSetDisplayName, "valve", false) == -1) {
+            continue;
         }
+
+        IntToString(iStickerSetNum, szStickerSetNum, sizeof(szStickerSetNum));
+        Format(szTranslation, sizeof(szTranslation), "» %s", szStickerSetDisplayName);
+        menu.AddItem(szStickerSetNum, szTranslation);
     }
 
     for(int iStickerSetNum = 0; iStickerSetNum < eTweaker_GetStickersSetsCount(); iStickerSetNum++)
     {
         eItems_GetStickerSetDisplayNameByStickerSetNum(iStickerSetNum, szStickerSetDisplayName, sizeof(szStickerSetDisplayName));
 
-        if (StrContains(szStickerSetDisplayName, "valve", false) == -1) {
+        if (StrContains(szStickerSetDisplayName, "valve", false) != -1) {
             continue;
         }
 
