@@ -17,15 +17,16 @@ public void SDK_OnWeaponSwitchPost(int client, int iWeapon)
     {
         switch(ClientInfo[client].WeaponSwitch)
         {
-            case SWITCH_ALLWEAPONS:                     Skins_BuildAllWeaponSkinsMenu(client);
-            case SWITCH_CURRENTWEAPON:                  Skins_BuildCurrentWeaponSkinsMenu(client);
-            case SWITCH_TWEAKS_CURRENTMAIN:             Tweaks_BuildTweakMenuForCurrent(client);
-            case SWITCH_TWEAKS_CURRENT_STICKERS_MAIN:   Tweaks_BuildStickersMenuForCurrent(client);
-            case SWITCH_TWEAKS_CURRENT_STATTRAK:        Tweaks_BuildStatTrakMenuForCurrent(client);
-            case SWITCH_TWEAKS_CURRENT_RARITIES:        Tweaks_BuildRaritiesMenuForCurrent(client);
-            case SWITCH_TWEAKS_CURRENT_WEAR:            Tweaks_BuildWearMenuForCurrent(client);
-            case SWITCH_TWEAKS_CURRENT_PATTERN:         Tweaks_BuildPatternMenuForCurrent(client);
-            case SWITCH_TWEAKS_CURRENT_NAMETAG:         Tweaks_BuildNametagMenuForCurrent(client);
+            case SWITCH_ALLWEAPONS:                         Skins_BuildAllWeaponSkinsMenu(client);
+            case SWITCH_CURRENTWEAPON:                      Skins_BuildCurrentWeaponSkinsMenu(client);
+            case SWITCH_TWEAKS_CURRENTMAIN:                 Tweaks_BuildTweakMenuForCurrent(client);
+            case SWITCH_TWEAKS_CURRENT_STICKERS_MAIN:       Tweaks_BuildStickersMenuForCurrent(client);
+            case SWITCH_TWEAKS_CURRENT_STICKERS_CATEGORY:   Tweaks_BuildStickersCategoryMenuForCurrent(client);
+            case SWITCH_TWEAKS_CURRENT_STATTRAK:            Tweaks_BuildStatTrakMenuForCurrent(client);
+            case SWITCH_TWEAKS_CURRENT_RARITIES:            Tweaks_BuildRaritiesMenuForCurrent(client);
+            case SWITCH_TWEAKS_CURRENT_WEAR:                Tweaks_BuildWearMenuForCurrent(client);
+            case SWITCH_TWEAKS_CURRENT_PATTERN:             Tweaks_BuildPatternMenuForCurrent(client);
+            case SWITCH_TWEAKS_CURRENT_NAMETAG:             Tweaks_BuildNametagMenuForCurrent(client);
         }
     }
 

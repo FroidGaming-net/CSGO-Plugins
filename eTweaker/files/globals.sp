@@ -9,6 +9,7 @@ int g_iGlovesCount;
 int g_iMusicKitsCount;
 int g_iStickersSetsCount;
 int g_iStickersCount;
+int g_iPatchesCount;
 
 Handle g_hGiveWearableCall;
 Handle g_hRemoveWearableCall;
@@ -96,6 +97,7 @@ char g_szWeaponPattern[][] =
 #define SWITCH_TWEAKS_CURRENT_WEAR 6
 #define SWITCH_TWEAKS_CURRENT_PATTERN 7
 #define SWITCH_TWEAKS_CURRENT_NAMETAG 8
+#define SWITCH_TWEAKS_CURRENT_STICKERS_CATEGORY 9
 
 
 enum struct eKnife

@@ -134,6 +134,11 @@ stock int eTweaker_GetStickersCount()
     return g_iStickersCount;
 }
 
+stock int eTweaker_GetPatchesCount()
+{
+    return g_iPatchesCount;
+}
+
 stock void eTweaker_PrintDataNotSynced(int client)
 {
     if(g_bFirstSynced == false) {
@@ -607,6 +612,14 @@ stock void eTweaker_AttachStickerToWeapon(int client, int iWeaponDefIndex, int i
     char szWeaponDefIndex[12];
     char szWeaponDisplayName[48];
     IntToString(iWeaponDefIndex, szWeaponDefIndex, sizeof(szWeaponDefIndex));
+    eItems_GetWeaponDisplayNameByDefIndex(iWeaponDefIndex, szWeaponDisplayName, sizeof(szWeaponDisplayName));
+
+    int iStickerSlots = eItems_GetWeaponStickersSlotsByDefIndex(iWeaponDefIndex);
+
+    if (iStickerSlots == 0) {
+        CPrintToChat(client, "%s No sticker slots for \x06%s\x01.", PREFIX, szWeaponDisplayName);
+        return;
+    }
 
     eWeaponSettings WeaponSettings;
     g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
@@ -632,10 +645,11 @@ stock void eTweaker_AttachStickerToWeapon(int client, int iWeaponDefIndex, int i
 
     if(!eItems_GetStickerDisplayNameByDefIndex(iStickerDefIndex, szStickerDisplayName, sizeof(szStickerDisplayName)))
     {
-        strcopy(szStickerDisplayName, sizeof(szStickerDisplayName), "Default");
+        if(!eItems_GetPatchDisplayNameByDefIndex(iStickerDefIndex, szStickerDisplayName, sizeof(szStickerDisplayName)))
+        {
+            strcopy(szStickerDisplayName, sizeof(szStickerDisplayName), "Default");
+        }
     }
-
-    eItems_GetWeaponDisplayNameByDefIndex(iWeaponDefIndex, szWeaponDisplayName, sizeof(szWeaponDisplayName));
 
     CPrintToChat(client, "%s You have selected \x06%s\x01 sticker (slot %i) for \x06%s\x01.", PREFIX, szStickerDisplayName, iStickerSlot + 1, szWeaponDisplayName);
 }

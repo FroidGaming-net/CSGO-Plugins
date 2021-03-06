@@ -13,7 +13,7 @@
 #pragma semicolon 1
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.4.8"
+#define VERSION "3.4.9"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
@@ -236,6 +236,7 @@ public void eItems_OnItemsSynced()
     g_iMusicKitsCount = eItems_GetMusicKitsCount();
     g_iStickersSetsCount = eItems_GetStickersSetsCount();
     g_iStickersCount = eItems_GetStickersCount();
+    g_iPatchesCount = eItems_GetPatchesCount();
 }
 
 public Action Event_OnWeaponInspect(Event event, const char[] name, bool dontBroadcast)

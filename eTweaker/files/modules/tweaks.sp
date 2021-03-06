@@ -362,7 +362,10 @@ public void Tweaks_BuildStickersMenuForWeapon(int client, int iWeaponDefIndex)
             {
                 if(!eItems_GetStickerDisplayNameByDefIndex(WeaponSettings.Sticker[iStickerSlot], szStickerDisplayName, sizeof(szStickerDisplayName)))
                 {
-                    strcopy(szStickerDisplayName, sizeof(szStickerDisplayName), "No sticker applied");
+                    if(!eItems_GetPatchDisplayNameByDefIndex(WeaponSettings.Sticker[iStickerSlot], szStickerDisplayName, sizeof(szStickerDisplayName)))
+                    {
+                        strcopy(szStickerDisplayName, sizeof(szStickerDisplayName), "No sticker applied");
+                    }
                 }
                 FormatEx(szMenuItem, sizeof(szMenuItem), "• Sticker slot %i\n ❯ %s", iStickerSlot + 1, szStickerDisplayName);
 
@@ -437,6 +440,7 @@ stock void Tweaks_BuildStickersCategoryMenuForWeapon(int client, int iWeaponDefI
     menu.SetTitle("★ Tweaks Menu - %s Stickers (slot %i) ★ \n ", szDisplayName, iStickerSlot + 1);
 
     menu.AddItem("#0", "» Default");
+    menu.AddItem("#1", "» Patches");
 
     char szStickerSetDisplayName[48];
     char szStickerSetNum[12];
@@ -509,6 +513,10 @@ public int m_TweakStickersCategoryForWeapon(Menu menu, MenuAction action, int cl
                     }
                     Tweaks_BuildStickersCategoryMenuForWeapon(client, ClientInfo[client].WeaponStoredDefIndex, ClientInfo[client].MenuCategorySelection);
 
+                }
+                case 1:
+                {
+                    Tweaks_BuildPatchesSelectionMenuForWeapon(client, ClientInfo[client].WeaponStoredDefIndex);
                 }
                 default:
                 {
@@ -611,6 +619,88 @@ public int m_TweakStickersSelectionForWeapon(Menu menu, MenuAction action, int c
                 }
             }
             Tweaks_BuildStickersSelectionMenuForWeapon(client, ClientInfo[client].WeaponStoredDefIndex, ClientInfo[client].StickerSetStored, GetMenuSelectionPosition());
+        }
+        case MenuAction_Cancel:
+        {
+            if(option == MenuCancel_ExitBack)
+            {
+                Tweaks_BuildStickersCategoryMenuForWeapon(client, ClientInfo[client].WeaponStoredDefIndex, ClientInfo[client].MenuCategorySelection);
+            }
+        }
+        case MenuAction_End:
+        {
+            delete menu;
+        }
+    }
+}
+
+stock void Tweaks_BuildPatchesSelectionMenuForWeapon(int client, int iWeaponDefIndex, int iPosition = 0)
+{
+    if(eTweaker_IsClientSpectating(client))
+    {
+        eTweaker_PrintNotAvailableInSpec(client);
+        return;
+    }
+
+    int iStickerSlot = ClientInfo[client].StickerSlotStored;
+    char szWeaponDefIndex[12];
+    IntToString(iWeaponDefIndex, szWeaponDefIndex, sizeof(szWeaponDefIndex));
+
+    eWeaponSettings WeaponSettings;
+    g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
+
+    Menu menu = new Menu(m_TweakPatchesSelectionForWeapon);
+    menu.SetTitle("★ Tweaks Menu - Patches Stickers (slot %i) ★ \n ", iStickerSlot + 1);
+
+    char szPatchDisplayName[48];
+    char szPatchDefIndex[12];
+    char szTranslation[256];
+    for(int iPatchNum = 0; iPatchNum < eTweaker_GetPatchesCount(); iPatchNum++)
+    {
+        eItems_GetPatchDisplayNameByPatchNum(iPatchNum, szPatchDisplayName, sizeof(szPatchDisplayName));
+        Format(szTranslation, sizeof(szTranslation), "» %s", szPatchDisplayName);
+        int iStickerDefIndex = eItems_GetPatchDefIndexByPatchNum(iPatchNum);
+        IntToString(iStickerDefIndex, szPatchDefIndex, sizeof(szPatchDefIndex));
+        menu.AddItem(szPatchDefIndex, szTranslation);
+    }
+
+    menu.ExitBackButton = true;
+
+    switch(iPosition)
+    {
+        case 0: menu.Display(client, MENU_TIME_FOREVER);
+        default: menu.DisplayAt(client, iPosition, MENU_TIME_FOREVER);
+    }
+}
+
+public int m_TweakPatchesSelectionForWeapon(Menu menu, MenuAction action, int client, int option)
+{
+    switch(action)
+    {
+        case MenuAction_Select:
+        {
+            if(eTweaker_IsClientSpectating(client))
+            {
+                eTweaker_PrintNotAvailableInSpec(client);
+                return;
+            }
+
+            char szPatchDefIndex[12];
+            menu.GetItem(option, szPatchDefIndex, sizeof(szPatchDefIndex));
+            int iPatchDefIndex = StringToInt(szPatchDefIndex);
+
+            eTweaker_AttachStickerToWeapon(client, ClientInfo[client].WeaponStoredDefIndex, iPatchDefIndex, ClientInfo[client].StickerSlotStored);
+            int iWeapon = eItems_FindWeaponByDefIndex(client, ClientInfo[client].WeaponStoredDefIndex);
+            if(iWeapon > 0)
+            {
+                eItems_RespawnWeapon(client, iWeapon, g_cvDrawAnimation.BoolValue);
+
+                if(g_cvForceFullUpdate.BoolValue)
+                {
+                    PTaH_ForceFullUpdate(client);
+                }
+            }
+            Tweaks_BuildPatchesSelectionMenuForWeapon(client, ClientInfo[client].WeaponStoredDefIndex, GetMenuSelectionPosition());
         }
         case MenuAction_Cancel:
         {
@@ -1898,7 +1988,10 @@ stock void Tweaks_BuildStickersMenuForCurrent(int client)
             {
                 if(!eItems_GetStickerDisplayNameByDefIndex(WeaponSettings.Sticker[iStickerSlot], szStickerDisplayName, sizeof(szStickerDisplayName)))
                 {
-                    strcopy(szStickerDisplayName, sizeof(szStickerDisplayName), "No sticker applied");
+                    if(!eItems_GetPatchDisplayNameByDefIndex(WeaponSettings.Sticker[iStickerSlot], szStickerDisplayName, sizeof(szStickerDisplayName)))
+                    {
+                        strcopy(szStickerDisplayName, sizeof(szStickerDisplayName), "No sticker applied");
+                    }
                 }
                 FormatEx(szMenuItem, sizeof(szMenuItem), "• Sticker slot %i\n ❯ %s", iStickerSlot + 1, szStickerDisplayName);
 
@@ -1978,16 +2071,29 @@ stock void Tweaks_BuildStickersCategoryMenuForCurrent(int client, int iPosition 
     char szWeaponDefIndex[12];
     IntToString(iWeaponDefIndex, szWeaponDefIndex, sizeof(szWeaponDefIndex));
 
-    eWeaponSettings WeaponSettings;
-    g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
-
     char szDisplayName[48];
     eItems_GetWeaponDisplayNameByDefIndex(iWeaponDefIndex, szDisplayName, sizeof(szDisplayName));
+
+    int iStickerSlots = eItems_GetWeaponStickersSlotsByDefIndex(iWeaponDefIndex);
+
+    if (iStickerSlots == 0) {
+        Menu menu = new Menu(m_TweakStickersCategoryForCurrent);
+        menu.SetTitle("★ Tweaks Menu - %s ★ \n ", szDisplayName);
+        menu.AddItem("#none", "» No sticker slots", ITEMDRAW_DISABLED);
+        menu.ExitBackButton = true;
+        menu.Display(client, MENU_TIME_FOREVER);
+        ClientInfo[client].WeaponSwitch = SWITCH_TWEAKS_CURRENT_STICKERS_CATEGORY;
+        return;
+    }
+
+    eWeaponSettings WeaponSettings;
+    g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
 
     Menu menu = new Menu(m_TweakStickersCategoryForCurrent);
     menu.SetTitle("★ Tweaks Menu - %s Stickers (slot %i) ★ \n ", szDisplayName, iStickerSlot + 1);
 
     menu.AddItem("#0", "» Default");
+    menu.AddItem("#1", "» Patches");
 
     char szStickerSetDisplayName[48];
     char szStickerSetNum[12];
@@ -2025,7 +2131,7 @@ stock void Tweaks_BuildStickersCategoryMenuForCurrent(int client, int iPosition 
         case 0: menu.Display(client, MENU_TIME_FOREVER);
         default: menu.DisplayAt(client, iPosition, MENU_TIME_FOREVER);
     }
-    ClientInfo[client].WeaponSwitch = SWITCH_TWEAKS_CURRENT_STICKERS_MAIN;
+    ClientInfo[client].WeaponSwitch = SWITCH_TWEAKS_CURRENT_STICKERS_CATEGORY;
 }
 
 public int m_TweakStickersCategoryForCurrent(Menu menu, MenuAction action, int client, int option)
@@ -2064,6 +2170,10 @@ public int m_TweakStickersCategoryForCurrent(Menu menu, MenuAction action, int c
                         PTaH_ForceFullUpdate(client);
                     }
 
+                }
+                case 1:
+                {
+                    Tweaks_BuildPatchesSelectionMenuForCurrent(client);
                 }
                 default:
                 {
@@ -2144,7 +2254,7 @@ stock void Tweaks_BuildStickersSelectionMenuForCurrent(int client, int iStickerS
         case 0: menu.Display(client, MENU_TIME_FOREVER);
         default: menu.DisplayAt(client, iPosition, MENU_TIME_FOREVER);
     }
-    ClientInfo[client].WeaponSwitch = SWITCH_TWEAKS_CURRENT_STICKERS_MAIN;
+    ClientInfo[client].WeaponSwitch = SWITCH_TWEAKS_CURRENT_STICKERS_CATEGORY;
 }
 
 public int m_TweakStickersSelectionForCurrent(Menu menu, MenuAction action, int client, int option)
@@ -2175,6 +2285,102 @@ public int m_TweakStickersSelectionForCurrent(Menu menu, MenuAction action, int 
             int iWeapon = eItems_GetActiveWeapon(client);
             eItems_RespawnWeapon(client, iWeapon, g_cvDrawAnimation.BoolValue);
             Tweaks_BuildStickersSelectionMenuForCurrent(client, ClientInfo[client].StickerSetStored, GetMenuSelectionPosition());
+
+            if(g_cvForceFullUpdate.BoolValue)
+            {
+                PTaH_ForceFullUpdate(client);
+            }
+        }
+        case MenuAction_Cancel:
+        {
+            ClientInfo[client].WeaponSwitch = -1;
+            if(option == MenuCancel_ExitBack)
+            {
+                Tweaks_BuildStickersCategoryMenuForCurrent(client, ClientInfo[client].MenuCategorySelection);
+            }
+        }
+        case MenuAction_End:
+        {
+            delete menu;
+        }
+    }
+}
+
+stock void Tweaks_BuildPatchesSelectionMenuForCurrent(int client, int iPosition = 0)
+{
+    if(eTweaker_IsClientSpectating(client))
+    {
+        eTweaker_PrintNotAvailableInSpec(client);
+        return;
+    }
+
+    if(!IsPlayerAlive(client))
+    {
+        eTweaker_PrintOnlyForAlivePlayers(client);
+        return;
+    }
+
+    int iStickerSlot = ClientInfo[client].StickerSlotStored;
+    int iWeaponDefIndex = eItems_GetActiveWeaponDefIndex(client);
+    char szWeaponDefIndex[12];
+    IntToString(iWeaponDefIndex, szWeaponDefIndex, sizeof(szWeaponDefIndex));
+
+    eWeaponSettings WeaponSettings;
+    g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
+
+    Menu menu = new Menu(m_TweakPatchesSelectionForCurrent);
+    menu.SetTitle("★ Tweaks Menu - Patches Stickers (slot %i) ★ \n ", iStickerSlot + 1);
+
+    char szPatchDisplayName[48];
+    char szPatchDefIndex[12];
+    char szTranslation[256];
+    for(int iPatchNum = 0; iPatchNum < eTweaker_GetPatchesCount(); iPatchNum++)
+    {
+        eItems_GetPatchDisplayNameByPatchNum(iPatchNum, szPatchDisplayName, sizeof(szPatchDisplayName));
+        Format(szTranslation, sizeof(szTranslation), "» %s", szPatchDisplayName);
+        int iStickerDefIndex = eItems_GetPatchDefIndexByPatchNum(iPatchNum);
+        IntToString(iStickerDefIndex, szPatchDefIndex, sizeof(szPatchDefIndex));
+        menu.AddItem(szPatchDefIndex, szTranslation);
+    }
+
+    menu.ExitBackButton = true;
+
+    switch(iPosition)
+    {
+        case 0: menu.Display(client, MENU_TIME_FOREVER);
+        default: menu.DisplayAt(client, iPosition, MENU_TIME_FOREVER);
+    }
+    ClientInfo[client].WeaponSwitch = SWITCH_TWEAKS_CURRENT_STICKERS_CATEGORY;
+}
+
+public int m_TweakPatchesSelectionForCurrent(Menu menu, MenuAction action, int client, int option)
+{
+    switch(action)
+    {
+        case MenuAction_Select:
+        {
+            if(eTweaker_IsClientSpectating(client))
+            {
+                eTweaker_PrintNotAvailableInSpec(client);
+                return;
+            }
+
+            if(!IsPlayerAlive(client))
+            {
+                eTweaker_PrintOnlyForAlivePlayers(client);
+                return;
+            }
+
+            char szPatchDefIndex[12];
+            menu.GetItem(option, szPatchDefIndex, sizeof(szPatchDefIndex));
+            int iPatchDefIndex = StringToInt(szPatchDefIndex);
+
+            int iWeaponDefIndex = eItems_GetActiveWeaponDefIndex(client);
+
+            eTweaker_AttachStickerToWeapon(client, iWeaponDefIndex, iPatchDefIndex, ClientInfo[client].StickerSlotStored);
+            int iWeapon = eItems_GetActiveWeapon(client);
+            eItems_RespawnWeapon(client, iWeapon, g_cvDrawAnimation.BoolValue);
+            Tweaks_BuildPatchesSelectionMenuForCurrent(client, GetMenuSelectionPosition());
 
             if(g_cvForceFullUpdate.BoolValue)
             {
