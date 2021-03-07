@@ -142,16 +142,16 @@ void MenuPistolRound(int iClient, int iStart = 0)
         hMenu.AddItem("weapon_usp_silencer", "» USP-S", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_usp_silencer")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_hkp2000", "» P2000", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_hkp2000")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_fiveseven", "» Five-SeveN", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_fiveseven")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_deagle", "» Desert Eagle (Limited)", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_revolver", "» Revolver (Limited)", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_deagle", "» Desert Eagle", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_revolver", "» Revolver", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_cz75a", "» CZ75-Auto", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_cz75a")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_p250", "» P250", StrEqual(g_PlayerData[iClient].sPistolRound_CT, "weapon_p250")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
     } else if (g_PlayerData[iClient].iCacheTeam == 2) {
         hMenu.AddItem("weapon_glock", "» Glock-18", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_glock")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_tec9", "» Tec-9", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_tec9")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_elite", "» Dual Berettas", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_elite")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_deagle", "» Desert Eagle (Limited)", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_revolver", "» Revolver (Limited)", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_deagle", "» Desert Eagle", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_revolver", "» Revolver", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_cz75a", "» CZ75-Auto", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_cz75a")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_p250", "» P250", StrEqual(g_PlayerData[iClient].sPistolRound_T, "weapon_p250")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
     }
@@ -319,15 +319,15 @@ void MenuSecondary(int iClient, int iStart = 0)
         hMenu.AddItem("weapon_usp_silencer", "» USP-S", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_usp_silencer")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_hkp2000", "» P2000", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_hkp2000")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_fiveseven", "» Five-SeveN", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_fiveseven")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_deagle", "» Desert Eagle", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_revolver", "» Revolver", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_deagle", "» Desert Eagle (Limited)", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_revolver", "» Revolver (Limited)", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_cz75a", "» CZ75-Auto", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_cz75a")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_p250", "» P250", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_p250")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
     } else if (g_PlayerData[iClient].iCacheTeam == 2) {
         hMenu.AddItem("weapon_glock", "» Glock-18", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_glock")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_tec9", "» Tec-9", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_tec9")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_elite", "» Dual Berettas", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_elite")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_deagle", "» Desert Eagle", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_elite", "» Dual Berettas (Limited)", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_elite")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_deagle", "» Desert Eagle (Limited)", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_revolver", "» Revolver", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_cz75a", "» CZ75-Auto", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_cz75a")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_p250", "» P250", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_p250")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
