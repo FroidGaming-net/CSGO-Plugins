@@ -127,8 +127,7 @@ void MenuColor(int iClient, char sType, int iStart = 0)
     hMenu.SetTitle("%s \n \n", szBuffer);
 
     /// Body
-    StringMap palette = cc_drop_palette();
-    StringMapSnapshot shotPalette = palette.Snapshot();
+    ArrayList palette = cc_drop_palette();
     int drawType = ITEMDRAW_DEFAULT;
 
     char key[PLATFORM_MAX_PATH], value[PLATFORM_MAX_PATH];
@@ -141,8 +140,8 @@ void MenuColor(int iClient, char sType, int iStart = 0)
     hMenu.AddItem(key, szBuffer[1], drawType);
 
     // Color
-    for(int i; i < shotPalette.Length; i++) {
-        shotPalette.GetKey(i, key, sizeof(key));
+    for(int i; i < palette.Length; i+=2) {
+        palette.GetString(i, key, sizeof(key));
         drawType = (!strcmp(key, value)) ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT;
 
         FormatEx(szBuffer, sizeof(szBuffer), "%T", key, iClient);

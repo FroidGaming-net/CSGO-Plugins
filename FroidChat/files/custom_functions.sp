@@ -100,39 +100,44 @@ public void Multi1v1_AfterPlayerSetup(int iClient)
 	}
 }
 
-public Action cc_proc_RebuildString(const int mType, int iClient, int &pLevel, const char[] szBind, char[] szBuffer, int iSize) {
-    if(mType > eMsg_ALL) {
-        return Plugin_Continue;
+public Processing  cc_proc_OnRebuildString(const int[] props, int part, ArrayList params, int &level, char[] value, int size) {
+    static const char channels[][] = {"ST1", "STP", "STA", "RT"};
+    static char szValue[MESSAGE_LENGTH];
+    static char channel[64];
+    static int index = BIND_MAX;
+
+    if(!SENDER_INDEX(props[1]) || (index = indexOfPart(part)) == -1 || level > g_iLevel[index]) {
+        return Proc_Continue;
     }
 
-    int part = BindFromString(szBind);
-    if((part = indexOfPart(part)) == -1) {
-        return Plugin_Continue;
+    params.GetString(0, channel, sizeof(channel));
+    if(!InChannels(channel, channels, sizeof(channels))) {
+        return Proc_Continue;
     }
 
-    if(pLevel > g_iLevel[part]) {
-        return Plugin_Continue;
+    FormatEx(
+        szValue, sizeof(szValue),
+        (!index)
+        ? g_PlayerData[SENDER_INDEX(props[1])].sName
+        : g_PlayerData[SENDER_INDEX(props[1])].sMessage
+    );
+
+    if(!szValue[0]) {
+        return Proc_Continue;
     }
 
-    char value[PLATFORM_MAX_PATH];
-    FormatEx(value, sizeof(value), (!part) ? g_PlayerData[iClient].sName : g_PlayerData[iClient].sMessage);
-
-    if(!value[0]) {
-        return Plugin_Continue;
+    level = g_iLevel[index];
+    if(!strcmp(szValue, "rainbow")) {
+        FormatEx(szValue, sizeof(szValue), NULL_STRING);
+        doRainbow(szValue, sizeof(szValue), value);
+        FormatEx(value, size, "%s", szValue);
+        return Proc_Change;
+    } else if(!strcmp(szValue, "random")) {
+        doRandom(szValue, sizeof(szValue));
     }
 
-    if(!strcmp(value, "rainbow")) {
-        FormatEx(value, sizeof(value), NULL_STRING);
-        doRainbow(value, sizeof(value), szBuffer);
-        FormatEx(szBuffer, iSize, value);
-        return Plugin_Continue;
-    } else if(!strcmp(value, "random")) {
-        doRandom(value, sizeof(value));
-    }
-
-    Format(szBuffer, iSize, "%s%s", value, szBuffer);
-
-    return Plugin_Continue;
+    Format(value, size, "%s%s", szValue, value);
+    return Proc_Change;
 }
 
 public void levelHandler(ConVar convar, const char[] oldVal, const char[] newVal) {
@@ -149,7 +154,7 @@ public void levelHandler(ConVar convar, const char[] oldVal, const char[] newVal
 
 void triggerConVars() {
     char convarName[PLATFORM_MAX_PATH];
-    
+
     for(int i; i < BIND_MAX; i++) {
         if(indexOfPart(i) == -1) {
             continue;
@@ -193,7 +198,7 @@ void doRainbow(char[] buffer, int size, const char[] input) {
         if(a >= size) {
             buffer[a-1] = 0;
             break;
-        } else { 
+        } else {
             buffer[a] = 0 ;
         }
     }
@@ -205,7 +210,7 @@ void doRandom(char[] input, int size) {
 }
 
 int indexOfPart(int part) {
-    
+
     int parts[] = { BIND_NAME, BIND_MSG };
 
     for(int i; i < sizeof(parts); i++) {
@@ -223,4 +228,14 @@ stock bool IsValidChatTag(const char[] Tag)
 		return false;
 
 	return true;
+}
+
+stock bool InChannels(const char[] channel, const char[][] channels, int count) {
+    for(int i; i < count; i++) {
+        if(!strcmp(channel, channels[i])) {
+            return true;
+        }
+    }
+
+    return false;
 }
