@@ -101,7 +101,7 @@ public void Multi1v1_AfterPlayerSetup(int iClient)
 }
 
 public Processing  cc_proc_OnRebuildString(const int[] props, int part, ArrayList params, int &level, char[] value, int size) {
-    static const char channels[][] = {"ST1", "STP", "STA", "RT"};
+    static const char channels[][] = {"STP", "STA"};
     static char szValue[MESSAGE_LENGTH];
     static char channel[64];
     static int index = BIND_MAX;
