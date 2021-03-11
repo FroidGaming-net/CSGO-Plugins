@@ -1,7 +1,7 @@
 /* SM Includes */
 #include <sourcemod>
 #include <geoip>
-#include <lvl_ranks>
+#include <ripext>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -10,12 +10,13 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidVeteran/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
 #include "files/globals.sp"
 #include "files/client.sp"
+#include "files/API.sp"
 
 public Plugin myinfo =
 {
@@ -28,6 +29,8 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
+    httpClient = new HTTPClient("https://froidgaming.net");
+
     CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
 
     if (LibraryExists("updater")) {
@@ -40,9 +43,7 @@ public Action Timer_Repeat(Handle hTimer)
 	for (int i = 1; i < MAXPLAYERS; i++) {
 		if (IsValidClient(i)) {
 			if (g_PlayerData[i].iPlayersLoaded == -1) {
-                if (LR_IsLoaded()) {
-                    OnCheckPlayer(i);
-                }
+                OnClientPostAdminCheck(i);
 			}
         }
     }
@@ -69,21 +70,16 @@ public void OnClientPostAdminCheck(int iClient)
     GeoipCode2(sIP, sCountryCode);
     Format(g_PlayerData[iClient].sCountryCode, sizeof(g_PlayerData[].sCountryCode), sCountryCode);
 
-    if (LR_IsLoaded()) {
-        OnCheckPlayer(iClient);
-    } else {
-        g_PlayerData[iClient].iPlayersLoaded = -1;
-    }
+    // API
+	char sAuthID[64], sUrl[128];
+	GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
+	Format(sUrl, sizeof(sUrl), "api/profile/%s/rank/pug", sAuthID);
+	httpClient.Get(sUrl, OnGetExp, GetClientUserId(iClient));
 }
 
 void OnCheckPlayer(int iClient)
 {
-    // LevelsRanks
-    g_PlayerData[iClient].iPlayersLoaded = 1;
-    g_PlayerData[iClient].iRank = LR_GetClientInfo(iClient, ST_RANK);
-    g_PlayerData[iClient].iEXP = LR_GetClientInfo(iClient, ST_EXP);
-
-    if (g_PlayerData[iClient].iRank <= 13) {
+    if (g_PlayerData[iClient].iEXP < 1800) {
         if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
             KickClient(iClient, "Kamu membutuhkan minimal 1800 EXP (DMG) untuk bermain di server ini.\nEXP Kamu sekarang : %i EXP\nKamu masih bisa bermain di PUG 1, PUG 2 dan PUG 3", g_PlayerData[iClient].iEXP);
         } else {
