@@ -1,0 +1,15 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.0"
+	}
+
+	"Notes"	"Plugin release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/FroidApp/FroidEmoji.smx"
+    "Plugin"	"Path_SM/configs/level_icons.cfg"
+}
