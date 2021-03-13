@@ -74,7 +74,6 @@ public void OnPluginStart()
     }
 }
 
-
 public void OnLibraryAdded(const char[] name)
 {
     if (StrEqual(name, "updater")) {
