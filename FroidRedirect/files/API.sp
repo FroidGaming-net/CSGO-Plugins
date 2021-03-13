@@ -28,7 +28,7 @@ void OnGetServers(HTTPResponse response, DataPack pack)
 
         JSONObject jsondata3;
         char sTemp[512];
-        char sServerName[256], sIP[128], sFullPlayers[128], sMap[128];
+        char sServerName[256], sIP[128], sFullPlayers[6], sMap[128], sStatus[32];
 
         Menu hMenu = new Menu(MenuServers_Callback);
         hMenu.SetTitle("★ Servers Menu ★");
@@ -41,9 +41,15 @@ void OnGetServers(HTTPResponse response, DataPack pack)
                 jsondata3.GetString("domain", sIP, sizeof(sIP));
                 jsondata3.GetString("full_players", sFullPlayers, sizeof(sFullPlayers));
                 jsondata3.GetString("map", sMap, sizeof(sMap));
+                jsondata3.GetString("status", sStatus, sizeof(sStatus));
 
-                Format(sTemp, sizeof(sTemp), "• %s\n ❯ %s | %s Players", sServerName, sMap, sFullPlayers);
-                hMenu.AddItem(sIP, sTemp);
+                if (StrContains(sStatus, "Online", false)) {
+                    Format(sTemp, sizeof(sTemp), "• %s\n ❯ %s | %s Players", sServerName, sMap, sFullPlayers);
+                    hMenu.AddItem(sIP, sTemp);
+                } else {
+                    Format(sTemp, sizeof(sTemp), "• %s\n ❯ %s | %s Players", sServerName, sMap, sFullPlayers);
+                    hMenu.AddItem(sIP, sTemp, ITEMDRAW_DISABLED);
+                }
             }
 
             delete jsondata3;
