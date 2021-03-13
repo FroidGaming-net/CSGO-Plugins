@@ -128,7 +128,7 @@ public void OnClientDisconnect(int iClient)
 		Format(sUrl, sizeof(sUrl), "api/emojis/%s", sAuthID);
 
 		JSONObject jsondata = new JSONObject();
-        jsondata.SetInt("hat_id", g_PlayerData[iClient].iEmojiData);
+        jsondata.SetInt("emoji_id", g_PlayerData[iClient].iEmojiData);
 		httpClient.Put(sUrl, jsondata, OnUpdateEmoji);
 
 		delete jsondata;
