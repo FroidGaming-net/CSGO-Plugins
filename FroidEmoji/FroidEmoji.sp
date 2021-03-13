@@ -14,7 +14,7 @@
 
 /* Plugin Info */
 #define VERSION "1.0.0"
-#define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
+#define UPDATE_URL "https://sys.froidgaming.net/FroidEmoji/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 #define MAX_ICONS 128
 
