@@ -43,7 +43,7 @@ void OnGetServers(HTTPResponse response, DataPack pack)
                 jsondata3.GetString("map", sMap, sizeof(sMap));
                 jsondata3.GetString("status", sStatus, sizeof(sStatus));
 
-                if (StrContains(sStatus, "Online", false)) {
+                if (StrContains(sStatus, "Online", false)  != -1) {
                     Format(sTemp, sizeof(sTemp), "• %s\n ❯ %s | %s Players", sServerName, sMap, sFullPlayers);
                     hMenu.AddItem(sIP, sTemp);
                 } else {
