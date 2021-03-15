@@ -51,6 +51,10 @@ void MenuFeatures(int iClient)
 		hMenu.AddItem("10", "• Chat Apperance");
 	}
 
+	if (CommandExists("sm_emoji")) {
+		hMenu.AddItem("11", "• Scoreboard Emoji");
+	}
+
 	hMenu.ExitBackButton = false;
     hMenu.Display(iClient, MENU_TIME_FOREVER);
 }
@@ -91,6 +95,8 @@ int MenuFeatures_Callback(Menu hMenu, MenuAction mAction, int iClient, int iSlot
 				FakeClientCommand(iClient, "sm_hats");
 			} else if (StrEqual(sInfo, "10", false)) {
 				FakeClientCommand(iClient, "sm_tag");
+			} else if (StrEqual(sInfo, "11", false)) {
+				FakeClientCommand(iClient, "sm_emoji");
 			}
 		}
 		case MenuAction_End:
