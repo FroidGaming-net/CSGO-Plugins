@@ -33,7 +33,7 @@ void MenuPremiumFeatures(int iClient)
 	if (!IsValidClient(iClient)) {
 		return;
 	}
-	
+
     Menu hMenu = new Menu(MenuPremium_Callback);
     hMenu.SetTitle("★ Premium Features ★");
 	hMenu.AddItem("1", "» [Retakes] !join (Join on Retakes)", ITEMDRAW_DISABLED);
@@ -70,13 +70,14 @@ void MenuPremiumPlusFeatures(int iClient)
 	hMenu.AddItem("10", "» [FFA Deathmatch] No Weapon Restriction", ITEMDRAW_DISABLED);
 	hMenu.AddItem("11", "» [AWP] !join (Join on AWP)", ITEMDRAW_DISABLED);
 	hMenu.AddItem("12", "» [AWP] 10.000 Credits in-game to buy !shop Items", ITEMDRAW_DISABLED);
-	hMenu.AddItem("13", "» [All] !maks command for use a mask/hats", ITEMDRAW_DISABLED);
-	hMenu.AddItem("14", "» [All] !tag command for customize name color, message color & tag", ITEMDRAW_DISABLED);
-	hMenu.AddItem("15", "» [All] !rankreset command for reset rank", ITEMDRAW_DISABLED);
-	hMenu.AddItem("16", "» [All] Reserved slots", ITEMDRAW_DISABLED);
-	hMenu.AddItem("17", "» [All] Non Prime Join", ITEMDRAW_DISABLED);
-	hMenu.AddItem("18", "» [All] Advertisement Immunity", ITEMDRAW_DISABLED);
-	hMenu.AddItem("19", "» [Discord] Premium Plus Rank", ITEMDRAW_DISABLED);
+	hMenu.AddItem("13", "» [All] !emoji command for use a scoreboard emoji", ITEMDRAW_DISABLED);
+	hMenu.AddItem("14", "» [All] !maks command for use a mask/hats", ITEMDRAW_DISABLED);
+	hMenu.AddItem("15", "» [All] !tag command for customize name color, message color & tag", ITEMDRAW_DISABLED);
+	hMenu.AddItem("16", "» [All] !rankreset command for reset rank", ITEMDRAW_DISABLED);
+	hMenu.AddItem("17", "» [All] Reserved slots", ITEMDRAW_DISABLED);
+	hMenu.AddItem("18", "» [All] Non Prime Join", ITEMDRAW_DISABLED);
+	hMenu.AddItem("19", "» [All] Advertisement Immunity", ITEMDRAW_DISABLED);
+	hMenu.AddItem("20", "» [Discord] Premium Plus Rank", ITEMDRAW_DISABLED);
 	hMenu.ExitBackButton = true;
     hMenu.Display(iClient, MENU_TIME_FOREVER);
 }
@@ -110,7 +111,7 @@ void MenuPremiumBuy(int iClient)
 	if (!IsValidClient(iClient)) {
 		return;
 	}
-	
+
     Menu hMenu = new Menu(MenuPremium_Callback);
     hMenu.SetTitle("★ How to Buy ★");
 	if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
