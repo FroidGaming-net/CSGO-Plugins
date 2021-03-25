@@ -109,7 +109,7 @@ public Action Timer_Setting(Handle hTimer)
     }
 
     // FFA Deathmatch
-    if(StrContains(g_sServerName, "FFA") > -1){
+    if(StrContains(g_sServerName, "Deathmatch") > -1){
         SetConVarInt(g_Cvar_FriendlyFire, 1, true);
         SetConVarInt(g_Cvar_IgnoreWin, 0, true);
         SetConVarInt(g_Cvar_WarmupPeriod, 0, true);
