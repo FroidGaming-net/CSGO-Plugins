@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -111,7 +111,7 @@ public Action Timer_Setting(Handle hTimer)
     // FFA Deathmatch
     if(StrContains(g_sServerName, "FFA") > -1){
         SetConVarInt(g_Cvar_FriendlyFire, 1, true);
-        SetConVarInt(g_Cvar_IgnoreWin, 1, true);
+        SetConVarInt(g_Cvar_IgnoreWin, 0, true);
         SetConVarInt(g_Cvar_WarmupPeriod, 0, true);
         SetConVarString(g_Cvar_BotChatter, "off", true);
         SetConVarInt(g_Cvar_MaxRounds, 99999, true);
