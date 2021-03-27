@@ -2,6 +2,7 @@
 #include <sourcemod>
 #include <multicolors>
 #include <cstrike>
+#include <geoip>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -10,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidChatUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -49,6 +50,22 @@ Action OnSay(int iClient, const char[] sCommand, int iArgs)
         if (GetClientTeam(iClient) == CS_TEAM_NONE) {
             return Plugin_Handled;
         }
+
+        if (StrContains(sText, "fps") > -1) {
+            char sIP[64], sCountryCode[3];
+            for (int i = 1; i < MAXPLAYERS; i++) {
+                if (IsValidClient(i)) {
+                    GetClientIP(i, sIP, sizeof(sIP));
+                    GeoipCode2(sIP, sCountryCode);
+                    if (StrEqual(sCountryCode, "ID")) {
+                        CPrintToChat(i, "Kamu mengalami FPS DROP? Silahkan tulis 'logaddress_add 1' di console untuk memperbaikinya");
+                    } else {
+                        CPrintToChat(i, "Are you experiencing FPS DROP? Please type 'logaddress_add 1' on the console to fix it");
+                    }
+                }
+            }
+		    return Plugin_Handled;
+	    }
 
         if (StrContains(sText, "discord.") > -1) {
 		    return Plugin_Handled;
