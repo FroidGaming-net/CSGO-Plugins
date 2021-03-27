@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.5"
+#define VERSION "1.1.6"
 #define UPDATE_URL "https://sys.froidgaming.net/executes_weapons/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -94,6 +94,19 @@ public void OnMapStart()
 {
 	g_iRounds_Pistol = 0;
 	g_iRounds_Force = 0;
+
+    char Remove[65];
+    for (int i = 64; i <= GetMaxEntities(); i++)
+    {
+        if(IsValidEdict(i) && IsValidEntity(i))
+        {
+            GetEdictClassname(i, Remove, sizeof(Remove));
+            if(StrEqual("func_buyzone", Remove))
+            {
+                RemoveEdict(i);
+            }
+        }
+    }
 }
 
 public void OnMapEnd()
