@@ -161,7 +161,11 @@ public void GiveSkinnedWeapon(int client, const char[] weapon)
         if (CheckCommandAccess(client, "sm_froidapp_premium_plus", ADMFLAG_CUSTOM6)) {
             GivePlayerItem(client, weapon);
         } else {
-            GivePlayerItem(client, "weapon_ak47");
+            if (StrContains(weapon, "awp", false) > -1) {
+                GivePlayerItem(client, "weapon_ak47");
+            } else if(StrContains(weapon, "five", false) > -1 || StrContains(weapon, "cz75", false) > -1 || StrContains(weapon, "tec", false) > -1){
+                GivePlayerItem(client, "weapon_p250");
+            }
         }
     } else {
         GivePlayerItem(client, weapon);
