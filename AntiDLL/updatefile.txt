@@ -1,0 +1,19 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.0"
+	}
+
+	"Notes"	"Release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/AntiCheat/AntiDLL.smx"
+	"Plugin"	"Path_SM/extensions/AntiDLL.ext.2.csgo.so"
+    "Plugin"	"Path_SM/gamedata/antidll.games/master.games.txt"
+    "Plugin"	"Path_SM/gamedata/antidll.games/engine.csgo.txt"
+    "Plugin"	"Path_SM/gamedata/antidll.games/engine.css.txt"
+    "Plugin"	"Path_SM/gamedata/antidll.games/engine.ep1.csgo.txt"
+}
