@@ -58,9 +58,9 @@ Action OnSay(int iClient, const char[] sCommand, int iArgs)
                     GetClientIP(i, sIP, sizeof(sIP));
                     GeoipCode2(sIP, sCountryCode);
                     if (StrEqual(sCountryCode, "ID")) {
-                        CPrintToChat(i, "%s Kamu mengalami FPS DROP? Silahkan tulis '{lightred}logaddress_add 1{default}' di console untuk memperbaikinya", PREFIX);
+                        CPrintToChat(i, "%s Kamu mengalami {lightred}FPS DROP{default}? Silahkan tulis '{lightred}logaddress_add 1{default}' di console untuk memperbaikinya", PREFIX);
                     } else {
-                        CPrintToChat(i, "%s Are you experiencing FPS DROP? Please type '{lightred}logaddress_add 1{default}' on the console to fix it", PREFIX);
+                        CPrintToChat(i, "%s Are you experiencing {lightred}FPS DROP{default}? Please type '{lightred}logaddress_add 1{default}' on the console to fix it", PREFIX);
                     }
                 }
             }
