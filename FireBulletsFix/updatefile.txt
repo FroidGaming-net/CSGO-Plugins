@@ -1,0 +1,15 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.0"
+	}
+
+	"Notes"	"Release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/Tools/firebulletsfix.smx"
+    "Plugin"	"Path_SM/gamedata/dhooks.weapon_shootposition.txt"
+}
