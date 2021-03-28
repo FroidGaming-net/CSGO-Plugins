@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.4"
+#define VERSION "1.1.5"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidChatUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -58,9 +58,10 @@ Action OnSay(int iClient, const char[] sCommand, int iArgs)
                     GetClientIP(i, sIP, sizeof(sIP));
                     GeoipCode2(sIP, sCountryCode);
                     if (StrEqual(sCountryCode, "ID")) {
-                        CPrintToChat(i, "%s Kamu mengalami {lightred}FPS DROP{default}? Silahkan ketik \"{lightred}logaddress_add 1{default}\" di console untuk memperbaikinya", PREFIX);
+                        CPrintToChat(i, "%s Kamu mengalami {lightred}FPS DROP{default}? Silahkan ketik \"{lightred}logaddress_add 1{default}\" di {lightred}CONSOLE{default} untuk memperbaikinya", PREFIX);
+                        CPrintToChat(i, "%s Ingat yaaa di {lightred}CONSOLE{default} dan jangan lupa angka 1 nya! Contoh : logaddress_add 1");
                     } else {
-                        CPrintToChat(i, "%s Are you experiencing {lightred}FPS DROP{default}? Please type \"{lightred}logaddress_add 1{default}\" on the console to fix it", PREFIX);
+                        CPrintToChat(i, "%s Are you experiencing {lightred}FPS DROP{default}? Please type \"{lightred}logaddress_add 1{default}\" on the {lightred}CONSOLE{default} to fix it", PREFIX);
                     }
                 }
             }
