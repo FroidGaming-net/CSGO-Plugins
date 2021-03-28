@@ -2,7 +2,7 @@
 {
 	"Version"
 	{
-		"Latest"	"1.0.0"
+		"Latest"	"1.0.1"
 	}
 
 	"Notes"	"Release."
@@ -16,4 +16,5 @@
     "Plugin"	"Path_SM/gamedata/antidll.games/engine.csgo.txt"
     "Plugin"	"Path_SM/gamedata/antidll.games/engine.css.txt"
     "Plugin"	"Path_SM/gamedata/antidll.games/engine.ep1.csgo.txt"
+    "Plugin"	"Path_SM/data/antidll/events_detection.txt"
 }
