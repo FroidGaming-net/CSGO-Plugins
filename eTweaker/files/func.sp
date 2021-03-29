@@ -10,10 +10,10 @@ public void eTweaker_UpdateClientWeapon(int client, int iWeapon)
         return;
     }
 
-    if(eTweaker_IsClientNotInGroup(client))
-    {
-        return;
-    }
+    // if(eTweaker_IsClientNotInGroup(client))
+    // {
+    //     return;
+    // }
 
     int iWeaponDefIndex = eItems_GetWeaponDefIndexByWeapon(iWeapon);
 
@@ -566,10 +566,10 @@ stock void eTweaker_EquipGloves(int client, bool bRemoveGloves = false)
         return;
     }
 
-    if(eTweaker_IsClientNotInGroup(client))
-    {
-        return;
-    }
+    // if(eTweaker_IsClientNotInGroup(client))
+    // {
+    //     return;
+    // }
 
     if(bRemoveGloves)
     {
@@ -644,10 +644,10 @@ stock void eTweaker_EquipMusicKit(int client, int iMusicKitDef)
 
 stock void eTweaker_GiveMusicKit(int client)
 {
-    if(eTweaker_IsClientNotInGroup(client))
-    {
-        return;
-    }
+    // if(eTweaker_IsClientNotInGroup(client))
+    // {
+    //     return;
+    // }
 
     SetEntProp(client, Prop_Send, "m_unMusicID", ClientInfo[client].MusicKit);
 }

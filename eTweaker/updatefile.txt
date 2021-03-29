@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"3.5.0"
+		"Latest"	"3.5.1"
 	}
 
-	"Notes"	"Steam Group Add."
+	"Notes"	"Existing Skins are allowed."
 }
 
 "Files"
