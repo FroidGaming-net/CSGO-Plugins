@@ -23,6 +23,12 @@ public Action Command_Music(int client, int args)
         return Plugin_Handled;
     }
 
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        eTweaker_PrintNotInGroup(client);
+        return Plugin_Handled;
+    }
+
     MusicKits_BuildMainMenu(client);
     return Plugin_Handled;
 }

@@ -10,6 +10,11 @@ public void eTweaker_UpdateClientWeapon(int client, int iWeapon)
         return;
     }
 
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        return;
+    }
+
     int iWeaponDefIndex = eItems_GetWeaponDefIndexByWeapon(iWeapon);
 
     char szWeaponDefIndex[12];
@@ -159,6 +164,37 @@ stock void eTweaker_PrintDataNotSynced(int client)
 stock void eTweaker_PrintNotAvailableInSpec(int client)
 {
     CPrintToChat(client, "%s This function is not available while spectating!", PREFIX);
+}
+
+stock bool eTweaker_IsClientNotInGroup(int client)
+{
+    if(CheckCommandAccess(client, "sm_froidapp_premium", ADMFLAG_CUSTOM5))
+    {
+        return false;
+    }
+
+    if(SWGM_IsPlayerValidated(client) && !SWGM_InGroup(client))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+stock void eTweaker_PrintNotInGroup(int client)
+{
+    char sIP[64], sCountryCode[3];
+    GetClientIP(client, sIP, sizeof(sIP));
+    GeoipCode2(sIP, sCountryCode);
+    if (StrEqual(sCountryCode, "ID")) {
+        CPrintToChat(client, "%s Untuk menggunakan fitur ini, Kamu harus bergabung dengan Steam Group kami!", PREFIX);
+        CPrintToChat(client, "%s Buka Scoreboard lalu pencet {lightred}SERVER WEBSITE{default} untuk bergabung", PREFIX);
+        CPrintToChat(client, "%s Steam Group URL : {lightred}https://steamcommunity.com/groups/FroidGaming", PREFIX);
+    } else {
+        CPrintToChat(client, "%s To use this feature you have to join our Steam Group!", PREFIX);
+        CPrintToChat(client, "%s Open Scoreboard then press {lightred}SERVER WEBSITE{default} to join", PREFIX);
+        CPrintToChat(client, "%s Steam Group URL : {lightred}https://steamcommunity.com/groups/FroidGaming", PREFIX);
+    }
 }
 
 stock void eTweaker_PrintNotAvailableWhileControllingBot(int client)
@@ -530,6 +566,11 @@ stock void eTweaker_EquipGloves(int client, bool bRemoveGloves = false)
         return;
     }
 
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        return;
+    }
+
     if(bRemoveGloves)
     {
         eTweaker_RemoveClientGloves(client);
@@ -603,6 +644,11 @@ stock void eTweaker_EquipMusicKit(int client, int iMusicKitDef)
 
 stock void eTweaker_GiveMusicKit(int client)
 {
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        return;
+    }
+
     SetEntProp(client, Prop_Send, "m_unMusicID", ClientInfo[client].MusicKit);
 }
 

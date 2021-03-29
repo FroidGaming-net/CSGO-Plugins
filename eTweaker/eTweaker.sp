@@ -6,6 +6,8 @@
 #include <PTaH>
 #include <autoexecconfig>
 #include <multicolors>
+#include <swgm>
+#include <geoip>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -13,7 +15,7 @@
 #pragma semicolon 1
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.4.9"
+#define VERSION "3.5.0"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"

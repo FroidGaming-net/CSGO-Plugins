@@ -23,6 +23,12 @@ public Action Command_Tweaks(int client, int args)
         return Plugin_Handled;
     }
 
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        eTweaker_PrintNotInGroup(client);
+        return Plugin_Handled;
+    }
+
     Tweaks_BuildMainMenu(client);
     return Plugin_Handled;
 }
@@ -56,6 +62,12 @@ public Action Command_Stickers(int client, int args)
     {
        eTweaker_PrintOnlyForAlivePlayers(client);
        return Plugin_Handled;
+    }
+
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        eTweaker_PrintNotInGroup(client);
+        return Plugin_Handled;
     }
 
     Tweaks_BuildStickersMenuForCurrent(client);

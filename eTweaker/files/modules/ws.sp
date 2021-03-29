@@ -23,6 +23,12 @@ public Action Command_Ws(int client, int args)
         return Plugin_Handled;
     }
 
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        eTweaker_PrintNotInGroup(client);
+        return Plugin_Handled;
+    }
+
     if(args > 3)
     {
         CPrintToChat(client, "%s Usage: sm_ws / sm_ws <skin name>", PREFIX);
@@ -150,6 +156,12 @@ public Action Command_WsAll(int client, int args)
     if(eTweaker_IsControllingBot(client))
     {
         eTweaker_PrintNotAvailableWhileControllingBot(client);
+        return Plugin_Handled;
+    }
+
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        eTweaker_PrintNotInGroup(client);
         return Plugin_Handled;
     }
 

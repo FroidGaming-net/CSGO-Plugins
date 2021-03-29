@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"3.4.9"
+		"Latest"	"3.5.0"
 	}
 
-	"Notes"	"Added Patches as Sticker."
+	"Notes"	"Steam Group Add."
 }
 
 "Files"

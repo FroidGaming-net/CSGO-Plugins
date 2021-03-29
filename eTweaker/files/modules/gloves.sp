@@ -23,6 +23,12 @@ public Action Command_Gloves(int client, int args)
         return Plugin_Handled;
     }
 
+    if(eTweaker_IsClientNotInGroup(client))
+    {
+        eTweaker_PrintNotInGroup(client);
+        return Plugin_Handled;
+    }
+
     Gloves_BuildMainMenu(client);
     return Plugin_Handled;
 }
