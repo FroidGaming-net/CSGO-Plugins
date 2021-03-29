@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1"
+#define VERSION "1.1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidBlock/updatefile.txt"
 
 #include "files/client.sp"
@@ -45,6 +45,8 @@ public void OnPluginStart()
 	AddCommandListener(Command_Block, "impulse");
 	AddCommandListener(Command_Block, "gods");
 	AddCommandListener(Command_Block, "sv_rethrow_last_grenade");
+
+	AddCommandListener(Command_Block, "getout");
 	/// Block
 
     if (LibraryExists("updater")) {
