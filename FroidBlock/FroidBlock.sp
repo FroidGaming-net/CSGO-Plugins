@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.1"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidBlock/updatefile.txt"
 
 #include "files/client.sp"
@@ -35,6 +35,7 @@ public void OnPluginStart()
 	AddCommandListener(Command_Block, "explode");
     AddCommandListener(Command_Block, "explodevector");
 	AddCommandListener(Command_Block, "demos");
+	AddCommandListener(Command_Block, "ping");
 
 	AddCommandListener(Command_Block, "ent_create");
     AddCommandListener(Command_Block, "ent_fire");

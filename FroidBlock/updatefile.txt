@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.1.1"
+		"Latest"	"1.1.2"
 	}
 
-	"Notes"	"Block getout Radio."
+	"Notes"	"Block 'ping' Command."
 }
 
 "Files"
