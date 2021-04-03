@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.3"
+		"Latest"	"1.3.2"
 	}
 
-	"Notes"	"Remove Radio Texts from Channels."
+	"Notes"	"Update Version."
 }
 
 "Files"
