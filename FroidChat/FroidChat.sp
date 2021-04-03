@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.3.4"
+#define VERSION "1.3.5"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidChat/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
