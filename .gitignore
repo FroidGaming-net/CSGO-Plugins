@@ -4,6 +4,7 @@ FroidSounds/FroidSounds.sp
 AC_LOG/ac_log.smx
 AC_LOG/ac_log.sp
 afk_manager4/
+FroidChat/CCP
 FroidChat/plugins/CCP
 FroidChat/plugins/CCP-Latest
 FroidChat/plugins/CCP-Stable
