@@ -68,7 +68,7 @@ enum struct PlayerData
 
     void ResetTemp()
 	{
-		this.bAWP_T = false;
+		this.bIsGotAWP = false;
     }
 }
 
