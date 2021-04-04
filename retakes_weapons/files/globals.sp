@@ -36,6 +36,8 @@ enum struct PlayerData
     bool bAWP_T;
     bool bScout_T;
 
+    bool bIsGotAWP;
+
     int iCacheTeam;
 
     void Reset()
@@ -57,6 +59,9 @@ enum struct PlayerData
 		this.sSMG_T = "weapon_ump45";
 		this.bAWP_T = false;
 		this.bScout_T = false;
+
+        // All Team
+		this.bIsGotAWP = false;
 
         this.iCacheTeam = 0;
 	}
