@@ -36,6 +36,8 @@ enum struct PlayerData
     bool bAWP_T;
     bool bScout_T;
 
+    bool bIsGotAWP;
+
     int iCacheTeam;
 
     void Reset()
@@ -58,8 +60,16 @@ enum struct PlayerData
 		this.bAWP_T = false;
 		this.bScout_T = false;
 
+        // All Team
+		this.bIsGotAWP = false;
+
         this.iCacheTeam = 0;
 	}
+
+    void ResetTemp()
+	{
+		this.bAWP_T = false;
+    }
 }
 
 PlayerData g_PlayerData[MAXPLAYERS + 1];
