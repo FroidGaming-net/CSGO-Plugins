@@ -2,7 +2,7 @@
 {
 	"Version"
 	{
-		"Latest"	"1.1.7"
+		"Latest"	"1.1.8"
 	}
 
 	"Notes"	"Update Deagle Limit."

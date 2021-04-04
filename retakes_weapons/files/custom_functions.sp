@@ -122,6 +122,8 @@ void EquipWeapons(int iClient)
         return;
     }
 
+    g_PlayerData[iClient].ResetTemp();
+
     int iMoney = 0;
 	StripPlayerWeapons(iClient);
 

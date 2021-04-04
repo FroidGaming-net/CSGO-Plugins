@@ -65,6 +65,11 @@ enum struct PlayerData
 
         this.iCacheTeam = 0;
 	}
+
+    void ResetTemp()
+	{
+		this.bAWP_T = false;
+    }
 }
 
 PlayerData g_PlayerData[MAXPLAYERS + 1];
