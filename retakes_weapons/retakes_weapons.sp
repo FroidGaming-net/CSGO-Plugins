@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.8"
+#define VERSION "1.1.9"
 #define UPDATE_URL "https://sys.froidgaming.net/retakes_weapons/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
