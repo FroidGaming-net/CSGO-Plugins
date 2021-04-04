@@ -1,0 +1,14 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.1"
+	}
+
+	"Notes"	"Update Retakes Breaker."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/Retakes/retakes_breaker.smx"
+}
