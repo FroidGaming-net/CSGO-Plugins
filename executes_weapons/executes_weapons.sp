@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.9"
+#define VERSION "1.2.0"
 #define UPDATE_URL "https://sys.froidgaming.net/executes_weapons/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -173,10 +173,10 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
         return;
     }
 
-    if(Executes_GetNumActivePlayers() < 4)
-	{
-		return;
-	}
+    // if(Executes_GetNumActivePlayers() < 4)
+	// {
+	// 	return;
+	// }
 
     if (g_iRounds_Pistol < PISTOL_ROUND_TOTAL) {
         g_iRounds_Pistol++;
