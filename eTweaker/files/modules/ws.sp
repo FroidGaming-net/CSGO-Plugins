@@ -23,11 +23,11 @@ public Action Command_Ws(int client, int args)
         return Plugin_Handled;
     }
 
-    if(eTweaker_IsClientNotInGroup(client))
-    {
-        eTweaker_PrintNotInGroup(client);
-        return Plugin_Handled;
-    }
+    // if(eTweaker_IsClientNotInGroup(client))
+    // {
+    //     eTweaker_PrintNotInGroup(client);
+    //     return Plugin_Handled;
+    // }
 
     if(args > 3)
     {
@@ -97,11 +97,11 @@ public void Ws_BuildMainMenu(int client)
 
     Menu menu = new Menu(m_Ws);
     menu.SetTitle("★ Main Menu - Select Menu ★ \n ");
-    menu.AddItem("#0", "• Weapon skins\n ❯ Change the skin of any weapon.");
-    menu.AddItem("#1", "• Weapon tweaks\n ❯ Change the stickers, wear, etc.");
-    menu.AddItem("#2", "• Knife selection\n ❯ Equip any knife.");
-    menu.AddItem("#3", "• Glove selection\n ❯ Equip any pair of gloves.");
-    menu.AddItem("#4", "• Music Kit selection\n ❯ Equip any music kit.");
+    menu.AddItem("#0", "• Weapon Skins");
+    menu.AddItem("#1", "• Weapon Tweaks\n ");
+    menu.AddItem("#2", "• Knife Selection");
+    menu.AddItem("#3", "• Glove Selection");
+    menu.AddItem("#4", "• Music Kit Selection");
     menu.ExitButton = true;
     menu.Display(client, MENU_TIME_FOREVER);
 }
@@ -159,11 +159,11 @@ public Action Command_WsAll(int client, int args)
         return Plugin_Handled;
     }
 
-    if(eTweaker_IsClientNotInGroup(client))
-    {
-        eTweaker_PrintNotInGroup(client);
-        return Plugin_Handled;
-    }
+    // if(eTweaker_IsClientNotInGroup(client))
+    // {
+    //     eTweaker_PrintNotInGroup(client);
+    //     return Plugin_Handled;
+    // }
 
     if(args < 1)
     {

@@ -23,11 +23,11 @@ public Action Command_Tweaks(int client, int args)
         return Plugin_Handled;
     }
 
-    if(eTweaker_IsClientNotInGroup(client))
-    {
-        eTweaker_PrintNotInGroup(client);
-        return Plugin_Handled;
-    }
+    // if(eTweaker_IsClientNotInGroup(client))
+    // {
+    //     eTweaker_PrintNotInGroup(client);
+    //     return Plugin_Handled;
+    // }
 
     Tweaks_BuildMainMenu(client);
     return Plugin_Handled;
@@ -64,11 +64,11 @@ public Action Command_Stickers(int client, int args)
        return Plugin_Handled;
     }
 
-    if(eTweaker_IsClientNotInGroup(client))
-    {
-        eTweaker_PrintNotInGroup(client);
-        return Plugin_Handled;
-    }
+    // if(eTweaker_IsClientNotInGroup(client))
+    // {
+    //     eTweaker_PrintNotInGroup(client);
+    //     return Plugin_Handled;
+    // }
 
     Tweaks_BuildStickersMenuForCurrent(client);
     return Plugin_Handled;
@@ -84,10 +84,10 @@ stock void Tweaks_BuildMainMenu(int client)
 
     Menu menu = new Menu(m_Tweaks);
     menu.SetTitle("★ Tweaks Menu - Select Menu ★ \n ");
-    menu.AddItem("#0", "• Current weapon tweaks\n ❯ Tweak current weapon");
-    menu.AddItem("#1", "• Primary weapon tweaks\n ❯ Tweak primary weapon");
-    menu.AddItem("#2", "• Secondary weapon tweaks\n ❯ Tweak secondary weapon");
-    menu.AddItem("#3", "• Knife tweaks\n ❯ Tweak knife weapon");
+    menu.AddItem("#0", "• Current Weapon\n ");
+    menu.AddItem("#1", "• Primary Weapon");
+    menu.AddItem("#2", "• Secondary Weapon");
+    menu.AddItem("#3", "• Knife Weapon");
     menu.ExitBackButton = true;
     menu.Display(client, MENU_TIME_FOREVER);
 }

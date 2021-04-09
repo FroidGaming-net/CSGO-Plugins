@@ -6,7 +6,7 @@
 #include <PTaH>
 #include <autoexecconfig>
 #include <multicolors>
-#include <swgm>
+// #include <swgm>
 #include <geoip>
 #undef REQUIRE_PLUGIN
 #include <updater>
@@ -15,7 +15,7 @@
 #pragma semicolon 1
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.5.1"
+#define VERSION "3.5.2"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
@@ -161,6 +161,11 @@ public void OnLibraryAdded(const char[] name)
     }
 }
 
+public void OnAllPluginsLoaded()
+{
+	DisablePlugin("SWGM");
+}
+
 public void OnClientPostAdminCheck(int client)
 {
     if(!IsValidClient(client))
@@ -254,6 +259,11 @@ public Action Event_OnWeaponInspect(Event event, const char[] name, bool dontBro
         return Plugin_Continue;
     }
 
+    if(!eTweaker_AreDataSynced())
+    {
+        return Plugin_Continue;
+    }
+
     int iWeaponDefIndex = eItems_GetActiveWeaponDefIndex(client);
 
     char szWeaponDefIndex[12];
@@ -297,6 +307,11 @@ public Action Event_OnPlayerDeath(Event event, const char[] name, bool dontBroad
 
     if(IsValidClient(victim) && IsValidClient(attacker) && victim != attacker)
     {
+        if(!eTweaker_AreDataSynced())
+        {
+            return Plugin_Continue;
+        }
+
         char szWeapon[32];
         char szWeaponClassname[48];
         event.GetString("weapon", szWeapon, sizeof(szWeapon));

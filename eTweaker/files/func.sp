@@ -166,20 +166,20 @@ stock void eTweaker_PrintNotAvailableInSpec(int client)
     CPrintToChat(client, "%s This function is not available while spectating!", PREFIX);
 }
 
-stock bool eTweaker_IsClientNotInGroup(int client)
-{
-    if(CheckCommandAccess(client, "sm_froidapp_premium", ADMFLAG_CUSTOM5))
-    {
-        return false;
-    }
+// stock bool eTweaker_IsClientNotInGroup(int client)
+// {
+//     if(CheckCommandAccess(client, "sm_froidapp_premium", ADMFLAG_CUSTOM5))
+//     {
+//         return false;
+//     }
 
-    if(SWGM_IsPlayerValidated(client) && !SWGM_InGroup(client))
-    {
-        return true;
-    }
+//     if(SWGM_IsPlayerValidated(client) && !SWGM_InGroup(client))
+//     {
+//         return true;
+//     }
 
-    return false;
-}
+//     return false;
+// }
 
 stock void eTweaker_PrintNotInGroup(int client)
 {
@@ -435,6 +435,11 @@ stock bool eTwekaer_SetClientTeamKnife(int client, int iKnifeDefIndex, int Team 
 
 stock bool eTweaker_IsClientSpectating(int client)
 {
+    if(ClientInfo[client].Key == -1)
+    {
+        return true;
+    }
+
     return ClientInfo[client].Team() == CS_TEAM_SPECTATOR;
 }
 
@@ -716,4 +721,23 @@ stock void eTweaker_SetClientActiveCoin(int client, int iActiveCoinDef, bool bPi
 
     ClientInfo[client].ActiveCoin = iActiveCoinDef;
     CPrintToChat(client, "%s You have selected \x06%s\x01%s.", PREFIX, szCoinDisplayName, szType);
+}
+
+stock void DisablePlugin(char[] pluginname)
+{
+	char sPath[64];
+	BuildPath(Path_SM, sPath, sizeof(sPath), "plugins/%s.smx", pluginname);
+	if (FileExists(sPath)) {
+		char sNewPath[64];
+		BuildPath(Path_SM, sNewPath, sizeof(sNewPath), "plugins/disabled/%s.smx", pluginname);
+
+		ServerCommand("sm plugins unload %s", pluginname);
+
+		if (FileExists(sNewPath)) {
+			DeleteFile(sNewPath);
+		}
+		RenameFile(sNewPath, sPath);
+
+		LogMessage("%s was unloaded and moved to %s to avoid conflicts", sPath, sNewPath);
+	}
 }
