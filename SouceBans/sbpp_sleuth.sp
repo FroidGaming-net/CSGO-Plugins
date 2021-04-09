@@ -177,7 +177,7 @@ void OnCheckIP(HTTPResponse response, DataPack pack)
 	if(StrEqual(sStatus, "success")) {
 		char sISP[64];
 		json1.GetString("isp", sISP, sizeof(sISP));
-		if(StrContains(sISP, "Eka Mas Republik", false) == -1 && StrContains(sISP, "BIZNET", false) == -1){
+		if(StrContains(sISP, "MYREPUBLIC", false) == -1 && StrContains(sISP, "BIZNET", false) == -1){
 			char Prefix[64];
 			GetClientIP(iClient, sIP, sizeof(sIP));
 
