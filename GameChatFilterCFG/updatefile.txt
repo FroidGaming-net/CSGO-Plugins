@@ -1,0 +1,19 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.0"
+	}
+
+	"Notes"	"Release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/Tools/GameChatFilterCFG.smx"
+	"Plugin"	"Path_SM/configs/gcFilters.ini"
+	"Plugin"	"Path_SM/configs/chat/cF_censure.txt"
+	"Plugin"	"Path_SM/configs/chat/cF_server.txt"
+	"Plugin"	"Path_SM/configs/chat/cF_triggers.txt"
+	"Plugin"	"Path_SM/configs/chat/cF_whiteip.txt"
+}
