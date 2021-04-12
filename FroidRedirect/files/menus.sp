@@ -12,6 +12,7 @@ void MenuServersCategory(int iClient)
 	hMenu.AddItem("ffa", "• FFA Deathmatch");
 	hMenu.AddItem("arena", "• Arena 1v1");
 	hMenu.AddItem("practice", "• Practice Mode");
+	hMenu.AddItem("awp", "• AWP Bhop");
     hMenu.Display(iClient, MENU_TIME_FOREVER);
 }
 
