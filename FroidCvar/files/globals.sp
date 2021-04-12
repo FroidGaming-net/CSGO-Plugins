@@ -14,12 +14,14 @@ ConVar 	g_Cvar_AllowVotes,
         g_Cvar_TeamCash,
         g_Cvar_Radar,
         g_Cvar_DamageInfo,
-        g_Cvar_WeaponsMap;
+        g_Cvar_WeaponsMap,
+        g_Cvar_EquipmentReset;
 
 // All FFA Deathmatch
 ConVar 	g_Cvar_IgnoreWin,
         g_Cvar_WarmupPeriod,
         g_Cvar_BotChatter,
+        g_Cvar_TimeLimit,
         g_Cvar_MaxRounds,
         g_Cvar_RoundTime,
         g_Cvar_RoundTimeHostage,

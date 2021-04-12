@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.4"
+#define VERSION "1.1.5"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -40,6 +40,7 @@ public void OnPluginStart()
     g_Cvar_IgnoreWin = FindConVar("mp_ignore_round_win_conditions");
     g_Cvar_WarmupPeriod = FindConVar("mp_do_warmup_period");
     g_Cvar_BotChatter = FindConVar("bot_chatter");
+    g_Cvar_TimeLimit = FindConVar("mp_timelimit");
     g_Cvar_MaxRounds = FindConVar("mp_maxrounds");
     g_Cvar_RoundTime = FindConVar("mp_roundtime");
     g_Cvar_RoundTimeHostage = FindConVar("mp_roundtime_hostage");
@@ -49,6 +50,7 @@ public void OnPluginStart()
     g_Cvar_Radar = FindConVar("sv_disable_radar");
     g_Cvar_DamageInfo = FindConVar("sv_damage_print_enable");
     g_Cvar_WeaponsMap = FindConVar("mp_weapons_allow_map_placed");
+    g_Cvar_EquipmentReset = FindConVar("mp_equipment_reset_rounds");
 
     CreateTimer(60.0, Timer_Repeat, _, TIMER_REPEAT);
 
@@ -124,6 +126,13 @@ public Action Timer_Setting(Handle hTimer)
     }
     // FFA Deathmatch
     if(StrContains(g_sServerName, "AWP") > -1){
+        SetConVarInt(g_Cvar_TimeLimit, 25, true);
+        SetConVarInt(g_Cvar_EquipmentReset, 1, true);
+        SetConVarInt(g_Cvar_MaxRounds, 0, true);
+        SetConVarInt(g_Cvar_RoundTime, 3, true);
+        SetConVarFloat(g_Cvar_RoundTimeHostage, 2.25, true);
+        SetConVarFloat(g_Cvar_RoundTimeDefuse, 2.25, true);
+
         SetConVarInt(g_Cvar_FriendlyFire, 0, true);
         SetConVarInt(g_Cvar_GrenadeRadio, 1, true);
         SetConVarInt(g_Cvar_PlayerCash, 0, true);
