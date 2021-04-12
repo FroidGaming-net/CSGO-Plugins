@@ -497,7 +497,7 @@ stock void eTweaker_AttachGloveSkin(int client, int iGlovesDefIndex, int iSkinDe
     {
         char szGloveWorldModel[PLATFORM_MAX_PATH];
         eItems_GetGlovesWorldModelByDefIndex(iGlovesDefIndex, szGloveWorldModel, sizeof(szGloveWorldModel));
-        int iGloveModelIndex = PrecacheModel(szGloveWorldModel, true);
+        // int iGloveModelIndex = PrecacheModel(szGloveWorldModel, true);
 
         SetEntProp(iGloves, Prop_Send, "m_bInitialized", 1);
         SetEntProp(iGloves, Prop_Send, "m_iItemDefinitionIndex", iGlovesDefIndex);
@@ -510,7 +510,7 @@ stock void eTweaker_AttachGloveSkin(int client, int iGlovesDefIndex, int iSkinDe
         SetEntProp(iGloves, Prop_Send, "m_iEntityQuality", 4);
         SetEntPropFloat(iGloves, Prop_Send, "m_flFallbackWear", 0.0001);
         SetEntPropEnt(iGloves, Prop_Send, "m_hOwnerEntity", client);
-        SetEntProp(iGloves, Prop_Send, "m_nModelIndex", iGloveModelIndex);
+        // SetEntProp(iGloves, Prop_Send, "m_nModelIndex", iGloveModelIndex);
         SetEntPropEnt(iGloves, Prop_Data, "m_hParent", client);
         SetEntPropEnt(iGloves, Prop_Data, "m_hOwnerEntity", client);
         SetEntPropEnt(iGloves, Prop_Data, "m_hMoveParent", client);
