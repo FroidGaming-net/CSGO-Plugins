@@ -36,6 +36,7 @@ public void OnPluginStart()
     HookEvent("player_death", Event_PlayerDeath);
     HookEvent("round_prestart", Event_PreRoundStart);
     HookEvent("round_end", Event_RoundEnd);
+    HookEvent("decoy_started", Event_DecoyStarted, EventHookMode_Pre);
 
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
@@ -152,4 +153,14 @@ public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 
     g_bNoScope = false;
     g_bNoKnifeDamage = false;
+}
+
+public Action Event_DecoyStarted(Event event, const char[] name, bool dontBroadcast)
+{
+	int entity = event.GetInt("entityid");
+	char decoyName[16];
+	GetEntPropString(entity, Prop_Data, "m_iName", decoyName, sizeof(decoyName));
+	if (!StrEqual(decoyName, "normal", false)) {
+        AcceptEntityInput(entity, "Kill");
+    }
 }
