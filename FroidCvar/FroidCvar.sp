@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.3"
+#define VERSION "1.1.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -48,6 +48,7 @@ public void OnPluginStart()
     g_Cvar_SolidTeam = FindConVar("mp_solid_teammates");
     g_Cvar_Radar = FindConVar("sv_disable_radar");
     g_Cvar_DamageInfo = FindConVar("sv_damage_print_enable");
+    g_Cvar_WeaponsMap = FindConVar("mp_weapons_allow_map_placed");
 
     CreateTimer(60.0, Timer_Repeat, _, TIMER_REPEAT);
 
@@ -124,10 +125,18 @@ public Action Timer_Setting(Handle hTimer)
     // FFA Deathmatch
     if(StrContains(g_sServerName, "AWP") > -1){
         SetConVarInt(g_Cvar_FriendlyFire, 0, true);
+        SetConVarInt(g_Cvar_GrenadeRadio, 1, true);
+        SetConVarInt(g_Cvar_PlayerCash, 0, true);
+        SetConVarInt(g_Cvar_TeamCash, 0, true);
+        SetConVarInt(g_Cvar_Radar, 1);
+        SetConVarInt(g_Cvar_WeaponsMap, 0);
     }
 
     // Multi1v1
     if(StrContains(g_sServerName, "Arena") > -1){
         SetConVarInt(g_Cvar_Radar, 1);
+        SetConVarInt(g_Cvar_GrenadeRadio, 1, true);
+        SetConVarInt(g_Cvar_PlayerCash, 0, true);
+        SetConVarInt(g_Cvar_TeamCash, 0, true);
     }
 }
