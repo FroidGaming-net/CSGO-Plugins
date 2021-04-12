@@ -2,18 +2,18 @@
 {
 	"Version"
 	{
-		"Latest"	"1.0.1"
+		"Latest"	"1.0.2"
 	}
 
-	"Notes"	"Release."
+	"Notes"	"Fix Wrong Path."
 }
 
 "Files"
 {
 	"Plugin"	"Path_SM/plugins/Tools/GameChatFilterCFG.smx"
-	"Plugin"	"Path_SM/configs/gcFilters.ini"
-	"Plugin"	"Path_SM/configs/chat/cF_censure.txt"
-	"Plugin"	"Path_SM/configs/chat/cF_server.txt"
-	"Plugin"	"Path_SM/configs/chat/cF_triggers.txt"
-	"Plugin"	"Path_SM/configs/chat/cF_whiteip.txt"
+	"Plugin"	"Path_SM/configs/chat/gcFilters.ini"
+	"Plugin"	"Path_SM/configs/chat/filters/cF_censure.txt"
+	"Plugin"	"Path_SM/configs/chat/filters/cF_server.txt"
+	"Plugin"	"Path_SM/configs/chat/filters/cF_triggers.txt"
+	"Plugin"	"Path_SM/configs/chat/filters/cF_whiteip.txt"
 }
