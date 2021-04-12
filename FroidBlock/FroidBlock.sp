@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidBlock/updatefile.txt"
 
 #include "files/client.sp"
@@ -48,6 +48,7 @@ public void OnPluginStart()
 	AddCommandListener(Command_Block, "sv_rethrow_last_grenade");
 
 	AddCommandListener(Command_Block, "getout");
+	AddCommandListener(Command_Block, "sorry");
 	/// Block
 
     if (LibraryExists("updater")) {
