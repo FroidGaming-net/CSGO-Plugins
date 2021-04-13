@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"3.5.4"
+		"Latest"	"3.5.3"
 	}
 
-	"Notes"	"Fix Zeus Bug."
+	"Notes"	"Fix Incompatible Plugin."
 }
 
 "Files"

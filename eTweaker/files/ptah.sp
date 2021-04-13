@@ -28,23 +28,6 @@ public void PTaH_OnGiveNamedItemPost(int client, const char[] szClassname, const
         return;
     }
 
-    int iWeaponDefIndex = eItems_GetWeaponDefIndexByClassName(szClassname);
-    int iSelectedKnife = eTwekaer_GetClientTeamKnife(client);
-    if(eItems_IsDefIndexKnife(iWeaponDefIndex))
-    {
-        if(!eItems_IsDefIndexKnife(iSelectedKnife))
-        {
-           return;
-        }
-
-        if(!g_cvDangerZoneKnives.BoolValue && eTweaker_IsDangerZoneKnife(iSelectedKnife))
-        {
-            return;
-        }
-
-        EquipPlayerWeapon(client, iEnt);
-    }
-
     eTweaker_UpdateClientWeapon(client, iEnt);
 }
 
@@ -63,18 +46,18 @@ public Action PTaH_OnGiveNamedItemPre(int client, char szClassName[64], CEconIte
     {
         if(!eItems_IsDefIndexKnife(iSelectedKnife))
         {
-           return Plugin_Continue;
+           return Plugin_Continue; 
         }
 
         if(!g_cvDangerZoneKnives.BoolValue && eTweaker_IsDangerZoneKnife(iSelectedKnife))
         {
-            return Plugin_Continue;
+            return Plugin_Continue; 
         }
 
         IgnoredCEconItemView = true;
 
         eItems_GetWeaponClassNameByDefIndex(iSelectedKnife, szClassName, sizeof(szClassName));
-
+        
         return Plugin_Changed;
     }
 
