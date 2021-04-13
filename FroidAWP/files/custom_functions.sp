@@ -158,7 +158,8 @@ public void RemoveRagdoll(int iClient)
     if (IsValidEdict(iClient))
     {
         int ragdoll = GetEntPropEnt(iClient, Prop_Send, "m_hRagdoll");
-        if (ragdoll != -1)
+        if (ragdoll != -1) {
             AcceptEntityInput(ragdoll, "Kill");
+        }
     }
 }

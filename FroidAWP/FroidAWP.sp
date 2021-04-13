@@ -4,6 +4,7 @@
 #include <sdkhooks>
 #include <multicolors>
 #include <smlib>
+#include <cstrike>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -32,7 +33,7 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    HookEvent("player_spawn", Event_PlayerSpawn);
+    HookEvent("player_spawn", Event_PlayerSpawn, EventHookMode_Pre);
     HookEvent("player_death", Event_PlayerDeath);
     HookEvent("round_prestart", Event_PreRoundStart);
     HookEvent("round_end", Event_RoundEnd);
@@ -41,6 +42,18 @@ public void OnPluginStart()
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
+
+    reloadPlugins();
+}
+
+/// Reload Detected
+public void reloadPlugins()
+{
+	for (int i = 1; i < MAXPLAYERS; i++) {
+		if (IsValidClient(i)) {
+            OnClientPutInServer(i);
+		}
+	}
 }
 
 public void OnLibraryAdded(const char[] name)
@@ -112,6 +125,7 @@ public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadca
     Client_RemoveAllWeapons(iClient);
     GiveWeapon(iClient);
     GivePlayerItem(iClient, "weapon_knife");
+
     return Plugin_Continue;
 }
 
