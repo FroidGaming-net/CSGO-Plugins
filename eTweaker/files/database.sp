@@ -3,7 +3,7 @@ public void Database_Load()
 	if (g_hDatabase != null)
 	{
         PrintToServer("%s Database is already connected! (Handle: %d)", TAG_NCLR, g_hDatabase);
-		return;
+	    return;
 	}
 
 	Database.Connect(Database_OnConnect, "default");
@@ -28,8 +28,8 @@ public Action Timer_RetryMySQL(Handle timer)
 {
     PrintToServer("%s Reconnecting...", TAG_NCLR);
 
-	Database_Load();
-	return Plugin_Stop;
+    Database_Load();
+    return Plugin_Stop;
 }
 
 public void Database_CreateTables()
