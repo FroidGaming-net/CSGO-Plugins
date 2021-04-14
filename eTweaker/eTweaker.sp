@@ -11,11 +11,12 @@
 #undef REQUIRE_PLUGIN
 #include <updater>
 
-#pragma newdecls required
 #pragma semicolon 1
+#pragma newdecls required
+#pragma tabsize 4
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.5.3"
+#define VERSION "3.5.4"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
@@ -118,7 +119,7 @@ public void OnPluginStart()
 
     g_iNameTagOffset    = FindSendPropInfo("CBaseAttributableItem", "m_szCustomName");
 
-    Database.Connect(Database_OnConnect, "default");
+    Database_Load();
 
     AutoExecConfig_SetFile("eTweaker_config");
 

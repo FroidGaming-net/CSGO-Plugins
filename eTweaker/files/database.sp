@@ -1,8 +1,20 @@
+public void Database_Load()
+{
+	if (g_hDatabase != null)
+	{
+        PrintToServer("%s Database is already connected! (Handle: %d)", TAG_NCLR, g_hDatabase);
+		return;
+	}
+
+	Database.Connect(Database_OnConnect, "default");
+}
+
 public void Database_OnConnect(Database db, const char[] error, any data)
 {
     if(db == null)
     {
         PrintToServer("%s Unable to connect to MySQL server. Saving is off!", TAG_NCLR);
+        CreateTimer(5.0, Timer_RetryMySQL);
         return;
     }
 
@@ -10,6 +22,14 @@ public void Database_OnConnect(Database db, const char[] error, any data)
     PrintToServer("%s Connected to the MySQL successfully!", TAG_NCLR);
 
     Database_CreateTables();
+}
+
+public Action Timer_RetryMySQL(Handle timer)
+{
+    PrintToServer("%s Reconnecting...", TAG_NCLR);
+
+	Database_Load();
+	return Plugin_Stop;
 }
 
 public void Database_CreateTables()
