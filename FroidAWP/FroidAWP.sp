@@ -123,10 +123,26 @@ public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadca
     }
 
     Client_RemoveAllWeapons(iClient);
-    GiveWeapon(iClient);
-    GivePlayerItem(iClient, "weapon_knife");
+
+    DataPack pack = new DataPack();
+    CreateDataTimer(0.5, Timer_Weapon, pack);
+    pack.WriteCell(GetClientUserId(iClient));
 
     return Plugin_Continue;
+}
+
+public Action Timer_Weapon(Handle hTimer, Handle hDatapack)
+{
+    ResetPack(hDatapack);
+    int iClient = GetClientOfUserId(ReadPackCell(hDatapack));
+
+    if (!IsValidClient(iClient)) {
+        return;
+    }
+
+    Client_RemoveAllWeapons(iClient);
+    GiveWeapon(iClient);
+    GivePlayerItem(iClient, "weapon_knife");
 }
 
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
