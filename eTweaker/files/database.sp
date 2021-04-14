@@ -3,7 +3,7 @@ public void Database_Load()
 	if (g_hDatabase != null)
 	{
         PrintToServer("%s Database is already connected! (Handle: %d)", TAG_NCLR, g_hDatabase);
-	    return;
+        return;
 	}
 
 	Database.Connect(Database_OnConnect, "default");
