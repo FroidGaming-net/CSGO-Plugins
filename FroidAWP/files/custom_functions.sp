@@ -24,8 +24,9 @@ public void RandomRound(int iRoundMode)
         {
             PrintNotification("AWP Noscope + Bhop Enabled + No Knife Damage");
             EnabledBhop();
-            g_bNoScope = true;
+            ServerCommand("sv_infinite_ammo 2");
             g_bNoKnifeDamage = true;
+            g_bNoScope = true;
         }
         case 5:
         {
@@ -36,11 +37,13 @@ public void RandomRound(int iRoundMode)
         {
             PrintNotification("Knife + Zeus + Bhop Enabled");
             EnabledBhop();
+            g_bNormalKnifeDamage = true;
         }
         case 7:
         {
             PrintNotification("MAG-7 + Bhop Enabled + No Knife Damage");
             EnabledBhop();
+            ServerCommand("sv_infinite_ammo 2");
             g_bNoKnifeDamage = true;
         }
     }
@@ -48,6 +51,7 @@ public void RandomRound(int iRoundMode)
 
 public void GiveWeapon(int iClient)
 {
+    Client_RemoveAllWeapons(iClient);
     if (g_iRoundCount == 5) {
         // Special Rounds
         switch(g_iRoundMode)

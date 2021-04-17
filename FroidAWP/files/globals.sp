@@ -5,6 +5,7 @@ int g_iRoundMode = 0;
 bool g_bNades = false;
 bool g_bNoScope = false;
 bool g_bNoKnifeDamage = false;
+bool g_bNormalKnifeDamage = false;
 
 enum struct PlayerData
 {

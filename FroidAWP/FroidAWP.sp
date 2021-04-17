@@ -33,7 +33,9 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    HookEvent("player_spawn", Event_PlayerSpawn, EventHookMode_Pre);
+    HookEvent("player_spawn", Event_PrePlayerSpawn, EventHookMode_Pre);
+    HookEvent("player_spawn", Event_PlayerSpawn);
+    HookEvent("player_spawn", Event_PostPlayerSpawn, EventHookMode_Post);
     HookEvent("player_death", Event_PlayerDeath);
     HookEvent("round_prestart", Event_PreRoundStart);
     HookEvent("round_end", Event_RoundEnd);
@@ -113,6 +115,18 @@ public void OnClientDisconnect(int iClient)
 	SDKUnhook(iClient, SDKHook_OnTakeDamageAlive, OnTakeDamageAlive);
 	SDKUnhook(iClient, SDKHook_OnTakeDamagePost, OnTakeDamagePost);
 }
+public Action Event_PrePlayerSpawn(Event event, const char[] name, bool dontBroadcast)
+{
+    int iClient = GetClientOfUserId(event.GetInt("userid"));
+
+    if (!IsValidClient(iClient)) {
+        return Plugin_Continue;
+    }
+
+    Client_RemoveAllWeapons(iClient);
+
+    return Plugin_Continue;
+}
 
 public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 {
@@ -124,26 +138,45 @@ public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadca
 
     Client_RemoveAllWeapons(iClient);
 
-    DataPack pack = new DataPack();
-    CreateDataTimer(0.5, Timer_Weapon, pack);
-    pack.WriteCell(GetClientUserId(iClient));
-
     return Plugin_Continue;
 }
 
-public Action Timer_Weapon(Handle hTimer, Handle hDatapack)
+public Action Event_PostPlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 {
-    ResetPack(hDatapack);
-    int iClient = GetClientOfUserId(ReadPackCell(hDatapack));
+    int iClient = GetClientOfUserId(event.GetInt("userid"));
 
     if (!IsValidClient(iClient)) {
-        return;
+        return Plugin_Continue;
     }
 
     Client_RemoveAllWeapons(iClient);
     GiveWeapon(iClient);
     GivePlayerItem(iClient, "weapon_knife");
+
+    return Plugin_Continue;
 }
+
+// public void StripNextTick(int iClient)
+// {
+//     Client_RemoveAllWeapons(iClient);
+//     DataPack pack = new DataPack();
+//     CreateDataTimer(0.5, Timer_Weapon, pack);
+//     pack.WriteCell(GetClientUserId(iClient));
+// }
+
+// public Action Timer_Weapon(Handle hTimer, Handle hDatapack)
+// {
+//     ResetPack(hDatapack);
+//     int iClient = GetClientOfUserId(ReadPackCell(hDatapack));
+
+//     if (!IsValidClient(iClient)) {
+//         return;
+//     }
+
+//     Client_RemoveAllWeapons(iClient);
+//     GiveWeapon(iClient);
+//     GivePlayerItem(iClient, "weapon_knife");
+// }
 
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
@@ -181,8 +214,18 @@ public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
         g_iRoundMode = 0;
     }
 
-    g_bNoScope = false;
-    g_bNoKnifeDamage = false;
+    if (g_bNoScope == true)  {
+        g_bNoScope = false;
+    }
+
+    if (g_bNoKnifeDamage == true)  {
+        ServerCommand("sv_infinite_ammo 0");
+        g_bNoKnifeDamage = false;
+    }
+
+    if (g_bNormalKnifeDamage == true) {
+        g_bNormalKnifeDamage = false;
+    }
 }
 
 public Action Event_DecoyStarted(Event event, const char[] name, bool dontBroadcast)

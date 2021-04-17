@@ -29,6 +29,9 @@ public Action OnTakeDamage(int iVictim, int &iAttacker, int &iInflictor, float &
                 char sWeapon[255];
                 GetClientWeapon(iAttacker, sWeapon, sizeof(sWeapon));
                 if (StrContains(sWeapon, "knife") != -1 || StrContains(sWeapon, "bayonet") != -1) {
+                    if (g_bNormalKnifeDamage == true) {
+                        return Plugin_Continue;
+                    }
                     if (fDamage <= 30.0) {
                         // Left-Click
                         fDamage = 15.0;
