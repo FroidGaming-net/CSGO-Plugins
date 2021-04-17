@@ -128,6 +128,8 @@ public Action Event_RoundMVP(Handle event, const char[] name, bool dontBroadcast
 				// Mute game sound
 				// https://forums.alliedmods.net/showthread.php?t=227735
 				ClientCommand(i, "playgamesound Music.StopAllMusic");
+				ClientCommand(i, "playgamesound Music.StopAllMusic");
+				ClientCommand(i, "playgamesound Music.StopAllMusic");
 
 				// Play MVP Anthem
 				EmitSoundToClient(i, sound, SOUND_FROM_PLAYER, SNDCHAN_STATIC, SNDLEVEL_NONE, _, VolMVP[i]);

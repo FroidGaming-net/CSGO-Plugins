@@ -43,7 +43,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
     int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
     int iAttacker = GetClientOfUserId(GetEventInt(event, "attacker"));
 
-    if (iAttacker != iClient && CheckCommandAccess(iAttacker, "sm_froidapp_premium", ADMFLAG_CUSTOM5)) {
+    if (iAttacker != iClient && CheckCommandAccess(iAttacker, "sm_froidapp_premium_plus", ADMFLAG_CUSTOM6)) {
         float fPos[3];
         GetClientAbsOrigin(iClient, fPos);
 		Func_Tesla(fPos);

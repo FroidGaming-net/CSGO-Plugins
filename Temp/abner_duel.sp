@@ -1,7 +1,7 @@
 #include <sourcemod>
 #include <sdktools>
 #include <sdkhooks>
-#include <colors>
+#include <multicolors>
 #include <clientprefs>
 #include <cstrike>
 #include <emitsoundany>
@@ -172,7 +172,7 @@ public Action msg(Handle timer, any client)
 {
 	if(IsValidClient(client))
 	{
-		CPrintToChat(client, "{green}[Duel]\x01 %t", "command");
+		CPrintToChat(client, "[{green}Duel{default}]\x01 %t", "command");
 	}
 }
 
@@ -343,9 +343,9 @@ void RefreshSounds(int client)
 {
 	int size = LoadSounds(sounds, g_hSoundPath);
 	if(size > 0)
-		CReplyToCommand(client, "{green}[Duel] {default}Loaded %d sounds.", size);
+		CReplyToCommand(client, "[{green}Duel{default}] {default}Loaded %d sounds.", size);
 	else
-		CReplyToCommand(client, "{green}[Duel] {default}INVALID SOUND PATH");
+		CReplyToCommand(client, "[{green}Duel{default}] {default}INVALID SOUND PATH");
 }
 
 
@@ -456,11 +456,11 @@ public void VoteYes(int client)
 
 	if(GetClientTeam(client) == 2)
 	{
-		CPrintToChatAll("{green}[Duel] \x01%t", "Duel Accepted Red", nome);
+		CPrintToChatAll("[{green}Duel{default}] \x01%t", "Duel Accepted Red", nome);
 	}
 	else if(GetClientTeam(client) == 3)
 	{
-		CPrintToChatAll("{green}[Duel] \x01%t", "Duel Accepted Blue", nome);
+		CPrintToChatAll("[{green}Duel{default}] \x01%t", "Duel Accepted Blue", nome);
 	}
 	check_votes();
 }
@@ -478,10 +478,10 @@ public void VoteNo(int client)
 	switch(team)
 	{
 		case 2: {
-			CPrintToChatAll("{green}[Duel] \x01%t", "Duel Refused Red", nome);
+			CPrintToChatAll("[{green}Duel{default}] \x01%t", "Duel Refused Red", nome);
 		}
 		case 3: {
-			CPrintToChatAll("{green}[Duel] \x01%t", "Duel Refused Blue", nome);
+			CPrintToChatAll("[{green}Duel{default}] \x01%t", "Duel Refused Blue", nome);
 		}
 	}
 
@@ -495,7 +495,7 @@ public void check_votes()
 		StartDuel();
 	}
 	else if (g_N >= 1)
-		CPrintToChatAll("{green}[Duel] \x01%t", "Duel Canceled");
+		CPrintToChatAll("[{green}Duel{default}] \x01%t", "Duel Canceled");
 }
 
 public Action CommandLoad(int client, int args)
@@ -540,7 +540,7 @@ public Action CommandSemMira(int client, int args)
 	if(NoScopeEnabled)
 	{
 		NoScopeEnabled = false;
-		CPrintToChatAll("{green}[Duel] \x01%t", "Scope On");
+		CPrintToChatAll("[{green}Duel{default}] \x01%t", "Scope On");
 		for (int  i = 1; i <= MaxClients; i++)
 		{
 			if(IsValidClient(i) && IsPlayerAlive(i))
@@ -566,7 +566,7 @@ public Action CommandSemMira(int client, int args)
 	else
 	{
 		NoScopeEnabled = true;
-		CPrintToChatAll("{green}[Duel] \x01%t", "Scope Off");
+		CPrintToChatAll("[{green}Duel{default}] \x01%t", "Scope Off");
 		return Plugin_Handled;
 	}
 }
@@ -585,8 +585,13 @@ public Action CheckDuel(Handle time, any client)
 
 public Action PlayerDeath(Handle event, const char[] name, bool dontBroadcast)
 {
-	if(DuelStarted)
+	if (DuelStarted) {
+		if(g_hTimeDuel != INVALID_HANDLE) {
+			KillTimer(g_hTimeDuel);
+			g_hTimeDuel = INVALID_HANDLE;
+		}
 		return Plugin_Continue;
+	}
 
 
 	if(CSGO && GameRules_GetProp("m_bWarmupPeriod") == 1)
@@ -628,11 +633,11 @@ void FinishDuel() {
 	}
 
 	if(winner > 0) {
-		DropWeapons(winner, null);
-		if(ctAlive)
-			ReturnWeapons(winner, ctItens);
-		else if(trAlive)
-			ReturnWeapons(winner, trItens);
+		// DropWeapons(winner, null);
+		// if(ctAlive)
+		// 	ReturnWeapons(winner, ctItens);
+		// else if(trAlive)
+		// 	ReturnWeapons(winner, trItens);
 
 		if(extra > 0)
 		{
@@ -725,7 +730,7 @@ public void StartDuel()
 
 
 	CreateTimer(3.0, SetDuelConditions);
-	CPrintToChatAll("{green}[Duel] {default}%t", "Start Duel");
+	CPrintToChatAll("[{green}Duel{default}] {default}%t", "Start Duel");
 }
 
 
@@ -775,7 +780,7 @@ public Action SetDuelConditions(Handle timer)
 
 public void DeleteAllWeapons()
 {
-	for(int  i=1;i<GetMaxEntities();i++)
+	for(int i=1;i<GetMaxEntities();i++)
 	{
 		if(IsValidEdict(i))
 		{
@@ -805,7 +810,9 @@ public void DropWeapons(int client, ArrayList arr) {
 			if(arr != null)
 				arr.Push(EntIndexToEntRef(weapon));
 			else
-				RemoveEdict(weapon);
+				if(IsValidEdict(weapon)){
+					RemoveEdict(weapon);
+				}
 
 			weapon = GetPlayerWeaponSlot(client, i);
 		}
@@ -869,7 +876,7 @@ public Action cmsg(Handle timer, any client)
 				ForcePlayerSuicide(i);
 			}
 		}
-		CPrintToChatAll("{green}[Duel] \x01%t", "Duel Canceled");
+		CPrintToChatAll("[{green}Duel{default}] \x01%t", "Duel Canceled");
 	}
 	return Plugin_Continue;
 }
