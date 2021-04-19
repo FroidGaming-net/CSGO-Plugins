@@ -149,9 +149,11 @@ public Action Event_PostPlayerSpawn(Event event, const char[] name, bool dontBro
         return Plugin_Continue;
     }
 
-    Client_RemoveAllWeapons(iClient);
-    GiveWeapon(iClient);
-    GivePlayerItem(iClient, "weapon_knife");
+    if(GetClientTeam(iClient) >= CS_TEAM_T) {
+        Client_RemoveAllWeapons(iClient);
+        GiveWeapon(iClient);
+        GivePlayerItem(iClient, "weapon_knife");
+    }
 
     return Plugin_Continue;
 }
