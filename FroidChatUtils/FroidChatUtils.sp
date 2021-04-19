@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.6"
+#define VERSION "1.1.7"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidChatUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -53,16 +53,14 @@ Action OnSay(int iClient, const char[] sCommand, int iArgs)
 
         if (StrContains(sText, "fps") > -1) {
             char sIP[64], sCountryCode[3];
-            for (int i = 1; i < MAXPLAYERS; i++) {
-                if (IsValidClient(i)) {
-                    GetClientIP(i, sIP, sizeof(sIP));
-                    GeoipCode2(sIP, sCountryCode);
-                    if (StrEqual(sCountryCode, "ID")) {
-                        CPrintToChat(i, "%s Kamu mengalami {lightred}FPS DROP{default}? Silahkan ketik \"{lightred}logaddress_add 1{default}\" di {lightred}CONSOLE{default} untuk memperbaikinya", PREFIX);
-                        CPrintToChat(i, "%s Ingat yaaa di {lightred}CONSOLE{default} dan jangan lupa angka 1 nya! Contoh : logaddress_add 1", PREFIX);
-                    } else {
-                        CPrintToChat(i, "%s Are you experiencing {lightred}FPS DROP{default}? Please type \"{lightred}logaddress_add 1{default}\" on the {lightred}CONSOLE{default} to fix it", PREFIX);
-                    }
+            if (IsValidClient(iClient)) {
+                GetClientIP(iClient, sIP, sizeof(sIP));
+                GeoipCode2(sIP, sCountryCode);
+                if (StrEqual(sCountryCode, "ID")) {
+                    CPrintToChat(iClient, "%s Kamu mengalami {lightred}FPS DROP{default}? Silahkan ketik \"{lightred}logaddress_add 1{default}\" di {lightred}CONSOLE{default} untuk memperbaikinya", PREFIX);
+                    CPrintToChat(iClient, "%s Ingat yaaa di {lightred}CONSOLE{default} dan jangan lupa angka 1 nya! Contoh : logaddress_add 1", PREFIX);
+                } else {
+                    CPrintToChat(iClient, "%s Are you experiencing {lightred}FPS DROP{default}? Please type \"{lightred}logaddress_add 1{default}\" on the {lightred}CONSOLE{default} to fix it", PREFIX);
                 }
             }
 		    return Plugin_Continue;
