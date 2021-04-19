@@ -71,7 +71,7 @@ void MenuPremiumPlusFeatures(int iClient)
 	hMenu.AddItem("11", "» [AWP] !join (Join on AWP)", ITEMDRAW_DISABLED);
 	hMenu.AddItem("12", "» [AWP] Kill Effect", ITEMDRAW_DISABLED);
 	hMenu.AddItem("12", "» [AWP] Zeus Tracers", ITEMDRAW_DISABLED);
-	hMenu.AddItem("12", "» [AWP] 10.000 Credits in-game to buy !shop Items", ITEMDRAW_DISABLED);
+	hMenu.AddItem("12", "» [AWP] 20.000 Credits in-game to buy !shop Items", ITEMDRAW_DISABLED);
 	hMenu.AddItem("13", "» [All] !emoji command for use a scoreboard emoji", ITEMDRAW_DISABLED);
 	hMenu.AddItem("14", "» [All] !maks command for use a mask/hats", ITEMDRAW_DISABLED);
 	hMenu.AddItem("15", "» [All] !tag command for customize name color, message color & tag", ITEMDRAW_DISABLED);
