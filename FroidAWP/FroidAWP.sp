@@ -5,6 +5,7 @@
 #include <multicolors>
 #include <smlib>
 #include <cstrike>
+#include <fuckZones>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -115,6 +116,14 @@ public void OnClientDisconnect(int iClient)
 	SDKUnhook(iClient, SDKHook_OnTakeDamageAlive, OnTakeDamageAlive);
 	SDKUnhook(iClient, SDKHook_OnTakeDamagePost, OnTakeDamagePost);
 }
+
+public Action fuckZones_OnStartTouchZone(int iClient, int iEntity, const char[] sZone_name, int iType)
+{
+    if (IsValidClient(iClient, true)) {
+        ForcePlayerSuicide(iClient);
+    }
+}
+
 public Action Event_PrePlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 {
     int iClient = GetClientOfUserId(event.GetInt("userid"));
@@ -149,22 +158,19 @@ public Action Event_PostPlayerSpawn(Event event, const char[] name, bool dontBro
         return Plugin_Continue;
     }
 
-    if(GetClientTeam(iClient) >= CS_TEAM_T) {
-        Client_RemoveAllWeapons(iClient);
-        GiveWeapon(iClient);
-        GivePlayerItem(iClient, "weapon_knife");
-    }
+    RequestFrame(StripNextTick, iClient);
 
     return Plugin_Continue;
 }
 
-// public void StripNextTick(int iClient)
-// {
-//     Client_RemoveAllWeapons(iClient);
-//     DataPack pack = new DataPack();
-//     CreateDataTimer(0.5, Timer_Weapon, pack);
-//     pack.WriteCell(GetClientUserId(iClient));
-// }
+public void StripNextTick(int iClient)
+{
+    if (GetClientTeam(iClient) >= CS_TEAM_T) {
+        Client_RemoveAllWeapons(iClient);
+        GiveWeapon(iClient);
+        GivePlayerItem(iClient, "weapon_knife");
+    }
+}
 
 // public Action Timer_Weapon(Handle hTimer, Handle hDatapack)
 // {
