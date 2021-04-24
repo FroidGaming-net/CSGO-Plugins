@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.5"
+#define VERSION "1.1.6"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -95,6 +95,10 @@ public Action OnTakeDamage(int iClient, int &iAttacker, int &iInflictor, float &
 
                     return Plugin_Changed;
                 } else if (iDamagetype == 4098 || iDamagetype == 1073745922) {
+                    if (IsWarmup()) {
+                        return Plugin_Continue;
+                    }
+
                     CPrintToChat(iAttacker, "{darkred}WARNING: You will be banned from the server if you attack your teammate!!!");
                     g_PlayerData[iClient].fStamina = GetEntPropFloat(iClient, Prop_Send, "m_flStamina");
                     fDamage = 0.0;
@@ -147,4 +151,9 @@ public void OnTakeDamagePost(int iClient, int iAttacker, int iInflictor, float f
             }
 		}
 	}
+}
+
+stock bool IsWarmup()
+{
+	return view_as<bool>(GameRules_GetProp("m_bWarmupPeriod"));
 }
