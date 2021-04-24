@@ -3,9 +3,9 @@
 #include <sdktools>
 #include <sdkhooks>
 #include <cstrike>
-#include <sourcebanspp>
 #include <multicolors>
 #undef REQUIRE_PLUGIN
+#include <sourcebanspp>
 #include <updater>
 
 #pragma semicolon 1
@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.3"
+#define VERSION "1.1.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -94,6 +94,10 @@ public Action OnTakeDamage(int iClient, int &iAttacker, int &iInflictor, float &
                     fDamage = 0.0;
 
                     return Plugin_Changed;
+                } else if (iDamagetype == 4098 || iDamagetype == 1073745922) {
+                    g_PlayerData[iClient].fStamina = GetEntPropFloat(iClient, Prop_Send, "m_flStamina");
+
+                    return Plugin_Changed;
                 }
             }
 		}
@@ -106,6 +110,16 @@ public Action OnTakeDamageAlive(int iClient, int &iAttacker, int &iInflictor, fl
 {
     if (iClient != iAttacker && IsValidClient(iAttacker)) {
         if (GetClientTeam(iClient) == GetClientTeam(iAttacker)) {
+            if (iDamagetype != 32) {
+                if (iDamagetype == 4098 || iDamagetype == 1073745922) {
+                    CPrintToChat(iAttacker, "{darkred}WARNING: You will be banned from the server if you attack your teammate!!!");
+
+                    fDamage = 0.0;
+
+                    return Plugin_Changed;
+                }
+            }
+
             g_PlayerData[iAttacker].iTeamDamage = g_PlayerData[iAttacker].iTeamDamage + RoundToNearest(fDamage);
 
             if (g_PlayerData[iAttacker].iTeamDamage >= 5 && g_PlayerData[iAttacker].iTeamDamage < 150) {
@@ -132,6 +146,9 @@ public void OnTakeDamagePost(int iClient, int iAttacker, int iInflictor, float f
                 char sWeapon[255];
                 GetClientWeapon(iAttacker, sWeapon, sizeof(sWeapon));
                 if (StrContains(sWeapon, "knife") != -1 || StrContains(sWeapon, "taser") != -1 || StrContains(sWeapon, "bayonet") != -1) {
+                    SetEntPropFloat(iClient, Prop_Send, "m_flVelocityModifier", 1.0);
+                    SetEntPropFloat(iClient, Prop_Send, "m_flStamina", g_PlayerData[iClient].fStamina);
+                } else if (iDamagetype == 4098 || iDamagetype == 1073745922) {
                     SetEntPropFloat(iClient, Prop_Send, "m_flVelocityModifier", 1.0);
                     SetEntPropFloat(iClient, Prop_Send, "m_flStamina", g_PlayerData[iClient].fStamina);
                 }
