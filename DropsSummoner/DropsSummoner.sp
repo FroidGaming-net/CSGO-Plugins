@@ -11,7 +11,7 @@
 
 #define PLUGIN_NAME "FroidApp"
 #define PLUGIN_AUTHORS "FroidGaming.net"
-#define PLUGIN_VERSION "1.0.4"
+#define PLUGIN_VERSION "1.0.5"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
 public Plugin myinfo =
@@ -139,16 +139,16 @@ MRESReturn Detour_RecordPlayerItemDrop(Handle hParams)
 		int iRarity = DHookGetParamObjectPtrVar(hParams, 1, 28, ObjectValueType_Int);
 		int iQuality = DHookGetParamObjectPtrVar(hParams, 1, 32, ObjectValueType_Int);
 
-		char sNewMessage[1024];
+		// char sNewMessage[1024];
 		g_cHostname = FindConVar("hostname");
 		g_cHostname.GetString(g_sHostname, sizeof(g_sHostname));
-		FormatEx(sNewMessage, sizeof(sNewMessage), "Player %L dropped [%u-%u-%u-%u] [%s]", iClient, iDefIndex, iPaintIndex, iRarity, iQuality, g_sHostname);
-		EscapeString(sNewMessage, sizeof(sNewMessage));
+		// FormatEx(sNewMessage, sizeof(sNewMessage), "Player %L dropped [%u-%u-%u-%u] [%s]", iClient, iDefIndex, iPaintIndex, iRarity, iQuality, g_sHostname);
+		// EscapeString(sNewMessage, sizeof(sNewMessage));
 
-		Discord_StartMessage();
-		Discord_SetUsername("FroidGaming.net");
-		Discord_SetContent(sNewMessage);
-		Discord_EndMessage("rewards", true);
+		// Discord_StartMessage();
+		// Discord_SetUsername("FroidGaming.net");
+		// Discord_SetContent(sNewMessage);
+		// Discord_EndMessage("rewards", true);
 
 		Protobuf hSendPlayerItemFound = view_as<Protobuf>(StartMessageAll("SendPlayerItemFound", USERMSG_RELIABLE));
 		hSendPlayerItemFound.SetInt("entindex", iClient);
