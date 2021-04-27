@@ -11,7 +11,7 @@
 
 #define PLUGIN_NAME "FroidApp"
 #define PLUGIN_AUTHORS "FroidGaming.net"
-#define PLUGIN_VERSION "1.0.5"
+#define PLUGIN_VERSION "1.0.6"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
 public Plugin myinfo =
@@ -165,7 +165,7 @@ MRESReturn Detour_RecordPlayerItemDrop(Handle hParams)
 		// Discord
 		Discord_StartMessage();
 		Discord_SetUsername("FroidGaming.net");
-		Discord_SetTitle(NULL_STRING, "★ Free Rewards ★");
+		Discord_SetTitle(NULL_STRING, "★ Reward Details ★");
 		/// Content
 		char szBody[2][1048];
 		GetClientAuthId(iClient, AuthId_SteamID64, szBody[0], sizeof(szBody[]));
