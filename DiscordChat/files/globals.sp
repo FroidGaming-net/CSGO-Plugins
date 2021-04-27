@@ -1,0 +1,1 @@
+ConVar g_cHostname = null;
