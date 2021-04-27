@@ -32,6 +32,17 @@ public void OnPluginStart()
 
     AddCommandListener(Say_Event, "say");
     AddCommandListener(SayTeam_Event, "say_team");
+
+    if (LibraryExists("updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
+}
+
+public void OnLibraryAdded(const char[] name)
+{
+    if (StrEqual(name, "updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
 public Action Say_Event(int iClient, const char[] sCmd, int iArgc)
