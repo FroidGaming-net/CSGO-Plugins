@@ -1,0 +1,15 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.9"
+	}
+
+	"Notes"	"Add Autoupdater."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/Discord/discord.smx"
+	"Plugin"	"Path_SM/configs/Discord.cfg"
+}
