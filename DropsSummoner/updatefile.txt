@@ -1,0 +1,15 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.4"
+	}
+
+	"Notes"	"Update."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/Tools/DropsSummoner.smx"
+	"Plugin"	"Path_SM/gamedata/DropsSummoner.games.txt"
+}
