@@ -173,6 +173,10 @@ void DiscordMessage(const char[] strAuthID, const char[] strName, const char[] s
         Discord_EndMessage("idffa", true);
     }else if(StrContains(sHostname, "Practice Mode #1 | ID") > -1 || StrContains(sHostname, "Practice Mode #1 | SEA") > -1){
         Discord_EndMessage("idpractice", true);
+    }else if(StrContains(sHostname, "AWP Bhop #1 | ID") > -1 || StrContains(sHostname, "AWP Bhop #1 | SEA") > -1){
+        Discord_EndMessage("idawp", true);
+    }else if(StrContains(sHostname, "Executes #1 | ID") > -1 || StrContains(sHostname, "Executes #1 | SEA") > -1){
+        Discord_EndMessage("idexecutes", true);
     }else{
         Discord_EndMessage("default", true);
     }
