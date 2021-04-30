@@ -7,8 +7,8 @@
 #include <multicolors>
 #include <froidmatch>
 
-#undef REQUIRE_EXTENSIONS
-#include <bzip2>
+// #undef REQUIRE_EXTENSIONS
+// #include <bzip2>
 
 #undef REQUIRE_PLUGIN
 #include <pugsetup>
@@ -38,7 +38,7 @@ char demoname_download[512] = "No Demo";
 
 Handle db;
 
-int g_iBzip2 = 9;
+// int g_iBzip2 = 9;
 char g_sDemoPath[PLATFORM_MAX_PATH];
 bool g_bRecording = false;
 
@@ -192,24 +192,7 @@ public Action Timer_UploadDemo(Handle timer, Handle hDataPack) {
 
 	char sDemoPath[PLATFORM_MAX_PATH];
 	ReadPackString(hDataPack, sDemoPath, sizeof(sDemoPath));
-
-	if(g_iBzip2 > 0 && g_iBzip2 < 10 && LibraryExists("bzip2")) {
-		char sBzipPath[PLATFORM_MAX_PATH];
-		Format(sBzipPath, sizeof(sBzipPath), "%s.bz2", sDemoPath);
-		BZ2_CompressFile(sDemoPath, sBzipPath, g_iBzip2, CompressionComplete);
-	} else {
-		EasyFTP_UploadFile("demos", sDemoPath, "/", UploadComplete);
-	}
-}
-
-public int CompressionComplete(BZ_Error iError, char[] inFile, char[] outFile, any data) {
-	if(iError == BZ_OK) {
-		LogMessage("%s compressed to %s", inFile, outFile);
-		EasyFTP_UploadFile("demos", outFile, "/", UploadComplete);
-	} else {
-		LogBZ2Error(iError);
-		EasyFTP_UploadFile("demos", inFile, "/", UploadComplete);
-	}
+	EasyFTP_UploadFile("demos", sDemoPath, "/", UploadComplete);
 }
 
 public int UploadComplete(const char[] sTarget, const char[] sLocalFile, const char[] sRemoteFile, int iErrorCode, any data) {
@@ -222,18 +205,8 @@ public int UploadComplete(const char[] sTarget, const char[] sLocalFile, const c
         SQL_ExecuteTransaction(db, txn);
 
 		DeleteFile(sLocalFile);
-		if(StrEqual(sLocalFile[strlen(sLocalFile)-4], ".bz2")) {
-			char sLocalNoCompressFile[PLATFORM_MAX_PATH];
-			strcopy(sLocalNoCompressFile, strlen(sLocalFile)-3, sLocalFile);
-			DeleteFile(sLocalNoCompressFile);
-		}
 	}else{
 		DeleteFile(sLocalFile);
-		if(StrEqual(sLocalFile[strlen(sLocalFile)-4], ".bz2")) {
-			char sLocalNoCompressFile[PLATFORM_MAX_PATH];
-			strcopy(sLocalNoCompressFile, strlen(sLocalFile)-3, sLocalFile);
-			DeleteFile(sLocalNoCompressFile);
-		}
 	}
 
 	for(int client = 1; client <= MaxClients; client++) {
@@ -584,7 +557,7 @@ void StartRecord()
 
 		LogMessage("Recording to auto-%s-%s.dem", sTime, sMap);
         Format(demoname, sizeof(demoname), "auto-%s-%s.dem", sTime, sMap);
-		Format(demoname_download, sizeof(demoname_download), "%s/auto-%s-%s.dem.bz2", URL_DOWNLOAD, sTime, sMap);
+		Format(demoname_download, sizeof(demoname_download), "%s/auto-%s-%s.dem", URL_DOWNLOAD, sTime, sMap);
 		CreateTimer(30.0, Timer_Chat);
 	}
 }
