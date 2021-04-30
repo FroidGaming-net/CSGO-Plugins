@@ -42,7 +42,7 @@ int g_iBzip2 = 9;
 char g_sDemoPath[PLATFORM_MAX_PATH];
 bool g_bRecording = false;
 
-public Plugin myinfo = 
+public Plugin myinfo =
 {
 	name = "FroidMatch",
 	author = "FroidGaming.net"
@@ -68,7 +68,7 @@ public void OnPluginStart()
 	{
 		SetFailState(buffer);
 	}
-	
+
 	HookEventEx("cs_win_panel_match", cs_win_panel_match);
 
 	CreateConVar("sm_autorecord_version", PLUGIN_VERSION, "FroidGaming Match plugin version", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
@@ -208,6 +208,7 @@ public int CompressionComplete(BZ_Error iError, char[] inFile, char[] outFile, a
 		EasyFTP_UploadFile("demos", outFile, "/", UploadComplete);
 	} else {
 		LogBZ2Error(iError);
+		EasyFTP_UploadFile("demos", inFile, "/", UploadComplete);
 	}
 }
 
@@ -219,7 +220,7 @@ public int UploadComplete(const char[] sTarget, const char[] sLocalFile, const c
         Format(buffer, sizeof(buffer), "UPDATE sql_matches_scoretotal SET demo = '%s' WHERE ip = '%s:%s' ORDER BY `match_id` DESC LIMIT 1;", demoname_upload, g_cServerIP, g_cPort);
 		SQL_AddQuery(txn, buffer);
         SQL_ExecuteTransaction(db, txn);
-		
+
 		DeleteFile(sLocalFile);
 		if(StrEqual(sLocalFile[strlen(sLocalFile)-4], ".bz2")) {
 			char sLocalNoCompressFile[PLATFORM_MAX_PATH];
@@ -310,7 +311,7 @@ public Action delay(Handle timer)
 
 	char mapname[128];
 	GetCurrentMap(mapname, sizeof(mapname));
-	
+
 	char teamname1[64];
 	char teamname2[64];
 
@@ -576,7 +577,7 @@ void StartRecord()
 		GetCurrentMap(sMap, sizeof(sMap));
 
 		// replace slashes in map path name with dashes, to prevent fail on workshop maps
-		ReplaceString(sMap, sizeof(sMap), "/", "-", false);		
+		ReplaceString(sMap, sizeof(sMap), "/", "-", false);
 
 		ServerCommand("tv_record \"%s/auto-%s-%s\"", sPath, sTime, sMap);
 		g_bIsRecording = true;
