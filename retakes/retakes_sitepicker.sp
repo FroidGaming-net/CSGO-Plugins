@@ -18,7 +18,7 @@ Bombsite g_pickedSite;
 
 public void OnPluginStart() {
     g_forceSite = false;
-    RegAdminCmd("sm_site", Command_Site, ADMFLAG_CHANGEMAP);
+    RegAdminCmd("sm_site", Command_Site, ADMFLAG_ROOT);
 }
 
 public Action Command_Site(int client, int args) {

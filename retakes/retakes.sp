@@ -11,6 +11,7 @@
 
 #undef REQUIRE_PLUGIN
 #tryinclude <pugsetup>
+#tryinclude <updater>
 
 #pragma semicolon 1
 #pragma newdecls required
@@ -132,8 +133,8 @@ Handle g_OnWeaponsAllocated;
  ***********************/
 
 public Plugin myinfo = {
-    name = "CS:GO Retakes",
-    author = "splewis",
+    name = "CS:GO Retakes (Modified by FroidGaming.net)",
+    author = "splewis, FroidGaming.net",
     description = "CS:GO Retake practice",
     version = PLUGIN_VERSION,
     url = "https://github.com/splewis/csgo-retakes"
@@ -147,12 +148,12 @@ public void OnPluginStart() {
     g_EnabledCvar = CreateConVar("sm_retakes_enabled", "1", "Whether the plugin is enabled");
     g_hAutoTeamsCvar = CreateConVar("sm_retakes_auto_set_teams", "1", "Whether retakes is allowed to automanage team balance");
     g_hEditorEnabled = CreateConVar("sm_retakes_editor_enabled", "1", "Whether the editor can be launched by admins");
-    g_hMaxPlayers = CreateConVar("sm_retakes_maxplayers", "9", "Maximum number of players allowed in the game at once.", _, true, 2.0);
-    g_hRatioConstant = CreateConVar("sm_retakes_ratio_constant", "0.425", "Ratio constant for team sizes.");
-    g_hRoundsToScramble = CreateConVar("sm_retakes_scramble_rounds", "10", "Consecutive terrorist wins to cause a team scramble.");
+    g_hMaxPlayers = CreateConVar("sm_retakes_maxplayers", "10", "Maximum number of players allowed in the game at once.", _, true, 2.0);
+    g_hRatioConstant = CreateConVar("sm_retakes_ratio_constant", "0.475", "Ratio constant for team sizes.");
+    g_hRoundsToScramble = CreateConVar("sm_retakes_scramble_rounds", "7", "Consecutive terrorist wins to cause a team scramble.");
     g_hRoundTime = CreateConVar("sm_retakes_round_time", "12", "Round time left in seconds.");
     g_hUseRandomTeams = CreateConVar("sm_retakes_random_teams", "0", "If set to 1, this will randomize the teams every round.");
-    g_WarmupTimeCvar = CreateConVar("sm_retakes_warmuptime", "25", "Warmup time on map starts");
+    g_WarmupTimeCvar = CreateConVar("sm_retakes_warmuptime", "60", "Warmup time on map starts");
 
     g_EnabledCvar.AddChangeHook(EnabledChanged);
 
@@ -166,25 +167,25 @@ public void OnPluginStart() {
     AddCommandListener(Command_JoinTeam, "jointeam");
 
     /** Admin/editor commands **/
-    RegAdminCmd("sm_scramble", Command_ScrambleTeams, ADMFLAG_CHANGEMAP, "Sets teams to scramble on the next round");
-    RegAdminCmd("sm_scrambleteams", Command_ScrambleTeams, ADMFLAG_CHANGEMAP, "Sets teams to scramble on the next round");
+    RegAdminCmd("sm_scramble", Command_ScrambleTeams, ADMFLAG_ROOT, "Sets teams to scramble on the next round");
+    RegAdminCmd("sm_scrambleteams", Command_ScrambleTeams, ADMFLAG_ROOT, "Sets teams to scramble on the next round");
 
-    RegAdminCmd("sm_edit", Command_EditSpawns, ADMFLAG_CHANGEMAP, "Launches the retakes spawn editor mode");
-    RegAdminCmd("sm_spawns", Command_EditSpawns, ADMFLAG_CHANGEMAP, "Launches the retakes spawn editor mode");
+    RegAdminCmd("sm_edit", Command_EditSpawns, ADMFLAG_ROOT, "Launches the retakes spawn editor mode");
+    RegAdminCmd("sm_spawns", Command_EditSpawns, ADMFLAG_ROOT, "Launches the retakes spawn editor mode");
 
-    RegAdminCmd("sm_new", Command_AddSpawn, ADMFLAG_CHANGEMAP, "Creates a new retakes spawn");
-    RegAdminCmd("sm_newspawn", Command_AddSpawn, ADMFLAG_CHANGEMAP, "Creates a new retakes spawn");
-    RegAdminCmd("sm_delete", Command_DeleteSpawn, ADMFLAG_CHANGEMAP, "Deletes the nearest retakes spawn");
-    RegAdminCmd("sm_deletespawn", Command_DeleteSpawn, ADMFLAG_CHANGEMAP, "Deletes the nearest retakes spawn");
-    RegAdminCmd("sm_deletemapspawns", Command_DeleteMapSpawns, ADMFLAG_CHANGEMAP, "Deletes all retakes spawns for the current map");
+    RegAdminCmd("sm_new", Command_AddSpawn, ADMFLAG_ROOT, "Creates a new retakes spawn");
+    RegAdminCmd("sm_newspawn", Command_AddSpawn, ADMFLAG_ROOT, "Creates a new retakes spawn");
+    RegAdminCmd("sm_delete", Command_DeleteSpawn, ADMFLAG_ROOT, "Deletes the nearest retakes spawn");
+    RegAdminCmd("sm_deletespawn", Command_DeleteSpawn, ADMFLAG_ROOT, "Deletes the nearest retakes spawn");
+    RegAdminCmd("sm_deletemapspawns", Command_DeleteMapSpawns, ADMFLAG_ROOT, "Deletes all retakes spawns for the current map");
 
-    RegAdminCmd("sm_show", Command_Show, ADMFLAG_CHANGEMAP, "Shows all retakes spawns in a bombsite");
-    RegAdminCmd("sm_goto", Command_GotoSpawn, ADMFLAG_CHANGEMAP, "Goes to a retakes spawn");
-    RegAdminCmd("sm_nearest", Command_GotoNearestSpawn, ADMFLAG_CHANGEMAP, "Goes to nearest retakes spawn");
+    RegAdminCmd("sm_show", Command_Show, ADMFLAG_ROOT, "Shows all retakes spawns in a bombsite");
+    RegAdminCmd("sm_goto", Command_GotoSpawn, ADMFLAG_ROOT, "Goes to a retakes spawn");
+    RegAdminCmd("sm_nearest", Command_GotoNearestSpawn, ADMFLAG_ROOT, "Goes to nearest retakes spawn");
 
-    RegAdminCmd("sm_iteratespawns", Command_IterateSpawns, ADMFLAG_CHANGEMAP);
-    RegAdminCmd("sm_reloadspawns", Command_ReloadSpawns, ADMFLAG_CHANGEMAP, "Reloads retakes spawns for the current map, discarding changes");
-    RegAdminCmd("sm_savespawns", Command_SaveSpawns, ADMFLAG_CHANGEMAP, "Saves retakes spawns for the current map");
+    RegAdminCmd("sm_iteratespawns", Command_IterateSpawns, ADMFLAG_ROOT);
+    RegAdminCmd("sm_reloadspawns", Command_ReloadSpawns, ADMFLAG_ROOT, "Reloads retakes spawns for the current map, discarding changes");
+    RegAdminCmd("sm_savespawns", Command_SaveSpawns, ADMFLAG_ROOT, "Saves retakes spawns for the current map");
 
     /** Player commands **/
     RegConsoleCmd("sm_guns", Command_Guns);
@@ -222,6 +223,17 @@ public void OnPluginStart() {
     // Set inital spawn types.
     for (int i = 0; i < MAX_SPAWNS; i++) {
         g_SpawnTypes[i] = SpawnType_Normal;
+    }
+
+    if (LibraryExists("updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
+}
+
+public void OnLibraryAdded(const char[] name)
+{
+    if (StrEqual(name, "updater")) {
+        Updater_AddPlugin(UPDATE_URL);
     }
 }
 

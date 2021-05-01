@@ -1,0 +1,14 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"0.3.5"
+	}
+
+	"Notes"	"Release Modified Version."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/Retakes/retakes.smx"
+}
