@@ -502,7 +502,6 @@ public Action Command_Guns(int client, int args) {
     Call_StartForward(g_hOnGunsCommand);
     Call_PushCell(client);
     Call_Finish();
-    GivePreferencesMenu(client);
   }
   return Plugin_Handled;
 }
@@ -537,7 +536,6 @@ public Action OnClientSayCommand(int client, const char[] command, const char[] 
       Call_StartForward(g_hOnGunsCommand);
       Call_PushCell(client);
       Call_Finish();
-      GivePreferencesMenu(client);
       break;
     }
   }
