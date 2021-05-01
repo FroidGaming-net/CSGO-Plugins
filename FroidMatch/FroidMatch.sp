@@ -18,7 +18,7 @@
 #pragma newdecls required
 #pragma tabsize 0
 
-#define PLUGIN_VERSION "1.0.1"
+#define PLUGIN_VERSION "1.0.2"
 
 ConVar g_cHostname = null;
 char g_sHostname[64];
@@ -71,17 +71,17 @@ public void OnPluginStart()
 
 	HookEventEx("cs_win_panel_match", cs_win_panel_match);
 
-	CreateConVar("sm_autorecord_version", PLUGIN_VERSION, "FroidGaming Match plugin version", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	CreateConVar("sm_froidmatch_version", PLUGIN_VERSION, "FroidGaming Match plugin version", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY|FCVAR_DONTRECORD);
 
-	g_hAutoRecord = CreateConVar("sm_autorecord_enable", "1", "Enable automatic recording", _, true, 0.0, true, 1.0);
-	g_hMinPlayersStart = CreateConVar("sm_autorecord_minplayers", "4", "Minimum players on server to start recording", _, true, 0.0);
-	g_hIgnoreBots = CreateConVar("sm_autorecord_ignorebots", "1", "Ignore bots in the player count", _, true, 0.0, true, 1.0);
-	g_hTimeStart = CreateConVar("sm_autorecord_timestart", "-1", "Hour in the day to start recording (0-23, -1 disables)");
-	g_hTimeStop = CreateConVar("sm_autorecord_timestop", "-1", "Hour in the day to stop recording (0-23, -1 disables)");
-	g_hFinishMap = CreateConVar("sm_autorecord_finishmap", "1", "If 1, continue recording until the map ends", _, true, 0.0, true, 1.0);
-	g_hDemoPath = CreateConVar("sm_autorecord_path", "demos", "Path to store recorded demos");
+	g_hAutoRecord = CreateConVar("sm_froidmatch_enable", "1", "Enable automatic recording", _, true, 0.0, true, 1.0);
+	g_hMinPlayersStart = CreateConVar("sm_froidmatch_minplayers", "2", "Minimum players on server to start recording", _, true, 0.0);
+	g_hIgnoreBots = CreateConVar("sm_froidmatch_ignorebots", "1", "Ignore bots in the player count", _, true, 0.0, true, 1.0);
+	g_hTimeStart = CreateConVar("sm_froidmatch_timestart", "-1", "Hour in the day to start recording (0-23, -1 disables)");
+	g_hTimeStop = CreateConVar("sm_froidmatch_timestop", "-1", "Hour in the day to stop recording (0-23, -1 disables)");
+	g_hFinishMap = CreateConVar("sm_froidmatch_finishmap", "1", "If 1, continue recording until the map ends", _, true, 0.0, true, 1.0);
+	g_hDemoPath = CreateConVar("sm_froidmatch_path", "demos", "Path to store recorded demos");
 
-	AutoExecConfig(true, "autorecorder");
+	AutoExecConfig(true, "froidmatch");
 
 	RegAdminCmd("sm_record", Command_Record, ADMFLAG_KICK, "Starts a SourceTV demo");
 	RegAdminCmd("sm_stoprecord", Command_StopRecord, ADMFLAG_KICK, "Stops the current SourceTV demo");
@@ -208,7 +208,6 @@ public int CompressionComplete(BZ_Error iError, char[] inFile, char[] outFile, a
 		EasyFTP_UploadFile("demos", outFile, "/", UploadComplete);
 	} else {
 		LogBZ2Error(iError);
-		EasyFTP_UploadFile("demos", inFile, "/", UploadComplete);
 	}
 }
 
