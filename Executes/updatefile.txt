@@ -1,0 +1,14 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.1"
+	}
+
+	"Notes"	"Release Modified Version."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/Executes/executes.smx"
+}

@@ -14,6 +14,7 @@
 #include "include/csutils.inc"
 
 #undef REQUIRE_PLUGIN
+#tryinclude <updater>
 #include "include/practicemode.inc"
 #include <pugsetup>
 
@@ -238,8 +239,8 @@ Handle g_OnGetSpecialPowers;
 
 // clang-format off
 public Plugin myinfo = {
-    name = "CS:GO Executes",
-    author = "splewis",
+    name = "CS:GO Executes (Modified by FroidGaming.net)",
+    author = "splewis, FroidGaming.net",
     description = "Site execute/defense practice",
     version = PLUGIN_VERSION,
     url = "https://github.com/splewis/csgo-executes"
@@ -257,7 +258,7 @@ public void OnPluginStart() {
                                   "Whether executes is allowed to automanage team balance");
   g_hEditorEnabled = CreateConVar("sm_executes_editor_enabled", "1",
                                   "Whether the editor can be launched by admins");
-  g_hMinPlayers = CreateConVar("sm_executes_minplayers", "5",
+  g_hMinPlayers = CreateConVar("sm_executes_minplayers", "2",
                                "Minimum number of players needed to start playing", _, true, 1.0);
   g_hMaxPlayers =
       CreateConVar("sm_executes_maxplayers", "10",
@@ -266,10 +267,10 @@ public void OnPluginStart() {
       CreateConVar("sm_executes_ratio_constant", "0.475", "Ratio constant for team sizes.");
   g_hRoundsToScramble = CreateConVar("sm_executes_scramble_rounds", "5",
                                      "Consecutive CT wins to cause a team scramble.");
-  g_hRoundTime = CreateConVar("sm_executes_round_time", "40", "Round time in seconds.");
+  g_hRoundTime = CreateConVar("sm_executes_round_time", "80", "Round time in seconds.");
   g_hRoundTimeVariationCvar = CreateConVar("sm_executes_round_time_variation_enabled", "1",
                                            "Whether round time variations are enabled");
-  g_AutoScrambleCvar = CreateConVar("sm_executes_auto_scramble", "7",
+  g_AutoScrambleCvar = CreateConVar("sm_executes_auto_scramble", "0",
                                     "If greater than 0, scrambles teams every this many rounds");
   g_ExtraFreezeTimeCvar = CreateConVar("sm_executes_default_extra_freeze_time", "1.3",
                                        "Default extra freezetime for terroristseach round");
@@ -291,23 +292,23 @@ public void OnPluginStart() {
   AddCommandListener(Command_Drop, "drop");
 
   /** Admin/editor commands **/
-  RegAdminCmd("sm_scramble", Command_ScrambleTeams, ADMFLAG_CHANGEMAP,
+  RegAdminCmd("sm_scramble", Command_ScrambleTeams, ADMFLAG_ROOT,
               "Sets teams to scramble on the next round");
-  RegAdminCmd("sm_scrambleteams", Command_ScrambleTeams, ADMFLAG_CHANGEMAP,
+  RegAdminCmd("sm_scrambleteams", Command_ScrambleTeams, ADMFLAG_ROOT,
               "Sets teams to scramble on the next round");
 
-  RegAdminCmd("sm_edit", Command_EditSpawns, ADMFLAG_CHANGEMAP,
+  RegAdminCmd("sm_edit", Command_EditSpawns, ADMFLAG_ROOT,
               "Launches the executes spawn editor mode");
-  RegAdminCmd("sm_setname", Command_Name, ADMFLAG_CHANGEMAP, "sets name buffer");
-  RegAdminCmd("sm_goto", Command_GotoSpawn, ADMFLAG_CHANGEMAP, "Goes to a executes spawn");
-  RegAdminCmd("sm_clearbuffers", Command_ClearBuffers, ADMFLAG_CHANGEMAP, "");
-  RegAdminCmd("sm_nextspawn", Command_NextSpawn, ADMFLAG_CHANGEMAP, "");
-  RegAdminCmd("sm_execute_distribution", Command_ExecuteDistribution, ADMFLAG_CHANGEMAP, "");
+  RegAdminCmd("sm_setname", Command_Name, ADMFLAG_ROOT, "sets name buffer");
+  RegAdminCmd("sm_goto", Command_GotoSpawn, ADMFLAG_ROOT, "Goes to a executes spawn");
+  RegAdminCmd("sm_clearbuffers", Command_ClearBuffers, ADMFLAG_ROOT, "");
+  RegAdminCmd("sm_nextspawn", Command_NextSpawn, ADMFLAG_ROOT, "");
+  RegAdminCmd("sm_execute_distribution", Command_ExecuteDistribution, ADMFLAG_ROOT, "");
 
   /** Player commands **/
   RegConsoleCmd("sm_guns", Command_Guns);
   RegConsoleCmd("debuginfo", Command_DebugInfo);
-  RegAdminCmd("executes_editorinfo", Command_EditorInfo, ADMFLAG_CHANGEMAP);
+  RegAdminCmd("executes_editorinfo", Command_EditorInfo, ADMFLAG_ROOT);
 
   /** Event hooks **/
   HookEvent("player_connect_full", Event_PlayerConnectFull);
@@ -357,6 +358,16 @@ public void OnPluginStart() {
   g_CTRiflePrefCookie = RegClientCookie("executes_ct_rifle", "", CookieAccess_Private);
   g_TRiflePrefCookie = RegClientCookie("executes_t_rifle", "", CookieAccess_Private);
 
+  if (LibraryExists("updater")) {
+    Updater_AddPlugin(UPDATE_URL);
+  }
+}
+
+public void OnLibraryAdded(const char[] name)
+{
+    if (StrEqual(name, "updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
 public void OnPluginEnd() {
@@ -789,7 +800,7 @@ public Action Event_DamageDealt(Event event, const char[] name, bool dontBroadca
 
   int attacker = GetClientOfUserId(event.GetInt("attacker"));
   int victim = GetClientOfUserId(event.GetInt("userid"));
-  int damage = event.GetInt("dmg_PlayerHealth");
+  int damage = event.GetInt("dmg_health");
 
   bool validAttacker = IsValidClient(attacker);
   bool validVictim = IsValidClient(victim);
@@ -854,11 +865,11 @@ public Action Event_RoundPreStart(Event event, const char[] name, bool dontBroad
   RoundEndUpdates();
   UpdateTeams();
 
-  if (g_ActivePlayers < g_hMinPlayers.IntValue) {
-    StartWarmup();
-    Executes_MessageToAll("Starting warmup period until %d players are connected.",
-                          g_hMinPlayers.IntValue);
-  }
+  // if (g_ActivePlayers < g_hMinPlayers.IntValue) {
+  //   StartWarmup();
+  //   Executes_MessageToAll("Starting warmup period until %d players are connected.",
+  //                         g_hMinPlayers.IntValue);
+  // }
 }
 
 public Action Event_RoundPostStart(Event event, const char[] name, bool dontBroadcast) {

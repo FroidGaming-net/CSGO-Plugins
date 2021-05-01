@@ -1,6 +1,7 @@
 #tryinclude "manual_version.sp"
 #if !defined PLUGIN_VERSION
-#define PLUGIN_VERSION "1.0.0-dev"
+#define PLUGIN_VERSION "1.0.1"
+#define UPDATE_URL "https://sys.froidgaming.net/Executes/updatefile.txt"
 #endif
 
 #define INTEGER_STRING_LENGTH 20  // max number of digits a 64-bit integer can use up as a string
