@@ -33,3 +33,29 @@ public int GetBombSite(float pos[3])
         return BOMBSITE_A;
     return BOMBSITE_B;
 }
+
+void SendPlayerToSpectators(int iClient)
+{
+    if (GetClientTeam(iClient) != CS_TEAM_SPECTATOR)
+    {
+        if (IsPlayerAlive(iClient))
+        {
+            ForcePlayerSuicide(iClient);
+        }
+
+        ChangeClientTeam(iClient, CS_TEAM_SPECTATOR);
+		RemoveRagdoll(iClient);
+		FakeClientCommand(iClient, "jointeam 2");
+		FakeClientCommand(iClient, "jointeam 3");
+    }
+}
+
+void RemoveRagdoll(int client)
+{
+    if (IsValidEdict(client))
+    {
+        int ragdoll = GetEntPropEnt(client, Prop_Send, "m_hRagdoll");
+        if (ragdoll != -1)
+            RemoveEntity(ragdoll);
+    }
+}

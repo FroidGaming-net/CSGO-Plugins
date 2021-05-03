@@ -3,6 +3,7 @@
 #include <retakes>
 #include <sdktools>
 #include <geoip>
+#include <cstrike>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -11,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.7.2"
+#define VERSION "1.7.3"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidPlant/updatefile.txt"
 
 #include "files/globals.sp"
@@ -169,6 +170,7 @@ public void Retakes_OnFailToPlant(int iClient)
     }
 
     g_PlayerData[iClient].iFailedToPlant++;
+    SendPlayerToSpectators(iClient);
 
     if (g_PlayerData[iClient].iFailedToPlant >= 3) {
         int iCooldown;
