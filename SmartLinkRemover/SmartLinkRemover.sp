@@ -5,7 +5,7 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.6.2"
+#define PLUGIN_VERSION "1.6.3"
 
 Regex urlPattern;
 RegexError regexError;
@@ -175,6 +175,9 @@ public void loadWhitelist() {
 }
 
 public SMCResult whitelistKeyValue(SMCParser smc, const char[] key, const char[] value, bool key_quotes, bool value_quotes) {
+	char lcKey[256];
+	Format(lcKey, sizeof(lcKey), "%s", key);
+	strToLower(lcKey);
 	simpleWhitelist.SetValue(key, ReadFlagString(value));
 }
 
@@ -190,6 +193,9 @@ public bool inWhitelist(int client, char[] url) {
 		LogError("Something went wrong with the whitelist StringMap!");
 	}
 
+	TrimString(url);
+	strToLower(url);
+
 	int flagBit;
 	//Match to the user if they have flag, or if the flag is an empty string.
 	if (simpleWhitelist.GetValue(url, flagBit)) {
@@ -197,4 +203,11 @@ public bool inWhitelist(int client, char[] url) {
 	}
 
 	return false; //No matches in the whitelist.
+}
+
+public void strToLower(char[] str)
+{
+	for (int i = 0; i <= strlen(str); i++) {
+		str[i] = CharToLower(str[i]);
+	}
 }
