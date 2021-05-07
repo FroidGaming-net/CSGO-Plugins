@@ -242,7 +242,9 @@ stock void eTweaker_EquipKnife(int client)
     }
 
     eItems_RemoveKnife(client);
-    PTaH_GivePlayerItem(client, szClassName);
+    // PTaH_GivePlayerItem(client, szClassName);
+    int iWeapon = PTaH_GivePlayerItem(client, szClassName);
+    EquipPlayerWeapon(client, iWeapon);
 }
 
 stock int eTweaker_FindKnifeDefIndexByName(const char[] szKnifeName)
