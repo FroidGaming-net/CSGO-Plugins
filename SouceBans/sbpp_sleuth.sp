@@ -4,10 +4,12 @@
 
 #include <sourcemod>
 #undef REQUIRE_PLUGIN
+#include <updater>
 #include <sourcebanspp>
 #include <ripext>
 
-#define PLUGIN_VERSION "1.7.0"
+#define PLUGIN_VERSION "1.7.1"
+#define UPDATE_URL "https://sys.froidgaming.net/SourceBans/updatefile.txt"
 
 #define LENGTH_ORIGINAL 1
 #define LENGTH_CUSTOM 2
@@ -66,6 +68,10 @@ public void OnPluginStart()
 	LoadWhiteList();
 
 	httpClient = new HTTPClient("http://ip-api.com");
+
+	if (LibraryExists("updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
 public void OnAllPluginsLoaded()
@@ -87,6 +93,11 @@ public void OnLibraryRemoved(const char[] name)
 	{
 		CanUseSourcebans = false;
 	}
+
+	if (StrEqual(name, "updater"))
+	{
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
 public void SQL_OnConnect(Database db, const char[] error, any data)
@@ -186,7 +197,8 @@ void OnCheckIP(HTTPResponse response, DataPack pack)
 			char query[1024];
 
 			// FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d AND length = 0", Prefix, sIP, GetTime() - g_cVar_excludeTime.IntValue);
-			FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d AND length = 0", Prefix, sIP, GetTime() - 604800);
+			// FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d AND length = 0", Prefix, sIP, GetTime() - 604800);
+			FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d", Prefix, sIP, GetTime() - 604800);
 			DataPack datapack = new DataPack();
 
 			datapack.WriteCell(GetClientUserId(iClient));
