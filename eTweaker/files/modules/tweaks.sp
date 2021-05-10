@@ -248,7 +248,7 @@ stock void Tweaks_BuildTweakMenuForWeapon(int client, int iWeaponDefIndex, int i
     menu.AddItem("#4", "• Nametag\n ❯ Change nametag");
     menu.AddItem("#5", "• StatTrak™\n ❯ Toggle StatTrak");
 
-    char szMenuItem[48];
+    char szMenuItem[64];
     char szWeaponDefIndex[12];
 
     IntToString(ClientInfo[client].WeaponStoredDefIndex, szWeaponDefIndex, sizeof(szWeaponDefIndex));
@@ -1261,7 +1261,7 @@ stock void Tweaks_BuildTweakMenuForCurrent(int client, int iPosition = 0)
     menu.AddItem("#4", "• Nametag\n ❯ Change nametag");
     menu.AddItem("#5", "• StatTrak\n ❯ Toggle StatTrak");
 
-    char szMenuItem[48];
+    char szMenuItem[64];
     char szWeaponDefIndex[12];
 
     IntToString(iWeaponDefIndex, szWeaponDefIndex, sizeof(szWeaponDefIndex));
