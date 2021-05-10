@@ -155,7 +155,7 @@ public Action Event_PostPlayerSpawn(Event event, const char[] name, bool dontBro
 {
     int iClient = GetClientOfUserId(event.GetInt("userid"));
 
-    if (!IsValidClient(iClient)) {
+    if (!IsValidClient(iClient, true)) {
         return Plugin_Continue;
     }
 
@@ -166,7 +166,7 @@ public Action Event_PostPlayerSpawn(Event event, const char[] name, bool dontBro
 
 public void StripNextTick(int iClient)
 {
-    if (GetClientTeam(iClient) >= CS_TEAM_T) {
+    if (IsValidClient(iClient, true)) {
         Client_RemoveAllWeapons(iClient);
         GivePlayerItem(iClient, "weapon_knife");
         GiveWeapon(iClient);

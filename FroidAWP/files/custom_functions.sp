@@ -53,14 +53,14 @@ public void GiveWeapon(int iClient)
 {
     Client_RemoveAllWeapons(iClient);
     GivePlayerItem(iClient, "weapon_knife");
-    if (g_iRoundCount == 5) {
+    if (g_iRoundCount != 10) {
         //Special Rounds
-        switch(6)
+        switch(g_iRoundMode)
         {
             case 1:
             {
                 // Decoy Rounds + 1 HP + no bhop + no armor
-                GivePlayerItem(iClient, "weapon_decoy");
+                PTaH_GivePlayerItem(iClient, "weapon_decoy");
                 SetEntProp(iClient, Prop_Send, "m_iHealth", 1);
                 SetEntProp(iClient, Prop_Send, "m_ArmorValue", 0);
                 SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 0);
@@ -68,7 +68,8 @@ public void GiveWeapon(int iClient)
             case 2:
             {
                 // Scout round + bhop
-                GivePlayerItem(iClient, "weapon_ssg08");
+                int iWeapon = PTaH_GivePlayerItem(iClient, "weapon_ssg08");
+                EquipPlayerWeapon(iClient, iWeapon);
                 SetEntProp(iClient, Prop_Send, "m_iHealth", 100);
                 SetEntProp(iClient, Prop_Send, "m_ArmorValue", 100);
                 SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 1);
@@ -76,7 +77,8 @@ public void GiveWeapon(int iClient)
             case 3:
             {
                 // auto sniper round + no bhop
-                GivePlayerItem(iClient, "weapon_scar20");
+                int iWeapon = PTaH_GivePlayerItem(iClient, "weapon_scar20");
+                EquipPlayerWeapon(iClient, iWeapon);
                 SetEntProp(iClient, Prop_Send, "m_iHealth", 100);
                 SetEntProp(iClient, Prop_Send, "m_ArmorValue", 100);
                 SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 1);
@@ -84,7 +86,8 @@ public void GiveWeapon(int iClient)
             case 4:
             {
                 // awp bhop + noscoped
-                GivePlayerItem(iClient, "weapon_awp");
+                int iWeapon = PTaH_GivePlayerItem(iClient, "weapon_awp");
+                EquipPlayerWeapon(iClient, iWeapon);
                 SetEntProp(iClient, Prop_Send, "m_iHealth", 100);
                 SetEntProp(iClient, Prop_Send, "m_ArmorValue", 100);
                 SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 1);
@@ -92,7 +95,8 @@ public void GiveWeapon(int iClient)
             case 5:
             {
                 // deagle round + no bhop
-                GivePlayerItem(iClient, "weapon_deagle");
+                int iWeapon = PTaH_GivePlayerItem(iClient, "weapon_deagle");
+                EquipPlayerWeapon(iClient, iWeapon);
                 SetEntProp(iClient, Prop_Send, "m_iHealth", 100);
                 SetEntProp(iClient, Prop_Send, "m_ArmorValue", 100);
                 SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 1);
@@ -100,8 +104,7 @@ public void GiveWeapon(int iClient)
             case 6:
             {
                 // Knife + Zeus + Bhop
-                int iWeapon = PTaH_GivePlayerItem(iClient, "weapon_taser");
-                EquipPlayerWeapon(iClient, iWeapon);
+                PTaH_GivePlayerItem(iClient, "weapon_taser");
                 SetEntProp(iClient, Prop_Send, "m_iHealth", 100);
                 SetEntProp(iClient, Prop_Send, "m_ArmorValue", 100);
                 SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 1);
@@ -109,7 +112,8 @@ public void GiveWeapon(int iClient)
             case 7:
             {
                 // MAG7
-                GivePlayerItem(iClient, "weapon_mag7");
+                int iWeapon = PTaH_GivePlayerItem(iClient, "weapon_mag7");
+                EquipPlayerWeapon(iClient, iWeapon);
                 SetEntProp(iClient, Prop_Send, "m_iHealth", 100);
                 SetEntProp(iClient, Prop_Send, "m_ArmorValue", 100);
                 SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 1);
@@ -118,7 +122,9 @@ public void GiveWeapon(int iClient)
     }else{
         // Normal Rounds
         // AWP Rounds
-        GivePlayerItem(iClient, "weapon_awp");
+        // GivePlayerItem(iClient, "weapon_awp");
+        int iWeapon = PTaH_GivePlayerItem(iClient, "weapon_awp");
+        EquipPlayerWeapon(iClient, iWeapon);
         SetEntProp(iClient, Prop_Send, "m_iHealth", 100);
         SetEntProp(iClient, Prop_Send, "m_ArmorValue", 100);
         SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 1);
