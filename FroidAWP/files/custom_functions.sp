@@ -53,7 +53,7 @@ public void GiveWeapon(int iClient)
 {
     Client_RemoveAllWeapons(iClient);
     GivePlayerItem(iClient, "weapon_knife");
-    if (g_iRoundCount != 10) {
+    if (g_iRoundCount == 5) {
         //Special Rounds
         switch(g_iRoundMode)
         {
