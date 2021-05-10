@@ -5,6 +5,7 @@
 #include <multicolors>
 #include <smlib>
 #include <cstrike>
+#include <PTaH>
 #include <fuckZones>
 #undef REQUIRE_PLUGIN
 #include <updater>
@@ -167,8 +168,8 @@ public void StripNextTick(int iClient)
 {
     if (GetClientTeam(iClient) >= CS_TEAM_T) {
         Client_RemoveAllWeapons(iClient);
-        GiveWeapon(iClient);
         GivePlayerItem(iClient, "weapon_knife");
+        GiveWeapon(iClient);
     }
 }
 

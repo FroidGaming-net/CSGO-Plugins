@@ -52,9 +52,10 @@ public void RandomRound(int iRoundMode)
 public void GiveWeapon(int iClient)
 {
     Client_RemoveAllWeapons(iClient);
+    GivePlayerItem(iClient, "weapon_knife");
     if (g_iRoundCount == 5) {
-        // Special Rounds
-        switch(g_iRoundMode)
+        //Special Rounds
+        switch(6)
         {
             case 1:
             {
@@ -99,7 +100,8 @@ public void GiveWeapon(int iClient)
             case 6:
             {
                 // Knife + Zeus + Bhop
-                GivePlayerItem(iClient, "weapon_taser");
+                int iWeapon = PTaH_GivePlayerItem(iClient, "weapon_taser");
+                EquipPlayerWeapon(iClient, iWeapon);
                 SetEntProp(iClient, Prop_Send, "m_iHealth", 100);
                 SetEntProp(iClient, Prop_Send, "m_ArmorValue", 100);
                 SetEntProp(iClient, Prop_Send, "m_bHasHelmet", 1);
