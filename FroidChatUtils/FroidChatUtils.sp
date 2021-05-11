@@ -56,6 +56,16 @@ Action OnSay(int iClient, const char[] sCommand, int iArgs)
                 CPrintToChat(iClient, "%s Server Owner : {lightred}Sevente (https://steamcommunity.com/id/Sevente/){default}", PREFIX);
             }
 		    return Plugin_Continue;
+	    } else if (StrContains(sText, "admin") > -1) {
+            if (IsValidClient(iClient)) {
+                CPrintToChat(iClient, "%s Server Owner : {lightred}Sevente (https://steamcommunity.com/id/Sevente/){default}", PREFIX);
+            }
+		    return Plugin_Continue;
+	    } else if (StrContains(sText, "staff") > -1) {
+            if (IsValidClient(iClient)) {
+                CPrintToChat(iClient, "%s Server Owner : {lightred}Sevente (https://steamcommunity.com/id/Sevente/){default}", PREFIX);
+            }
+		    return Plugin_Continue;
 	    }
 
         if (StrContains(sText, "fps") > -1) {
