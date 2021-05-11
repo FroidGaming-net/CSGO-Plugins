@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.7"
+#define VERSION "1.1.8"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidChatUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -50,6 +50,13 @@ Action OnSay(int iClient, const char[] sCommand, int iArgs)
         if (GetClientTeam(iClient) == CS_TEAM_NONE) {
             return Plugin_Handled;
         }
+
+        if (StrContains(sText, "owner") > -1) {
+            if (IsValidClient(iClient)) {
+                CPrintToChat(iClient, "%s Server Owner : {lightred}Sevente (https://steamcommunity.com/id/Sevente/){default}", PREFIX);
+            }
+		    return Plugin_Continue;
+	    }
 
         if (StrContains(sText, "fps") > -1) {
             char sIP[64], sCountryCode[3];
