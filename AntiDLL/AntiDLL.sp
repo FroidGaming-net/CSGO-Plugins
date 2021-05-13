@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.2"
+#define VERSION "1.0.3"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiDLL/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
