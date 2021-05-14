@@ -19,5 +19,5 @@ public SharedPlugin __pl_hotguard =
 {
 	name = "hotguard_4.0",
 	file = "hotguard_4.0.smx",
-    required = 1
+    required = 0
 };

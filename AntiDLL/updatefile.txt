@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.0.3"
+		"Latest"	"1.0.4"
 	}
 
-	"Notes"	"Add HotGuard Support."
+	"Notes"	"Fix HotGuard Support Bug."
 }
 
 "Files"
