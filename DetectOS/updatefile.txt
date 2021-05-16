@@ -1,0 +1,14 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.1"
+	}
+
+	"Notes"	"Release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/API/DetectOS.smx"
+}

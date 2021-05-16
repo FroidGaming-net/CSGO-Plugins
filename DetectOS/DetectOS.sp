@@ -35,8 +35,9 @@ public void OnPluginStart()
 
 	Handle hConfig = LoadGameConfigFile("detect_os.games");
 
-	if (hConfig == null)
+	if (hConfig == null) {
 		SetFailState("Failed to find gamedata file: detect_os.games.txt");
+	}
 
 	g_OSData[OS_Windows].bOSLoaded = GameConfGetKeyValue(hConfig, "Convar_Windows", g_OSData[OS_Windows].iOS, sizeof(g_OSData[].iOS));
 	g_OSData[OS_Linux].bOSLoaded = GameConfGetKeyValue(hConfig, "Convar_Linux", g_OSData[OS_Linux].iOS, sizeof(g_OSData[].iOS));
@@ -44,27 +45,45 @@ public void OnPluginStart()
 
 	delete hConfig;
 
-	if (g_bLateLoad)
-		for (int i = 1; i <= MaxClients; i++)
-			if (IsClientInGame(i))
+	if (g_bLateLoad) {
+		for (int i = 1; i <= MaxClients; i++) {
+			if (IsClientInGame(i)) {
 				OnClientPutInServer(i);
+			}
+		}
+	}
+
+	if (LibraryExists("updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
+}
+
+public void OnLibraryAdded(const char[] name)
+{
+    if (StrEqual(name, "updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
 public void OnClientPutInServer(int client)
 {
-	if (IsFakeClient(client))
+	if (IsFakeClient(client)) {
 		return;
+	}
 
 	int serial = GetClientSerial(client);
 
-	if (g_OSData[OS_Windows].bOSLoaded)
+	if (g_OSData[OS_Windows].bOSLoaded) {
 		QueryClientConVar(client, g_OSData[OS_Windows].iOS, OnCvarCheck, serial);
+	}
 
-	if (g_OSData[OS_Linux].bOSLoaded)
+	if (g_OSData[OS_Linux].bOSLoaded) {
 		QueryClientConVar(client, g_OSData[OS_Linux].iOS, OnCvarCheck, serial);
+	}
 
-	if (g_OSData[OS_Mac].bOSLoaded)
+	if (g_OSData[OS_Mac].bOSLoaded) {
 		QueryClientConVar(client, g_OSData[OS_Mac].iOS, OnCvarCheck, serial);
+	}
 }
 
 public void OnClientDisconnect_Post(int iClient)
@@ -74,15 +93,17 @@ public void OnClientDisconnect_Post(int iClient)
 
 public void OnCvarCheck(QueryCookie cookie, int iClient, ConVarQueryResult result, const char[] cvarName, const char[] cvarValue, any serial)
 {
-	if (result == ConVarQuery_NotFound || GetClientFromSerial(serial) != iClient || !IsClientInGame(iClient))
+	if (result == ConVarQuery_NotFound || GetClientFromSerial(serial) != iClient || !IsClientInGame(iClient)) {
 		return;
+	}
 
-	if (StrEqual(cvarName, g_OSData[OS_Windows].iOS))
+	if (StrEqual(cvarName, g_OSData[OS_Windows].iOS)) {
 		g_PlayerData[iClient].iOS = OS_Windows;
-	else if (StrEqual(cvarName, g_OSData[OS_Linux].iOS))
+	} else if (StrEqual(cvarName, g_OSData[OS_Linux].iOS)) {
 		g_PlayerData[iClient].iOS = OS_Linux;
-	else if (StrEqual(cvarName, g_OSData[OS_Mac].iOS))
+	} else if (StrEqual(cvarName, g_OSData[OS_Mac].iOS)) {
 		g_PlayerData[iClient].iOS = OS_Mac;
+	}
 
 	Call_StartForward(g_Forward_OnParseOS);
 	Call_PushCell(iClient);
@@ -96,8 +117,9 @@ public Action Command_PrintOS(int iClient, int args)
 
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (!IsClientInGame(i) || IsFakeClient(i))
+		if (!IsClientInGame(i) || IsFakeClient(i)) {
 			continue;
+		}
 
 		switch (g_PlayerData[iClient].iOS)
 		{
