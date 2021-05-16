@@ -37,11 +37,22 @@ public void OnLibraryAdded(const char[] name)
     }
 }
 
+public void OnClientDisconnect(int iClient)
+{
+    if (IsFakeClient(iClient)) {
+		return;
+	}
+
+    g_PlayerData[iClient].Reset();
+}
+
 public void OnParseOS(int iClient, OS OperatingSystem)
 {
     if (IsFakeClient(iClient)) {
 		return;
 	}
+
+    g_PlayerData[iClient].Reset();
 
     if (OperatingSystem != OS_Windows) {
         return;
@@ -64,9 +75,9 @@ public void QueryClientConVarCallback(QueryCookie sCookie, int iClient, ConVarQu
 
     if (StrEqual(sCvarValue, "0", false)) {
         if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
-            KickClient(iClient, "Kamu harus menjalankan CS:GO dalam Trusted Mode!");
+            KickClient(iClient, "Kamu harus menjalankan CS:GO dalam Trusted Mode");
         } else {
-            KickClient(iClient, "You must run CS:GO in Trusted Mode!");
+            KickClient(iClient, "You must run CS:GO in Trusted Mode");
         }
     }
 }
