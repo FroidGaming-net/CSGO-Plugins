@@ -233,10 +233,13 @@ void MenuPrimary(int iClient, int iStart = 0)
     if (g_PlayerData[iClient].iCacheTeam == 3) {
         hMenu.AddItem("weapon_m4a1", "» M4A4", StrEqual(g_PlayerData[iClient].sPrimary_CT, "weapon_m4a1")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_m4a1_silencer", "» M4A1-S", StrEqual(g_PlayerData[iClient].sPrimary_CT, "weapon_m4a1_silencer")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_famas", "» FAMAS", StrEqual(g_PlayerData[iClient].sPrimary_CT, "weapon_famas")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_ak47", "» AK-47 (40% Chance) (VIP 100% Chance)", StrEqual(g_PlayerData[iClient].sPrimary_CT, "weapon_ak47")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_aug", "» AUG", StrEqual(g_PlayerData[iClient].sPrimary_CT, "weapon_aug")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_famas", "» FAMAS", StrEqual(g_PlayerData[iClient].sPrimary_CT, "weapon_famas")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
     } else if (g_PlayerData[iClient].iCacheTeam == 2) {
         hMenu.AddItem("weapon_ak47", "» AK-47", StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_ak47")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_m4a1", "» M4A4 (40% Chance) (VIP 100% Chance)", StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_m4a1_silencer", "» M4A1-S (40% Chance) (VIP 100% Chance)", StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1_silencer")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_galilar", "» Galil AR", StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_galilar")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_sg556", "» SG 553", StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_sg556")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
     }
@@ -319,16 +322,16 @@ void MenuSecondary(int iClient, int iStart = 0)
         hMenu.AddItem("weapon_usp_silencer", "» USP-S", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_usp_silencer")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_hkp2000", "» P2000", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_hkp2000")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_fiveseven", "» Five-SeveN", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_fiveseven")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_deagle", "» Desert Eagle (Limited)", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_revolver", "» Revolver (Limited)", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_deagle", "» Desert Eagle (Limited) (60% Chance) (VIP 100% Chance)", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_revolver", "» Revolver (Limited) (60% Chance) (VIP 100% Chance)", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_cz75a", "» CZ75-Auto", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_cz75a")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_p250", "» P250", StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_p250")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
     } else if (g_PlayerData[iClient].iCacheTeam == 2) {
         hMenu.AddItem("weapon_glock", "» Glock-18", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_glock")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_tec9", "» Tec-9", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_tec9")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_elite", "» Dual Berettas", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_elite")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_deagle", "» Desert Eagle (Limited)", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
-        hMenu.AddItem("weapon_revolver", "» Revolver (Limited)", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_deagle", "» Desert Eagle (Limited) (60% Chance) (VIP 100% Chance)", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_deagle")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
+        hMenu.AddItem("weapon_revolver", "» Revolver (Limited) (60% Chance) (VIP 100% Chance)", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_revolver")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_cz75a", "» CZ75-Auto", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_cz75a")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
         hMenu.AddItem("weapon_p250", "» P250", StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_p250")==true?ITEMDRAW_DISABLED:ITEMDRAW_DEFAULT);
     }
@@ -500,16 +503,24 @@ void MenuSniper(int iClient)
     // T = 2
 
     if (g_PlayerData[iClient].iCacheTeam == 3) {
-        Format(sBuffer, sizeof(sBuffer), "» AWP (%s)", g_PlayerData[iClient].bAWP_CT == true ? "Enabled" : "Disabled");
+		hMenu.AddItem("infoAWP", "» AWP (Limited) (40% Chance) (VIP 60% Chance)", ITEMDRAW_DISABLED);
+        Format(sBuffer, sizeof(sBuffer), "» %s", g_PlayerData[iClient].bAWP_CT == true ? "Enabled" : "Disabled");
         hMenu.AddItem("1", sBuffer);
 
-        Format(sBuffer, sizeof(sBuffer), "» SSG-08 (%s)", g_PlayerData[iClient].bScout_CT == true ? "Enabled" : "Disabled");
+		hMenu.AddItem("", "", ITEMDRAW_SPACER);
+
+		hMenu.AddItem("infoSSG08", "» SSG-08 (Limited) (40% Chance) (VIP 60% Chance)", ITEMDRAW_DISABLED);
+        Format(sBuffer, sizeof(sBuffer), "» %s", g_PlayerData[iClient].bScout_CT == true ? "Enabled" : "Disabled");
         hMenu.AddItem("0", sBuffer);
     } else if (g_PlayerData[iClient].iCacheTeam == 2) {
-        Format(sBuffer, sizeof(sBuffer), "» AWP (%s)", g_PlayerData[iClient].bAWP_T == true ? "Enabled" : "Disabled");
+		hMenu.AddItem("infoAWP", "» AWP (Limited) (40% Chance) (VIP 60% Chance)", ITEMDRAW_DISABLED);
+        Format(sBuffer, sizeof(sBuffer), "» %s", g_PlayerData[iClient].bAWP_T == true ? "Enabled" : "Disabled");
         hMenu.AddItem("1", sBuffer);
 
-        Format(sBuffer, sizeof(sBuffer), "» SSG-08 (%s)", g_PlayerData[iClient].bScout_T == true ? "Enabled" : "Disabled");
+		hMenu.AddItem("", "", ITEMDRAW_SPACER);
+
+		hMenu.AddItem("infoSSG08", "» SSG-08 (Limited) (40% Chance) (VIP 60% Chance)", ITEMDRAW_DISABLED);
+        Format(sBuffer, sizeof(sBuffer), "» %s", g_PlayerData[iClient].bScout_T == true ? "Enabled" : "Disabled");
         hMenu.AddItem("0", sBuffer);
     }
 
