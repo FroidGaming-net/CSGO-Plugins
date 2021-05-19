@@ -150,16 +150,67 @@ void EquipWeapons(int iClient)
 							g_iAWP_CT_Premium++;
 							g_PlayerData[iClient].bIsGotAWP = true;
 						} else {
+							///////// AK47 ///////////////////////////////////////////////////////
+							if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_ak47")) {
+								if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+									GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+									iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+								} else {
+									if (iRandom == 1 || iRandom == 2) {
+										GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+										iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+									} else {
+										GivePlayerItem(iClient, "weapon_m4a1");
+										iMoney -= GetWeaponPrice("weapon_m4a1");
+									}
+								}
+							} else {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+							}
+							///////// AK47 ///////////////////////////////////////////////////////
+						}
+					} else {
+						///////// AK47 ///////////////////////////////////////////////////////
+						if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_ak47")) {
+							if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+							} else {
+								if (iRandom == 1 || iRandom == 2) {
+									GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+									iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+								} else {
+									GivePlayerItem(iClient, "weapon_m4a1");
+									iMoney -= GetWeaponPrice("weapon_m4a1");
+								}
+							}
+						} else {
 							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
 							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+						}
+						///////// AK47 ///////////////////////////////////////////////////////
+					}
+				} else {
+					///////// AK47 ///////////////////////////////////////////////////////
+					if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_ak47")) {
+						if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+						} else {
+							if (iRandom == 1 || iRandom == 2) {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+							} else {
+								GivePlayerItem(iClient, "weapon_m4a1");
+								iMoney -= GetWeaponPrice("weapon_m4a1");
+							}
 						}
 					} else {
 						GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
 						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
 					}
-				} else {
-					GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
-					iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+					///////// AK47 ///////////////////////////////////////////////////////
 				}
             } else if(g_PlayerData[iClient].bAWP_CT && MIN_PLAYER_AWP_CT <= GetPlayerCount(CS_TEAM_CT)) {
 				if (iRandom == 3) {
@@ -169,25 +220,80 @@ void EquipWeapons(int iClient)
 						g_iAWP_CT++;
 						g_PlayerData[iClient].bIsGotAWP = true;
 					} else {
+						///////// AK47 ///////////////////////////////////////////////////////
+						if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_ak47")) {
+							if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+							} else {
+								if (iRandom == 1 || iRandom == 2) {
+									GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+									iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+								} else {
+									GivePlayerItem(iClient, "weapon_m4a1");
+									iMoney -= GetWeaponPrice("weapon_m4a1");
+								}
+							}
+						} else {
+							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+						}
+						///////// AK47 ///////////////////////////////////////////////////////
+					}
+				} else {
+					///////// AK47 ///////////////////////////////////////////////////////
+					if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_ak47")) {
+						if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+						} else {
+							if (iRandom == 1 || iRandom == 2) {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+							} else {
+								GivePlayerItem(iClient, "weapon_m4a1");
+								iMoney -= GetWeaponPrice("weapon_m4a1");
+							}
+						}
+					} else {
 						GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
 						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+					}
+					///////// AK47 ///////////////////////////////////////////////////////
+				}
+            } else {
+				///////// AK47 ///////////////////////////////////////////////////////
+				if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_ak47")) {
+					if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+						GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+					} else {
+						if (iRandom == 1 || iRandom == 2) {
+							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+						} else {
+							GivePlayerItem(iClient, "weapon_m4a1");
+							iMoney -= GetWeaponPrice("weapon_m4a1");
+						}
 					}
 				} else {
 					GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
 					iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
 				}
-            } else {
-				GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_CT);
-				iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_CT);
+				///////// AK47 ///////////////////////////////////////////////////////
 			}
 
 			if (StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_deagle") || StrEqual(g_PlayerData[iClient].sSecondary_CT, "weapon_revolver")) {
-				if (iRandom == 1 || iRandom == 2 || iRandom == 4) {
-					if (g_PlayerData[iClient].bIsGotAWP == true){
-						GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
-						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_CT);
-						g_iDeagle_CT++;
-					} else if (g_iDeagle_CT < 2) {
+				if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+					GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
+					iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_CT);
+					g_iDeagle_CT++;
+				}else if(g_PlayerData[iClient].bIsGotAWP == true){
+					GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
+					iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_CT);
+					g_iDeagle_CT++;
+				}else if (iRandom == 1 || iRandom == 2 || iRandom == 4) {
+					if (g_iDeagle_CT < 2) {
 						GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
 						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_CT);
 						g_iDeagle_CT++;
@@ -207,7 +313,6 @@ void EquipWeapons(int iClient)
 				}
 			} else {
 				GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_CT);
-				iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_CT);
 			}
         } else if (GetClientTeam(iClient) == CS_TEAM_T) {
             int iRandom = RoundToNearest(GetRandomFloat(1.0, 5.0));
@@ -221,18 +326,67 @@ void EquipWeapons(int iClient)
 							g_iAWP_T_Premium++;
 							g_PlayerData[iClient].bIsGotAWP = true;
 						} else {
+							///////// M4A1 ///////////////////////////////////////////////////////
+							if (StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1") || StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1_silencer")) {
+								if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+									GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+									iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+								} else {
+									if (iRandom == 1 || iRandom == 2) {
+										GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+										iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+									} else {
+										GivePlayerItem(iClient, "weapon_ak47");
+										iMoney -= GetWeaponPrice("weapon_ak47");
+									}
+								}
+							} else {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+							}
+							///////// M4A1 ///////////////////////////////////////////////////////
+						}
+					} else {
+						///////// M4A1 ///////////////////////////////////////////////////////
+						if (StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1") || StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1_silencer")) {
+							if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+							} else {
+								if (iRandom == 1 || iRandom == 2) {
+									GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+									iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+								} else {
+									GivePlayerItem(iClient, "weapon_ak47");
+									iMoney -= GetWeaponPrice("weapon_ak47");
+								}
+							}
+						} else {
 							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
-                            iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+						}
+						///////// M4A1 ///////////////////////////////////////////////////////
+					}
+				} else {
+					///////// M4A1 ///////////////////////////////////////////////////////
+					if (StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1") || StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1_silencer")) {
+						if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+						} else {
+							if (iRandom == 1 || iRandom == 2) {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+							} else {
+								GivePlayerItem(iClient, "weapon_ak47");
+								iMoney -= GetWeaponPrice("weapon_ak47");
+							}
 						}
 					} else {
 						GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
-                        iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
 					}
-				}
-				else
-				{
-					GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
-                    iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+					///////// M4A1 ///////////////////////////////////////////////////////
 				}
             }else if(g_PlayerData[iClient].bAWP_T && MIN_PLAYER_AWP_T <= GetPlayerCount(CS_TEAM_T)) {
 				if (iRandom == 3) {
@@ -242,32 +396,87 @@ void EquipWeapons(int iClient)
 						g_iAWP_T++;
 						g_PlayerData[iClient].bIsGotAWP = true;
 					} else {
-                        GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
-                        iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+                        ///////// M4A1 ///////////////////////////////////////////////////////
+						if (StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1") || StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1_silencer")) {
+							if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+							} else {
+								if (iRandom == 1 || iRandom == 2) {
+									GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+									iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+								} else {
+									GivePlayerItem(iClient, "weapon_ak47");
+									iMoney -= GetWeaponPrice("weapon_ak47");
+								}
+							}
+						} else {
+							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+						}
+						///////// M4A1 ///////////////////////////////////////////////////////
 					}
 				} else {
-                    GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
-                    iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+                    ///////// M4A1 ///////////////////////////////////////////////////////
+					if (StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1") || StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1_silencer")) {
+						if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+						} else {
+							if (iRandom == 1 || iRandom == 2) {
+								GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+								iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+							} else {
+								GivePlayerItem(iClient, "weapon_ak47");
+								iMoney -= GetWeaponPrice("weapon_ak47");
+							}
+						}
+					} else {
+						GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+					}
+					///////// M4A1 ///////////////////////////////////////////////////////
 				}
 			} else {
-				GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
-				iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+				///////// M4A1 ///////////////////////////////////////////////////////
+				if (StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1") || StrEqual(g_PlayerData[iClient].sPrimary_T, "weapon_m4a1_silencer")) {
+					if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+						GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+					} else {
+						if (iRandom == 1 || iRandom == 2) {
+							GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+							iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+						} else {
+							GivePlayerItem(iClient, "weapon_ak47");
+							iMoney -= GetWeaponPrice("weapon_ak47");
+						}
+					}
+				} else {
+					GivePlayerItem(iClient, g_PlayerData[iClient].sPrimary_T);
+					iMoney -= GetWeaponPrice(g_PlayerData[iClient].sPrimary_T);
+				}
+				///////// M4A1 ///////////////////////////////////////////////////////
 			}
 
 			if (StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_deagle") || StrEqual(g_PlayerData[iClient].sSecondary_T, "weapon_revolver")) {
-				if (iRandom == 1 || iRandom == 2 || iRandom == 4) {
-					if (g_PlayerData[iClient].bIsGotAWP == true){
-						GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_T);
-						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_T);
-						g_iDeagle_T++;
-					} else if (g_iDeagle_T < 2) {
+				if (CheckCommandAccess(iClient, "sm_froidapp_premiumplus", ADMFLAG_CUSTOM6)) {
+					GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_T);
+					iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_T);
+					g_iDeagle_CT++;
+				}else if(g_PlayerData[iClient].bIsGotAWP == true){
+					GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_T);
+					iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_T);
+					g_iDeagle_T++;
+				}else if (iRandom == 1 || iRandom == 2 || iRandom == 4) {
+					if (g_iDeagle_T < 2) {
 						GivePlayerItem(iClient, g_PlayerData[iClient].sSecondary_T);
 						iMoney -= GetWeaponPrice(g_PlayerData[iClient].sSecondary_T);
 						g_iDeagle_T++;
 					} else {
 						GivePlayerItem(iClient, "weapon_glock");
 					}
-				}  else {
+				} else {
 					GivePlayerItem(iClient, "weapon_glock");
 				}
 			} else {
@@ -392,7 +601,6 @@ void EquipWeapons(int iClient)
 		GiveArmorKit(iClient, iMoney, iOrder);
 	}
 }
-
 
 void GiveArmorKit(int client, int money, int order)
 {
