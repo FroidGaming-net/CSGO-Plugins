@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -309,6 +309,6 @@ void Dropbomb(int iClient)
 
 		if(iClient != i)
 			CPrintToChat(i, "%s {lightred}%N{default} has dropped the bomb.", PREFIX, iClient);
-		else CPrintToChat(i, "%s {lightred}%N{default} You dropped the bomb.");
+		else CPrintToChat(i, "%s {default} You dropped the bomb.", PREFIX);
 	}
 }
