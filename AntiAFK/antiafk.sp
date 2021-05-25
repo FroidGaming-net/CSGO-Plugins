@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.2"
+#define VERSION "1.0.3"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -64,7 +64,7 @@ public void OnPluginStart()
 	HookEvent("round_freeze_end", Event_RoundFreezeEnd);
 	HookEvent("round_end", Event_RoundEnd);
 
-	CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_REPEAT );
+	CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
 
 	reloadPlugins();
 
@@ -76,9 +76,10 @@ public void OnPluginStart()
 /// Reload Detected
 public void reloadPlugins()
 {
-	LoopIngameClients(iClient)
-	{
-		OnClientPutInServer(iClient);
+	for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
+		if (IsClientInGame(iClient)) {
+			OnClientPutInServer(iClient);
+		}
 	}
 }
 
@@ -117,8 +118,11 @@ public Action Event_RoundEnd(Handle event, const char[] name, bool dontBroadcast
 
 public Action Event_RoundFreezeEnd(Handle event, const char[] name, bool dontBroadcast)
 {
-	LoopIngameClients(iClient)
-		g_fLastTime[iClient] = GetGameTime();
+	for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
+		if (IsClientInGame(iClient)) {
+			g_fLastTime[iClient] = GetGameTime();
+		}
+	}
 
 	g_fRoundStart = GetGameTime();
 
@@ -128,25 +132,29 @@ public Action Event_RoundFreezeEnd(Handle event, const char[] name, bool dontBro
 
 public Action OnWeaponCanUse(int iClient, int iWeapon)
 {
-	if(!bEnable)
+	if (!bEnable) {
 		return Plugin_Continue;
+	}
 
 	char sWeapon[32];
 	GetEntityClassname(iWeapon, sWeapon, sizeof(sWeapon));
 
-	if(g_iAfkstate[iClient] != -1 && StrEqual(sWeapon, "weapon_c4"))
+	if(g_iAfkstate[iClient] != -1 && StrEqual(sWeapon, "weapon_c4")) {
 		return Plugin_Handled;
+	}
 
 	return Plugin_Continue;
 }
 
 public Action OnPlayerRunCmd(int iClient, int &iButtons, int &impulse, float vel[3], float angles[3])
 {
-	if(!IsPlayerAlive(iClient))
+	if (!IsPlayerAlive(iClient)) {
 		return Plugin_Continue;
+	}
 
-	if(!bEnable || iButtons > 0 || vel[0] != 0 || vel[1] != 0 || GetVectorDistance(angles, g_fLastAngle[iClient]) > 0.1)
+	if (!bEnable || iButtons > 0 || vel[0] != 0 || vel[1] != 0 || GetVectorDistance(angles, g_fLastAngle[iClient]) > 0.1) {
 		g_fLastTime[iClient] = GetGameTime();
+	}
 
 	g_fLastAngle[iClient] = angles;
 
@@ -155,6 +163,10 @@ public Action OnPlayerRunCmd(int iClient, int &iButtons, int &impulse, float vel
 
 public Action Event_Spawn(Handle event, const char[] name, bool dontBroadcast)
 {
+	if (IsWarmup()) {
+		return Plugin_Continue;
+	}
+
 	g_fLastTime[GetClientOfUserId(GetEventInt(event, "userid"))] = GetGameTime();
 
 	return Plugin_Continue;
@@ -166,46 +178,52 @@ public Action Timer_Check(Handle timer, any data)
 		return Plugin_Continue;
 	}
 
-	LoopAlivePlayers(iClient)
-	{
-		if(g_cvTeam.IntValue > 1 && GetClientTeam(iClient) != g_cvTeam.IntValue)
-			continue;
+	for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
+		if (IsClientInGame(iClient) && IsPlayerAlive(iClient)) {
+			if (g_cvTeam.IntValue > 1 && GetClientTeam(iClient) != g_cvTeam.IntValue) {
+				continue;
+			}
 
-		g_iAfkstate[iClient] = GetAfkState(iClient);
+			g_iAfkstate[iClient] = GetAfkState(iClient);
 
-		if(g_iAfkstate[iClient] == -1)
-			continue;
+			if (g_iAfkstate[iClient] == -1) {
+				continue;
+			}
 
-		if(g_cvDropBomb.IntValue > 0 && g_cvDropBomb.IntValue <= g_iAfkstate[iClient]+1)
-			Dropbomb(iClient);
+			if (g_cvDropBomb.IntValue > 0 && g_cvDropBomb.IntValue <= g_iAfkstate[iClient]+1) {
+				Dropbomb(iClient);
+			}
 
-		if(g_cvKick.IntValue > 0 && g_cvKick.IntValue <= g_iAfkstate[iClient]+1)
-		{
-			CPrintToChatAll("%s {lightred}%N{default} got kicked for being AFK too long.", PREFIX, iClient);
-			KickClient(iClient, "AFK 2 long");
-			continue;
+			if (g_cvKick.IntValue > 0 && g_cvKick.IntValue <= g_iAfkstate[iClient]+1)
+			{
+				CPrintToChatAll("%s {lightred}%N{default} got kicked for being AFK too long.", PREFIX, iClient);
+				KickClient(iClient, "AFK too long");
+				continue;
+			}
+
+			if (g_cvSpec.IntValue > 0 && g_cvSpec.IntValue <= g_iAfkstate[iClient]+1)
+			{
+				CPrintToChatAll("%s {lightred}%N{default} got moved to spectators for being AFK too long.", PREFIX, iClient);
+				ChangeClientTeam(iClient, 1);
+				continue;
+			}
+
+			if (g_cvBeacon.IntValue > 0 && g_cvBeacon.IntValue <= g_iAfkstate[iClient]+1) {
+				StartBeacon(iClient);
+			}
+
+			if (g_cvSlap[g_iAfkstate[iClient]].IntValue >= 0) {
+				StartSlapping(iClient);
+			}
+
+			if (g_cvIgnite.IntValue > 0 && g_cvIgnite.IntValue <= g_iAfkstate[iClient]+1) {
+				IgniteEntity(iClient, g_cvCheckInterval.FloatValue);
+			}
 		}
-
-		if(g_cvSpec.IntValue > 0 && g_cvSpec.IntValue <= g_iAfkstate[iClient]+1)
-		{
-			CPrintToChatAll("%s {lightred}%N{default} got moved to spectators for being AFK too long.", PREFIX, iClient);
-			ChangeClientTeam(iClient, 1);
-			continue;
-		}
-
-		if(g_cvBeacon.IntValue > 0 && g_cvBeacon.IntValue <= g_iAfkstate[iClient]+1)
-			StartBeacon(iClient);
-
-		if(g_cvSlap[g_iAfkstate[iClient]].IntValue >= 0)
-			StartSlapping(iClient);
-
-		if(g_cvIgnite.IntValue > 0 && g_cvIgnite.IntValue <= g_iAfkstate[iClient]+1)
-			IgniteEntity(iClient, g_cvCheckInterval.FloatValue);
 	}
 
-	if(g_cvCheckInterval.FloatValue != data)
-	{
-		CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_REPEAT);
+	if (g_cvCheckInterval.FloatValue != data) {
+		CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
 		return Plugin_Stop;
 	}
 
@@ -219,8 +237,9 @@ int GetAfkState(int iClient)
 	bool bMidgame = fTime - g_fRoundStart > g_cvMidgame.FloatValue;
 	float fAfkTime = fTime - g_fLastTime[iClient];
 
-	if(bMidgame)
+	if (bMidgame) {
 		fAfkTime *= g_cvMidgameMult.FloatValue;
+	}
 
 	int iAfkState = -1;
 
@@ -235,12 +254,13 @@ int GetAfkState(int iClient)
 
 void StartSlapping(int iClient)
 {
-	if(g_hSlapTimer[iClient] != null)
+	if(g_hSlapTimer[iClient] != null) {
 		return;
+	}
 
 	Slap(iClient);
 
-	g_hSlapTimer[iClient] = CreateTimer(g_cvSlapInterval.FloatValue, Timer_Slap, iClient, TIMER_REPEAT);
+	g_hSlapTimer[iClient] = CreateTimer(g_cvSlapInterval.FloatValue, Timer_Slap, iClient, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
 }
 
 public Action Timer_Slap(Handle timer, any iClient)
@@ -263,12 +283,13 @@ void Slap(int iClient)
 
 void StartBeacon(int iClient)
 {
-	if(g_hBeaconTimer[iClient] != null)
+	if(g_hBeaconTimer[iClient] != null) {
 		return;
+	}
 
 	Beacon(iClient);
 
-	g_hBeaconTimer[iClient] = CreateTimer(g_cvBeaconInterval.FloatValue, Timer_Beacon, iClient, TIMER_REPEAT);
+	g_hBeaconTimer[iClient] = CreateTimer(g_cvBeaconInterval.FloatValue, Timer_Beacon, iClient, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
 }
 
 public Action Timer_Beacon(Handle timer, any iClient)
@@ -297,18 +318,23 @@ void Dropbomb(int iClient)
 {
 	int iWeapon = GetPlayerWeaponSlot(iClient, CS_SLOT_C4);
 
-	if(iWeapon <= 0)
+	if (iWeapon <= 0) {
 		return;
+	}
 
 	CS_DropWeapon(iClient, iWeapon, true);
 
-	LoopAlivePlayers(i)
-	{
-		if(GetClientTeam(i) != CS_TEAM_T)
-			continue;
+	for (int i = 1; i < MAXPLAYERS; i++) {
+		if (IsClientInGame(i) && IsPlayerAlive(i)) {
+			if (GetClientTeam(i) != CS_TEAM_T) {
+				continue;
+			}
 
-		if(iClient != i)
-			CPrintToChat(i, "%s {lightred}%N{default} has dropped the bomb.", PREFIX, iClient);
-		else CPrintToChat(i, "%s {default} You dropped the bomb.", PREFIX);
+			if (iClient == i) {
+				CPrintToChat(i, "%s {default} You dropped the bomb.", PREFIX);
+			} else {
+				CPrintToChat(i, "%s {lightred}%N{default} has dropped the bomb.", PREFIX, iClient);
+			}
+		}
 	}
 }
