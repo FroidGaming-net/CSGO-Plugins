@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.3"
+#define VERSION "1.0.4"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -148,6 +148,10 @@ public Action OnWeaponCanUse(int iClient, int iWeapon)
 
 public Action OnPlayerRunCmd(int iClient, int &iButtons, int &impulse, float vel[3], float angles[3])
 {
+	if (IsWarmup()) {
+		return Plugin_Continue;
+	}
+
 	if (!IsPlayerAlive(iClient)) {
 		return Plugin_Continue;
 	}
