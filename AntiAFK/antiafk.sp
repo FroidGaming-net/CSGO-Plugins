@@ -4,8 +4,9 @@
 #include <sdktools>
 #include <cstrike>
 #include <csgocolors>
-#include <retakes>
 #undef REQUIRE_PLUGIN
+// #include <executes>
+#include <retakes>
 #include <updater>
 
 #pragma semicolon 1
@@ -13,7 +14,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.5"
+#define VERSION "1.0.6"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -55,6 +56,7 @@ public void OnPluginStart()
 	HookEvent("round_start", Event_RoundStart);
 	HookEvent("round_freeze_end", Event_RoundFreezeEnd);
 	HookEvent("round_end", Event_RoundEnd);
+	HookEventEx("cs_win_panel_match", cs_win_panel_match);
 
 	CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
 
@@ -63,6 +65,12 @@ public void OnPluginStart()
 	if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
+	if (LibraryExists("retakes")) {
+        g_bRetakes = true;
+    }
+    // if (LibraryExists("executes")) {
+    //     g_bExecutes = true;
+    // }
 }
 
 /// Reload Detected
@@ -77,19 +85,46 @@ public void reloadPlugins()
 
 public void OnLibraryAdded(const char[] name)
 {
-    if (StrEqual(name, "updater")) {
+    if (StrEqual(name, "updater", false)) {
         Updater_AddPlugin(UPDATE_URL);
     }
+    if (StrEqual(name, "retakes", false)) {
+        g_bRetakes = true;
+    }
+    // if (StrEqual(name, "executes", false)) {
+    //     g_bExecutes = true;
+    // }
+}
+
+public void OnLibraryRemoved(const char[] name)
+{
+    if (StrEqual(name, "retakes", false)) {
+        g_bRetakes = false;
+    }
+    // if (StrEqual(name, "executes", false)) {
+    //     g_bExecutes = false;
+    // }
 }
 
 public void OnMapStart()
 {
 	g_fRoundStart = -1.0;
+	g_bWinPanel = false;
+}
+
+public void OnMapEnd()
+{
+	g_bWinPanel = false;
 }
 
 public void OnClientPutInServer(int client)
 {
 	SDKHook(client, SDKHook_WeaponCanUse, OnWeaponCanUse);
+}
+
+public void cs_win_panel_match(Handle event, const char[] eventname, bool dontBroadcast)
+{
+	g_bWinPanel = true;
 }
 
 public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadcast)
@@ -138,7 +173,7 @@ public Action OnWeaponCanUse(int iClient, int iWeapon)
 
 public Action OnPlayerRunCmd(int iClient, int &iButtons, int &impulse, float vel[3], float angles[3])
 {
-	if (!Retakes_Live()) {
+	if (!IsSafeToCheck()) {
 		return Plugin_Continue;
 	}
 
@@ -157,7 +192,7 @@ public Action OnPlayerRunCmd(int iClient, int &iButtons, int &impulse, float vel
 
 public Action Event_Spawn(Handle event, const char[] name, bool dontBroadcast)
 {
-	if (!Retakes_Live()) {
+	if (!IsSafeToCheck()) {
 		return Plugin_Continue;
 	}
 
@@ -168,7 +203,7 @@ public Action Event_Spawn(Handle event, const char[] name, bool dontBroadcast)
 
 public Action Timer_Check(Handle timer, any data)
 {
-	if (!Retakes_Live()) {
+	if (!IsSafeToCheck()) {
 		return Plugin_Continue;
 	}
 
