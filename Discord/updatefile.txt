@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.0.9"
+		"Latest"	"1.1.0"
 	}
 
-	"Notes"	"Add Autoupdater."
+	"Notes"	"Add Set Description."
 }
 
 "Files"

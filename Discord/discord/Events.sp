@@ -10,7 +10,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -42,7 +42,7 @@ public APLRes AskPluginLoad2(Handle hMySelf, bool bLate, char[] szError, int iEr
 
   // Setting parameters for message.
   CreateNative("Discord_SetUsername",           API_SetUsername);
-  CreateNative("Discord_SetAvatar",             API_SetAvatar); 
+  CreateNative("Discord_SetAvatar",             API_SetAvatar);
 
   // Content.
   CreateNative("Discord_SetTimestamp",          API_SetTimestamp);
@@ -50,6 +50,7 @@ public APLRes AskPluginLoad2(Handle hMySelf, bool bLate, char[] szError, int iEr
   CreateNative("Discord_SetColor",              API_SetColor);
   CreateNative("Discord_SetTitle",              API_SetTitle);
   CreateNative("Discord_AddField",              API_AddField);
+  CreateNative("Discord_SetDescription",        API_SetDescription);
 
   // WebHooks.
   CreateNative("Discord_WebHookExists",         API_WebHookExists);

@@ -10,7 +10,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -34,7 +34,7 @@
 void UTIL_SendMessage(Handle hMap, const char[] szConfigName, bool bAllowedDefault) {
   DebugMessage("UTIL_SendMessage(): Request %x, Config %s, Default %s.", hMap, szConfigName, bAllowedDefault ? "allowed" : "denied")
 
-  char szBuffer[1024];
+  char szBuffer[2048];
   Handle hCleanup = CreateArray(4);
   DebugMessage("UTIL_SendMessage(): Created storage for cleanup after work.")
 
@@ -135,6 +135,14 @@ void UTIL_SendMessage(Handle hMap, const char[] szConfigName, bool bAllowedDefau
     bAdd = true;
 
     DebugMessage("UTIL_SendMessage(): Added image (%s).", szBuffer)
+  }
+
+  // Description
+  if (GetTrieString(hMap, "embed_description", SZF(szBuffer))) {
+    hJSmsg.SetString("description", szBuffer);
+    bAdd = true;
+
+    DebugMessage("UTIL_SendMessage(): Installed description (%s).", szBuffer)
   }
 
   if (bAdd) {

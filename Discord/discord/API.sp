@@ -10,7 +10,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -340,4 +340,22 @@ NativeHandler(API_SetThumbnail) {
     SetTrieString(g_hMessage, "embed_thumb", szURL);
   else
     RemoveFromTrie(g_hMessage, "embed_thumb");
+}
+
+NativeHandler(API_SetDescription) {
+  DebugMessage("API_SetDescription()")
+  API_ValidateMsg();
+
+  char szDescription[2048];
+  if (iNumParams == 1) {
+    GetNativeString(1, szDescription, sizeof(szDescription));
+  } else {
+    int iWritten;
+    FormatNativeString(0, 1, 2, sizeof(szDescription), iWritten, szDescription);
+  }
+
+  if (szDescription[0])
+    SetTrieString(g_hMessage, "embed_description", szDescription);
+  else
+    RemoveFromTrie(g_hMessage, "embed_description");
 }
