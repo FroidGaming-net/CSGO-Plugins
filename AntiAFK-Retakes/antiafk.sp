@@ -14,7 +14,7 @@
 
 /* Plugin Info */
 #define VERSION "1.0.7"
-#define UPDATE_URL "https://sys.froidgaming.net/AntiAFK/updatefile.txt"
+#define UPDATE_URL "https://sys.froidgaming.net/AntiAFK-Retakes/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
 #include "files/globals.sp"
