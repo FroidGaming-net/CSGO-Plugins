@@ -22,7 +22,7 @@
 
 public Plugin myinfo =
 {
-	name = "[Anti-AFK] Core",
+	name = "[Anti-AFK] Retakes",
 	author = "FroidGaming.net",
 	description = "Anti-AFK.",
 	version = VERSION,
