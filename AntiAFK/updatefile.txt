@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.0.6"
+		"Latest"	"1.0.7"
 	}
 
-	"Notes"	"Add check win panel."
+	"Notes"	"Update."
 }
 
 "Files"

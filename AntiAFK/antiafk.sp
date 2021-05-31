@@ -5,7 +5,8 @@
 #include <cstrike>
 #include <csgocolors>
 #undef REQUIRE_PLUGIN
-// #include <executes>
+#include <retakesandexecutes>
+#include <executes>
 #include <retakes>
 #include <updater>
 
@@ -14,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.6"
+#define VERSION "1.0.7"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -68,9 +69,9 @@ public void OnPluginStart()
 	if (LibraryExists("retakes")) {
         g_bRetakes = true;
     }
-    // if (LibraryExists("executes")) {
-    //     g_bExecutes = true;
-    // }
+    if (LibraryExists("executes")) {
+        g_bExecutes = true;
+    }
 }
 
 /// Reload Detected
@@ -91,9 +92,9 @@ public void OnLibraryAdded(const char[] name)
     if (StrEqual(name, "retakes", false)) {
         g_bRetakes = true;
     }
-    // if (StrEqual(name, "executes", false)) {
-    //     g_bExecutes = true;
-    // }
+    if (StrEqual(name, "executes", false)) {
+        g_bExecutes = true;
+    }
 }
 
 public void OnLibraryRemoved(const char[] name)
@@ -101,9 +102,9 @@ public void OnLibraryRemoved(const char[] name)
     if (StrEqual(name, "retakes", false)) {
         g_bRetakes = false;
     }
-    // if (StrEqual(name, "executes", false)) {
-    //     g_bExecutes = false;
-    // }
+    if (StrEqual(name, "executes", false)) {
+        g_bExecutes = false;
+    }
 }
 
 public void OnMapStart()
@@ -265,6 +266,8 @@ int GetAfkState(int iClient)
 		if(fAfkTime >= g_cvAfkState[i].FloatValue)
 			iAfkState = i;
 	}
+
+	// PrintToConsoleAll("[Anti-AFK] AFK-State : %i | AFK-Time : %f", iAfkState, fAfkTime);
 
 	return iAfkState;
 }

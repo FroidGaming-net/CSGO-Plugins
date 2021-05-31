@@ -17,12 +17,12 @@ stock bool IsSafeToCheck()
 		return true;
 	}
 
-	// if (g_bExecutes == true) {
-	// 	if (Executes_InWarmup()) {
-	// 		return false;
-	// 	}
-	// 	return true;
-	// }
+	if (g_bExecutes == true) {
+		if (Executes_InWarmup()) {
+			return false;
+		}
+		return true;
+	}
 
 	if (IsWarmup()) {
 		return false;
