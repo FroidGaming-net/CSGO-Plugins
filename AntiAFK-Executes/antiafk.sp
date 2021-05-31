@@ -6,7 +6,6 @@
 #include <csgocolors>
 #undef REQUIRE_PLUGIN
 #include <executes>
-#include <retakes>
 #include <updater>
 
 #pragma semicolon 1
@@ -65,12 +64,6 @@ public void OnPluginStart()
 	if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
-	if (LibraryExists("retakes")) {
-        g_bRetakes = true;
-    }
-    if (LibraryExists("executes")) {
-        g_bExecutes = true;
-    }
 }
 
 /// Reload Detected
@@ -87,22 +80,6 @@ public void OnLibraryAdded(const char[] name)
 {
     if (StrEqual(name, "updater", false)) {
         Updater_AddPlugin(UPDATE_URL);
-    }
-    if (StrEqual(name, "retakes", false)) {
-        g_bRetakes = true;
-    }
-    if (StrEqual(name, "executes", false)) {
-        g_bExecutes = true;
-    }
-}
-
-public void OnLibraryRemoved(const char[] name)
-{
-    if (StrEqual(name, "retakes", false)) {
-        g_bRetakes = false;
-    }
-    if (StrEqual(name, "executes", false)) {
-        g_bExecutes = false;
     }
 }
 

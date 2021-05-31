@@ -9,19 +9,8 @@ stock bool IsSafeToCheck()
 		return false;
 	}
 
-	if (g_bRetakes == true) {
-		if (!Retakes_Live()) {
-			return false;
-		}
-
-		return true;
-	}
-
-	if (g_bExecutes == true) {
-		if (Executes_InWarmup()) {
-			return false;
-		}
-		return true;
+	if (Executes_InWarmup()) {
+		return false;
 	}
 
 	if (IsWarmup()) {

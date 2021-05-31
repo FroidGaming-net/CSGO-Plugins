@@ -15,6 +15,4 @@ int g_iAfkstate[MAXPLAYERS + 1] = {-1 , ...};
 bool bEnable = false;
 float g_fRoundStart = -1.0;
 
-bool g_bRetakes = false;
-bool g_bExecutes = false;
 bool g_bWinPanel = false;
