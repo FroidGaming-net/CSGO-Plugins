@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.7.3"
+#define VERSION "1.7.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidPlant/updatefile.txt"
 
 #include "files/globals.sp"
@@ -33,6 +33,8 @@ public void OnPluginStart()
 {
     PlayerConnect = new StringMap();
 
+	HookEvent("round_start", Event_RoundStart);
+    HookEvent("round_freeze_end", Event_RoundFreezeEnd);
     HookEvent("bomb_beginplant", Event_BombBeginPlant);
     HookEvent("bomb_planted", Event_BombPlanted, EventHookMode_Pre);
 
@@ -65,11 +67,23 @@ public void reloadPlugins() {
 public void OnMapStart()
 {
     PlayerConnect.Clear();
+    g_bEnable = false;
 }
 
 public void OnMapEnd()
 {
     PlayerConnect.Clear();
+    g_bEnable = false;
+}
+
+public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadcast)
+{
+    g_bEnable = false;
+}
+
+public Action Event_RoundFreezeEnd(Handle event, const char[] name, bool dontBroadcast)
+{
+    g_bEnable = true;
 }
 
 public void OnClientPostAdminCheck(int iClient)
@@ -113,6 +127,10 @@ public void Event_BombBeginPlant(Event event, const char[] name, bool dontBroadc
     int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
 
     if (!IsValidClient(iClient)) {
+        return;
+    }
+
+    if (g_bEnable == false) {
         return;
     }
 

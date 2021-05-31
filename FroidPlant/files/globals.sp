@@ -20,3 +20,5 @@ enum
     BOMBSITE_A = 0,
     BOMBSITE_B = 1
 }
+
+bool g_bEnable = false;
