@@ -3,11 +3,6 @@
 #endif
 #define _retakes_included
 
-enum Bombsite {
-    BombsiteA = 0,
-    BombsiteB = 1,
-};
-
 // Spawn types. These only apply to T-side spawns, all
 // CT-spawns are considered SpawnType_Normal since they have no bomb.
 enum SpawnType {
