@@ -3,6 +3,11 @@
 #endif
 #define _executes_included
 
+enum Bombsite {
+  BombsiteA = 0,
+  BombsiteB = 1,
+};
+
 enum SpawnSite {
   SpawnSite_Any = 0,
   SpawnSite_A = 1,
