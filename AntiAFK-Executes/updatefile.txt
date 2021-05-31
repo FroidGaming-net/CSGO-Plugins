@@ -1,0 +1,14 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.7"
+	}
+
+	"Notes"	"Update."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/Tools/antiafk.smx"
+}
