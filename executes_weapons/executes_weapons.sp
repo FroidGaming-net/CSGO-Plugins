@@ -3,6 +3,7 @@
 #include <sdktools>
 #include <cstrike>
 #include <ripext>
+#include <retakesandexecutes>
 #include <executes>
 #undef REQUIRE_PLUGIN
 #include <updater>
