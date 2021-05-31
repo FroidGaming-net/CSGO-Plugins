@@ -2,7 +2,7 @@
 {
 	"Version"
 	{
-		"Latest"	"1.0.8"
+		"Latest"	"1.0.9"
 	}
 
 	"Notes"	"Update."

@@ -4,6 +4,7 @@
 #include <sdktools>
 #include <cstrike>
 #include <csgocolors>
+#include <autoexecconfig>
 #undef REQUIRE_PLUGIN
 #include <retakes>
 #include <updater>
@@ -13,11 +14,12 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.8"
+#define VERSION "1.0.9"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK-Retakes/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
 #include "files/globals.sp"
+#include "files/convars.sp"
 #include "files/custom_functions.sp"
 
 public Plugin myinfo =
@@ -31,27 +33,42 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-	g_cvCheckInterval = CreateConVar("afk_check_interval", "1.0", "Check interval");
+	AutoExecConfig_SetFile("antiafk_retakes");
 
-	g_cvAfkState[0] = CreateConVar("afk_state_1", "4.0", "Amount of time the player was not moving to enable AFK state 1");
-	g_cvAfkState[1] = CreateConVar("afk_state_2", "8.0", "Amount of time the player was not moving to enable AFK state 2");
-	g_cvAfkState[2] = CreateConVar("afk_state_3", "14.0", "Amount of time the player was not moving to enable AFK state 3");
-	g_cvAfkState[3] = CreateConVar("afk_state_4", "16.0", "Amount of time the player was not moving to enable AFK state 4");
+	g_cvCheckInterval = AutoExecConfig_CreateConVar("afk_check_interval", "1.0", "Check interval");
+    g_cvCheckInterval.AddChangeHook(OnConVarChanged);
 
-	g_cvDropBomb = CreateConVar("afk_drop_bomb", "1", "AFK state from where to drop bomb (0: Disabled; 1 to 4)");
+	g_cvAfkState[0] = AutoExecConfig_CreateConVar("afk_state_1", "4.0", "Amount of time the player was not moving to enable AFK state 1");
+    g_cvAfkState[0].AddChangeHook(OnConVarChanged);
+	g_cvAfkState[1] = AutoExecConfig_CreateConVar("afk_state_2", "8.0", "Amount of time the player was not moving to enable AFK state 2");
+    g_cvAfkState[1].AddChangeHook(OnConVarChanged);
+	g_cvAfkState[2] = AutoExecConfig_CreateConVar("afk_state_3", "14.0", "Amount of time the player was not moving to enable AFK state 3");
+    g_cvAfkState[2].AddChangeHook(OnConVarChanged);
+	g_cvAfkState[3] = AutoExecConfig_CreateConVar("afk_state_4", "16.0", "Amount of time the player was not moving to enable AFK state 4");
+    g_cvAfkState[3].AddChangeHook(OnConVarChanged);
 
-	g_cvMidgame = CreateConVar("afk_midgame", "30.0", "Time from freezetime end to enable afk_midgame_multi");
-	g_cvMidgameMult = CreateConVar("afk_midgame_multi", "1.0", "0.5: Midgame let you be afk for double amount of time.");
+	g_cvDropBomb = AutoExecConfig_CreateConVar("afk_drop_bomb", "1", "AFK state from where to drop bomb (0: Disabled; 1 to 4)");
+    g_cvDropBomb.AddChangeHook(OnConVarChanged);
 
-	g_cvKick = CreateConVar("afk_kick", "4", "AFK state from where to kick the player (0: Disabled; 1 to 4)");
+	g_cvMidgame = AutoExecConfig_CreateConVar("afk_midgame", "30.0", "Time from freezetime end to enable afk_midgame_multi");
+    g_cvMidgame.AddChangeHook(OnConVarChanged);
+	g_cvMidgameMult = AutoExecConfig_CreateConVar("afk_midgame_multi", "1.0", "0.5: Midgame let you be afk for double amount of time");
+    g_cvMidgameMult.AddChangeHook(OnConVarChanged);
 
-	g_cvSpec = CreateConVar("afk_spec", "0", "AFK state from where to move the player to spectators (0: Disabled; 1 to 4)");
+	g_cvKick = AutoExecConfig_CreateConVar("afk_kick", "4", "AFK state from where to kick the player (0: Disabled; 1 to 4)");
+    g_cvKick.AddChangeHook(OnConVarChanged);
 
-	g_cvTeam = CreateConVar("afk_team", "0", "2: Check only Ts, 3: Check only CTs");
+	g_cvSpec = AutoExecConfig_CreateConVar("afk_spec", "0", "AFK state from where to move the player to spectators (0: Disabled; 1 to 4)");
+    g_cvSpec.AddChangeHook(OnConVarChanged);
 
-	g_cvDebug = CreateConVar("afk_debug", "0", "1: Enabled 0: Disabled");
+	g_cvTeam = AutoExecConfig_CreateConVar("afk_team", "0", "2: Check only Ts, 3: Check only CTs");
+    g_cvTeam.AddChangeHook(OnConVarChanged);
 
-	AutoExecConfig(true, "antiafk_retakes");
+	g_cvDebug = AutoExecConfig_CreateConVar("afk_debug", "0", "1: Enabled 0: Disabled");
+    g_cvDebug.AddChangeHook(OnConVarChanged);
+
+	AutoExecConfig_ExecuteFile();
+    AutoExecConfig_CleanFile();
 
 	HookEvent("player_spawn", Event_Spawn);
 	HookEvent("round_start", Event_RoundStart);
