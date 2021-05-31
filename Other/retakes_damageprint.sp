@@ -1,6 +1,5 @@
 #include <cstrike>
 #include <sourcemod>
-#include <retakesandexecutes>
 #include <retakes>
 
 #pragma semicolon 1
