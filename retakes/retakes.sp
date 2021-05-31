@@ -7,6 +7,7 @@
 #include "include/priorityqueue.inc"
 #include "include/queue.inc"
 #include "include/restorecvars.inc"
+#include "include/retakesandexecutes.inc"
 #include "include/retakes.inc"
 
 #undef REQUIRE_PLUGIN
