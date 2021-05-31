@@ -6,6 +6,7 @@ ConVar g_cvMidgameMult = null;
 ConVar g_cvKick = null;
 ConVar g_cvSpec = null;
 ConVar g_cvTeam = null;
+ConVar g_cvDebug = null;
 
 float g_fLastAngle[MAXPLAYERS + 1][3];
 float g_fLastTime[MAXPLAYERS + 1];

@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.7"
+#define VERSION "1.0.8"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK-Retakes/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -33,10 +33,10 @@ public void OnPluginStart()
 {
 	g_cvCheckInterval = CreateConVar("afk_check_interval", "1.0", "Check interval");
 
-	g_cvAfkState[0] = CreateConVar("afk_state_1", "8.0", "Amount of time the player was not moving to enable AFK state 1");
-	g_cvAfkState[1] = CreateConVar("afk_state_2", "14.0", "Amount of time the player was not moving to enable AFK state 2");
-	g_cvAfkState[2] = CreateConVar("afk_state_3", "16.0", "Amount of time the player was not moving to enable AFK state 3");
-	g_cvAfkState[3] = CreateConVar("afk_state_4", "20.0", "Amount of time the player was not moving to enable AFK state 4");
+	g_cvAfkState[0] = CreateConVar("afk_state_1", "4.0", "Amount of time the player was not moving to enable AFK state 1");
+	g_cvAfkState[1] = CreateConVar("afk_state_2", "8.0", "Amount of time the player was not moving to enable AFK state 2");
+	g_cvAfkState[2] = CreateConVar("afk_state_3", "14.0", "Amount of time the player was not moving to enable AFK state 3");
+	g_cvAfkState[3] = CreateConVar("afk_state_4", "16.0", "Amount of time the player was not moving to enable AFK state 4");
 
 	g_cvDropBomb = CreateConVar("afk_drop_bomb", "1", "AFK state from where to drop bomb (0: Disabled; 1 to 4)");
 
@@ -49,7 +49,9 @@ public void OnPluginStart()
 
 	g_cvTeam = CreateConVar("afk_team", "0", "2: Check only Ts, 3: Check only CTs");
 
-	AutoExecConfig(true, "antiafk");
+	g_cvDebug = CreateConVar("afk_debug", "0", "1: Enabled 0: Disabled");
+
+	AutoExecConfig(true, "antiafk_retakes");
 
 	HookEvent("player_spawn", Event_Spawn);
 	HookEvent("round_start", Event_RoundStart);
@@ -57,7 +59,7 @@ public void OnPluginStart()
 	HookEvent("round_end", Event_RoundEnd);
 	HookEventEx("cs_win_panel_match", cs_win_panel_match);
 
-	CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
+	CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_REPEAT);
 
 	reloadPlugins();
 
@@ -186,6 +188,12 @@ public Action Timer_Check(Handle timer, any data)
 
 	for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
 		if (IsClientInGame(iClient) && IsPlayerAlive(iClient)) {
+			if (g_cvDebug.IntValue == 1) {
+				if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
+					PrintToConsole(iClient, "[Anti-AFK] Timer_Check");
+				}
+			}
+
 			if (g_cvTeam.IntValue > 1 && GetClientTeam(iClient) != g_cvTeam.IntValue) {
 				continue;
 			}
@@ -217,7 +225,7 @@ public Action Timer_Check(Handle timer, any data)
 	}
 
 	if (g_cvCheckInterval.FloatValue != data) {
-		CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
+		CreateTimer(g_cvCheckInterval.FloatValue, Timer_Check, g_cvCheckInterval.FloatValue, TIMER_REPEAT);
 		return Plugin_Stop;
 	}
 
@@ -243,7 +251,11 @@ int GetAfkState(int iClient)
 			iAfkState = i;
 	}
 
-	// PrintToConsoleAll("[Anti-AFK] AFK-State : %i | AFK-Time : %f", iAfkState, fAfkTime);
+	if (g_cvDebug.IntValue == 1) {
+		if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
+			PrintToConsole(iClient, "[Anti-AFK] AFK-State : %i | AFK-Time : %f", iAfkState, fAfkTime);
+		}
+	}
 
 	return iAfkState;
 }
