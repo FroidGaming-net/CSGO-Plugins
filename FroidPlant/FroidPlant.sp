@@ -1,5 +1,6 @@
 /* SM Includes */
 #include <sourcemod>
+#include <retakesandexecutes>
 #include <retakes>
 #include <sdktools>
 #include <geoip>
