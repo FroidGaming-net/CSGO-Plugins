@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.6"
+#define VERSION "1.1.7"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -100,7 +100,7 @@ public Action Timer_Setting(Handle hTimer)
         SetConVarFloat(g_Cvar_Damage3, 0.85, true);
         SetConVarInt(g_Cvar_Damage4, 1, true);
         SetConVarFloat(g_Cvar_Damage5, 0.4, true);
-        SetConVarInt(g_Cvar_DamageInfo, 0, true);
+        SetConVarInt(g_Cvar_DamageInfo, 2, true);
     }
 
     // Practice
