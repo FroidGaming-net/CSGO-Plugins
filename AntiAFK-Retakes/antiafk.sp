@@ -14,7 +14,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.0"
+#define VERSION "1.1.1"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK-Retakes/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -149,6 +149,29 @@ public Action Event_RoundFreezeEnd(Handle event, const char[] name, bool dontBro
 
 	bEnable = true;
 	return Plugin_Continue;
+}
+
+public void FroidPlant_OnForceEndFreezeTime()
+{
+	for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
+		if (IsClientInGame(iClient)) {
+			if (g_cvDebug.IntValue == 1) {
+				if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
+					PrintToConsole(iClient, "[Anti-AFK] Triggered FroidPlant_OnForceEndFreezeTime");
+				}
+			}
+		}
+	}
+
+	for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
+		if (IsClientInGame(iClient)) {
+			g_fLastTime[iClient] = GetGameTime();
+		}
+	}
+
+	g_fRoundStart = GetGameTime();
+
+	bEnable = true;
 }
 
 public Action OnWeaponCanUse(int iClient, int iWeapon)
