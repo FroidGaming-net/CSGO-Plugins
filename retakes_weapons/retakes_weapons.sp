@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2.0"
+#define VERSION "1.2.1"
 #define UPDATE_URL "https://sys.froidgaming.net/retakes_weapons/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -39,9 +39,8 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_sniper", Call_MenuWeapon);
 	RegConsoleCmd("sm_snipers", Call_MenuWeapon);
 
-
     HookEvent("round_start", Event_RoundStart, EventHookMode_Pre);
-	HookEvent("bomb_planted", Event_BombPlanted, EventHookMode_Post);
+	// HookEvent("bomb_planted", Event_BombPlanted, EventHookMode_Post);
 
     httpClient = new HTTPClient("https://froidgaming.net");
 
@@ -187,7 +186,7 @@ public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
     }
 }
 
-public void Event_BombPlanted(Event event, const char[] name, bool dontBroadcast)
-{
-	PrintCenterTextAll("<font face='Arial' size='20'>Bomb planted on Bombsite: </font>\n\t<font face='Arial' color='#00FF00' size='30'><b>%s</b></font></font>", g_sBombSite);
-}
+// public void Event_BombPlanted(Event event, const char[] name, bool dontBroadcast)
+// {
+// 	PrintCenterTextAll("<font face='Arial' size='20'>Bomb planted on Bombsite: </font>\n\t<font face='Arial' color='#00FF00' size='30'><b>%s</b></font></font>", g_sBombSite);
+// }
