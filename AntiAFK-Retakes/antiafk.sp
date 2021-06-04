@@ -3,7 +3,7 @@
 #include <sdkhooks>
 #include <sdktools>
 #include <cstrike>
-#include <csgocolors>
+#include <multicolors>
 #include <autoexecconfig>
 #undef REQUIRE_PLUGIN
 #include <retakes>
@@ -14,7 +14,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.9"
+#define VERSION "1.1.0"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK-Retakes/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
