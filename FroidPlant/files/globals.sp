@@ -12,6 +12,7 @@ enum struct PlayerData
 	}
 }
 
+Handle g_hForward_OnForceEndFreezeTime;
 PlayerData g_PlayerData[MAXPLAYERS + 1];
 
 enum
@@ -20,5 +21,3 @@ enum
     BOMBSITE_A = 0,
     BOMBSITE_B = 1
 }
-
-bool g_bEnable = false;

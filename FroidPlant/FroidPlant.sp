@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.7.5"
+#define VERSION "1.7.6"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidPlant/updatefile.txt"
 
 #include "files/globals.sp"
@@ -32,10 +32,10 @@ public void OnPluginStart()
 {
     PlayerConnect = new StringMap();
 
-	HookEvent("round_start", Event_RoundStart);
-    HookEvent("round_freeze_end", Event_RoundFreezeEnd);
     HookEvent("bomb_beginplant", Event_BombBeginPlant);
     HookEvent("bomb_planted", Event_BombPlanted, EventHookMode_Pre);
+
+	g_hForward_OnForceEndFreezeTime = CreateGlobalForward("FroidPlant_OnForceEndFreezeTime", ET_Event, Param_Cell);
 
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
@@ -66,23 +66,11 @@ public void reloadPlugins() {
 public void OnMapStart()
 {
     PlayerConnect.Clear();
-    g_bEnable = false;
 }
 
 public void OnMapEnd()
 {
     PlayerConnect.Clear();
-    g_bEnable = false;
-}
-
-public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadcast)
-{
-    g_bEnable = false;
-}
-
-public Action Event_RoundFreezeEnd(Handle event, const char[] name, bool dontBroadcast)
-{
-    g_bEnable = true;
 }
 
 public void OnClientPostAdminCheck(int iClient)
@@ -126,10 +114,6 @@ public void Event_BombBeginPlant(Event event, const char[] name, bool dontBroadc
     int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
 
     if (!IsValidClient(iClient)) {
-        return;
-    }
-
-    if (g_bEnable == false) {
         return;
     }
 
@@ -178,7 +162,11 @@ public void Event_BombPlanted(Event event, const char[] name, bool dontBroadcast
             Retakes_SetRoundPoints(i, 0);
         }
     }
-    // GameRules_SetProp("m_bFreezePeriod", false);
+    GameRules_SetProp("m_bFreezePeriod", false);
+
+    // Global Forward
+    Call_StartForward(g_hForward_OnForceEndFreezeTime);
+    Call_Finish();
 }
 
 public void Retakes_OnFailToPlant(int iClient)
