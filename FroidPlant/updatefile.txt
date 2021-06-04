@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.7.4"
+		"Latest"	"1.7.5"
 	}
 
-	"Notes"	"Update Compatibility."
+	"Notes"	"Update."
 }
 
 "Files"

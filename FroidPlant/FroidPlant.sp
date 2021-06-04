@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.7.4"
+#define VERSION "1.7.5"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidPlant/updatefile.txt"
 
 #include "files/globals.sp"
@@ -178,7 +178,7 @@ public void Event_BombPlanted(Event event, const char[] name, bool dontBroadcast
             Retakes_SetRoundPoints(i, 0);
         }
     }
-    GameRules_SetProp("m_bFreezePeriod", false);
+    // GameRules_SetProp("m_bFreezePeriod", false);
 }
 
 public void Retakes_OnFailToPlant(int iClient)
