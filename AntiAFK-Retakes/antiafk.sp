@@ -14,7 +14,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK-Retakes/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -210,7 +210,7 @@ public Action OnPlayerRunCmd(int iClient, int &iButtons, int &impulse, float vel
 		return Plugin_Continue;
 	}
 
-	if (!IsPlayerAlive(iClient) && !IsFakeClient(iClient)) {
+	if (!IsPlayerAlive(iClient) && IsFakeClient(iClient)) {
 		return Plugin_Continue;
 	}
 
@@ -231,7 +231,7 @@ public Action Event_Spawn(Handle event, const char[] name, bool dontBroadcast)
 
 	int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
 
-	if (!IsFakeClient(iClient)) {
+	if (IsFakeClient(iClient)) {
 		return Plugin_Continue;
 	}
 
