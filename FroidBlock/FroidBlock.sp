@@ -1,7 +1,6 @@
 /* SM Includes */
 #include <sourcemod>
 #include <PTaH>
-#include <sdktools>
 #undef REQUIRE_PLUGIN
 #include <updater>
 
@@ -62,12 +61,6 @@ public void OnLibraryAdded(const char[] name)
     if (StrEqual(name, "updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
-}
-
-public Action OnPlayerRunCmd(int iClient, int &iButtons, int &impulse, float vel[3], float angles[3])
-{
-	impulse = 0;
-    return Plugin_Continue;
 }
 
 public Action Command_Block(int iClient, const char[] sCommand, int iArgc)
