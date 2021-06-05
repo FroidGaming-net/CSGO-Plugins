@@ -14,7 +14,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.0"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiAFK-Executes/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -113,9 +113,23 @@ public void OnMapEnd()
 	g_bWinPanel = false;
 }
 
-public void OnClientPutInServer(int client)
+public void OnClientPutInServer(int iClient)
 {
-	SDKHook(client, SDKHook_WeaponCanUse, OnWeaponCanUse);
+	if (IsFakeClient(iClient)) {
+		return;
+	}
+
+	SDKHook(iClient, SDKHook_WeaponCanUse, OnWeaponCanUse);
+}
+
+public void OnClientPostAdminCheck(int iClient)
+{
+	g_PlayerData[iClient].Reset();
+}
+
+public void OnClientDisconnect(int iClient)
+{
+	g_PlayerData[iClient].Reset();
 }
 
 public void cs_win_panel_match(Handle event, const char[] eventname, bool dontBroadcast)
@@ -141,7 +155,7 @@ public Action Event_RoundFreezeEnd(Handle event, const char[] name, bool dontBro
 {
 	for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
 		if (IsClientInGame(iClient)) {
-			g_fLastTime[iClient] = GetGameTime();
+			g_PlayerData[iClient].fLastTime = GetGameTime();
 		}
 	}
 
@@ -160,7 +174,7 @@ public Action OnWeaponCanUse(int iClient, int iWeapon)
 	char sWeapon[32];
 	GetEntityClassname(iWeapon, sWeapon, sizeof(sWeapon));
 
-	if(g_iAfkstate[iClient] != -1 && StrEqual(sWeapon, "weapon_c4")) {
+	if(g_PlayerData[iClient].iAfkstate != -1 && StrEqual(sWeapon, "weapon_c4")) {
 		return Plugin_Handled;
 	}
 
@@ -177,11 +191,11 @@ public Action OnPlayerRunCmd(int iClient, int &iButtons, int &impulse, float vel
 		return Plugin_Continue;
 	}
 
-	if (!bEnable || iButtons > 0 || vel[0] != 0 || vel[1] != 0 || GetVectorDistance(angles, g_fLastAngle[iClient]) > 0.1) {
-		g_fLastTime[iClient] = GetGameTime();
+	if (!bEnable || iButtons > 0 || vel[0] != 0 || vel[1] != 0 || GetVectorDistance(angles, g_PlayerData[iClient].fLastAngle) > 0.1) {
+		g_PlayerData[iClient].fLastTime = GetGameTime();
 	}
 
-	g_fLastAngle[iClient] = angles;
+	g_PlayerData[iClient].fLastAngle = angles;
 
 	return Plugin_Continue;
 }
@@ -192,7 +206,13 @@ public Action Event_Spawn(Handle event, const char[] name, bool dontBroadcast)
 		return Plugin_Continue;
 	}
 
-	g_fLastTime[GetClientOfUserId(GetEventInt(event, "userid"))] = GetGameTime();
+	int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
+
+	if (!IsFakeClient(iClient)) {
+		return Plugin_Continue;
+	}
+
+	g_PlayerData[iClient].fLastTime = GetGameTime();
 
 	return Plugin_Continue;
 }
@@ -204,7 +224,7 @@ public Action Timer_Check(Handle timer, any data)
 	}
 
 	for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
-		if (IsClientInGame(iClient) && IsPlayerAlive(iClient)) {
+		if (IsClientInGame(iClient) && IsPlayerAlive(iClient) && !IsFakeClient(iClient)) {
 			if (g_cvDebug.IntValue == 1) {
 				if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
 					PrintToConsole(iClient, "[Anti-AFK] Timer_Check");
@@ -215,24 +235,32 @@ public Action Timer_Check(Handle timer, any data)
 				continue;
 			}
 
-			g_iAfkstate[iClient] = GetAfkState(iClient);
+			g_PlayerData[iClient].iAfkstate = GetAfkState(iClient);
 
-			if (g_iAfkstate[iClient] == -1) {
+			if (g_PlayerData[iClient].iAfkstate == -1) {
 				continue;
 			}
 
-			if (g_cvDropBomb.IntValue > 0 && g_cvDropBomb.IntValue <= g_iAfkstate[iClient]+1) {
+			if (g_cvKick.IntValue > 0 && g_cvKick.IntValue > g_PlayerData[iClient].iAfkstate+1 && g_PlayerData[iClient].iAfkstate+1)
+			{
+				if (g_PlayerData[iClient].iLastAfkstate != g_PlayerData[iClient].iAfkstate+1) {
+					g_PlayerData[iClient].iLastAfkstate = g_PlayerData[iClient].iAfkstate+1;
+					CPrintToChat(iClient, "%s {default}Warning: If you do not move, you will be kicked. [%i/%i]", PREFIX, g_PlayerData[iClient].iAfkstate+1, g_cvKick.IntValue-1);
+				}
+			}
+
+			if (g_cvDropBomb.IntValue > 0 && g_cvDropBomb.IntValue <= g_PlayerData[iClient].iAfkstate+1) {
 				Dropbomb(iClient);
 			}
 
-			if (g_cvKick.IntValue > 0 && g_cvKick.IntValue <= g_iAfkstate[iClient]+1)
+			if (g_cvKick.IntValue > 0 && g_cvKick.IntValue <= g_PlayerData[iClient].iAfkstate+1)
 			{
 				CPrintToChatAll("%s {lightred}%N{default} got kicked for being AFK too long.", PREFIX, iClient);
 				KickClient(iClient, "AFK too long");
 				continue;
 			}
 
-			if (g_cvSpec.IntValue > 0 && g_cvSpec.IntValue <= g_iAfkstate[iClient]+1)
+			if (g_cvSpec.IntValue > 0 && g_cvSpec.IntValue <= g_PlayerData[iClient].iAfkstate+1)
 			{
 				CPrintToChatAll("%s {lightred}%N{default} got moved to spectators for being AFK too long.", PREFIX, iClient);
 				ChangeClientTeam(iClient, 1);
@@ -254,7 +282,7 @@ int GetAfkState(int iClient)
 	float fTime = GetGameTime();
 
 	bool bMidgame = fTime - g_fRoundStart > g_cvMidgame.FloatValue;
-	float fAfkTime = fTime - g_fLastTime[iClient];
+	float fAfkTime = fTime - g_PlayerData[iClient].fLastTime;
 
 	if (bMidgame) {
 		fAfkTime *= g_cvMidgameMult.FloatValue;
@@ -294,7 +322,7 @@ void Dropbomb(int iClient)
 			}
 
 			if (iClient == i) {
-				CPrintToChat(i, "%s {default} You dropped the bomb.", PREFIX);
+				CPrintToChat(i, "%s {default}You dropped the bomb.", PREFIX);
 			} else {
 				CPrintToChat(i, "%s {lightred}%N{default} has dropped the bomb.", PREFIX, iClient);
 			}
