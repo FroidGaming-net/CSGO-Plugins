@@ -15,7 +15,8 @@ ConVar 	g_Cvar_AllowVotes,
         g_Cvar_Radar,
         g_Cvar_DamageInfo,
         g_Cvar_WeaponsMap,
-        g_Cvar_EquipmentReset;
+        g_Cvar_EquipmentReset,
+        g_Cvar_UserRandomSeed;
 
 // All FFA Deathmatch
 ConVar 	g_Cvar_IgnoreWin,

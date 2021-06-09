@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.7"
+#define VERSION "1.1.8"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -51,6 +51,7 @@ public void OnPluginStart()
     g_Cvar_DamageInfo = FindConVar("sv_damage_print_enable");
     g_Cvar_WeaponsMap = FindConVar("mp_weapons_allow_map_placed");
     g_Cvar_EquipmentReset = FindConVar("mp_equipment_reset_rounds");
+    g_Cvar_UserRandomSeed = FindConVar("sv_usercmd_custom_random_seed");
 
     CreateTimer(60.0, Timer_Repeat, _, TIMER_REPEAT);
 
@@ -87,6 +88,7 @@ public Action Timer_Setting(Handle hTimer)
     SetConVarInt(g_Cvar_AllowVotes, 0, true);
     SetConVarInt(g_Cvar_Occlude, 1, true);
     SetConVarInt(g_Cvar_LoserBonus, 0, true);
+    SetConVarInt(g_Cvar_UserRandomSeed, 0, true);
 
     // PUG / 5v5 / Retakes / Executes
     if(StrContains(g_sServerName, "PUG") > -1 || StrContains(g_sServerName, "Retakes") > -1 || StrContains(g_sServerName, "5v5") > -1 || StrContains(g_sServerName, "Executes") > -1){
