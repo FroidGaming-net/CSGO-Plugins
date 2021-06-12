@@ -170,6 +170,7 @@ public Action Command_WsAll(int client, int args)
         CPrintToChat(client, "%s Usage: sm_wsa <skin name>", PREFIX);
         return Plugin_Handled;
     }
+
     char szSkinName[48];
     GetCmdArgString(szSkinName, sizeof(szSkinName));
 

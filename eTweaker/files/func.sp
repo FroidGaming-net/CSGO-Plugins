@@ -17,6 +17,11 @@ public void eTweaker_UpdateClientWeapon(int client, int iWeapon)
 
     int iWeaponDefIndex = eItems_GetWeaponDefIndexByWeapon(iWeapon);
 
+    if(!eItems_IsSkinnableDefIndex(iWeaponDefIndex))
+    {
+        return;
+    }
+
     char szWeaponDefIndex[12];
     IntToString(iWeaponDefIndex, szWeaponDefIndex, sizeof(szWeaponDefIndex));
 

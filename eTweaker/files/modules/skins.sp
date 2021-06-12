@@ -661,22 +661,28 @@ stock void Skins_BuildSkinsMenuBySkinName(int client, char[] szSkinName, int iPo
 
     menu.SetTitle("★ Skins Menu - %s skins ★ \n ", szSkinName);
 
-    for(int iSkinNum = 0; iSkinNum < eTweaker_GetSkinsCount(); iSkinNum++)
+    if(!eItems_IsSkinnableDefIndex(iWeaponDefIndex))
     {
-
-        eItems_GetSkinDisplayNameBySkinNum(iSkinNum, szFoundSkinName, sizeof(szFoundSkinName));
-
-        if(StrContains(szFoundSkinName, szSkinName, false) == -1)
+        Format(szFoundSkinName, sizeof(szFoundSkinName), "» This weapon is not skinnable!");
+        menu.AddItem("#0", szFoundSkinName, ITEMDRAW_DISABLED);
+    } else {
+        for(int iSkinNum = 0; iSkinNum < eTweaker_GetSkinsCount(); iSkinNum++)
         {
-            continue;
+
+            eItems_GetSkinDisplayNameBySkinNum(iSkinNum, szFoundSkinName, sizeof(szFoundSkinName));
+
+            if(StrContains(szFoundSkinName, szSkinName, false) == -1)
+            {
+                continue;
+            }
+
+            int iSkinDefIndex = eItems_GetSkinDefIndexBySkinNum(iSkinNum);
+            IntToString(iSkinDefIndex, szSkinDefIndex, sizeof(szSkinDefIndex));
+
+            eWeaponSettings WeaponSettings;
+            g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
+            menu.AddItem(szSkinDefIndex, szFoundSkinName, WeaponSettings.PaintKit == iSkinDefIndex ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT);
         }
-
-        int iSkinDefIndex = eItems_GetSkinDefIndexBySkinNum(iSkinNum);
-        IntToString(iSkinDefIndex, szSkinDefIndex, sizeof(szSkinDefIndex));
-
-        eWeaponSettings WeaponSettings;
-        g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
-        menu.AddItem(szSkinDefIndex, szFoundSkinName, WeaponSettings.PaintKit == iSkinDefIndex ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT);
     }
 
     menu.ExitButton = true;
