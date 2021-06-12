@@ -10,11 +10,12 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidPractice/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
 #include "files/client.sp"
+#include "files/globals.sp"
 
 public Plugin myinfo =
 {
@@ -41,6 +42,24 @@ public void OnLibraryAdded(const char[] name)
     }
 }
 
+public void OnClientPostAdminCheck(int iClient)
+{
+    if (!IsValidClient(iClient)) {
+        return;
+    }
+
+    g_PlayerData[iClient].Reset();
+}
+
+public void OnClientDisconnect(int iClient)
+{
+    if (!IsValidClient(iClient)) {
+        return;
+    }
+
+    g_PlayerData[iClient].Reset();
+}
+
 public Action Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
 {
     int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
@@ -50,7 +69,11 @@ public Action Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadc
 	}
 
     FakeClientCommand(iClient, "say .god");
-    FakeClientCommand(iClient, "say .noflash");
+
+	if (g_PlayerData[iClient].bNoFlash == false) {
+		FakeClientCommand(iClient, "say .noflash");
+		g_PlayerData[iClient].bNoFlash = true;
+	}
 	CPrintToChat(iClient, "%s {lightred}God Mode {default}and {lightred}No Flash Mode {default}Enabled Automatically.", PREFIX);
     return Plugin_Continue;
 }
