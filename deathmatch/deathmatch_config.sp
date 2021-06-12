@@ -142,7 +142,7 @@ public Action Timer_Repeat2(Handle hTimer)
 
 public Action Timer_ClosePanel(Handle timer)
 {
-    ShowPanel();
+    ShowPanel(" ");
 }
 
 stock int GetTotalRoundTime()
