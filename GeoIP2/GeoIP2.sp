@@ -8,17 +8,17 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.7"
+#define VERSION "1.0.8"
 #define UPDATE_URL "https://sys.froidgaming.net/GeoIP2/updatefile.txt"
 
 
 public Plugin myinfo =
 {
-  name = "[API] GeoIP2 Updater",
-  author = "FroidGaming.net",
-  description = "GeoIP2 Updater.",
-  version = VERSION,
-  url = "https://froidgaming.net"
+    name = "[API] GeoIP2 Updater",
+    author = "FroidGaming.net",
+    description = "GeoIP2 Updater.",
+    version = VERSION,
+    url = "https://froidgaming.net"
 };
 
 public void OnPluginStart()

@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.0.7"
+		"Latest"	"1.0.8"
 	}
 
-	"Notes"	"Databases Update 2021-05-18."
+	"Notes"	"Databases Update 2021-06-08."
 }
 
 "Files"
