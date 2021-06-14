@@ -31,7 +31,7 @@ char g_cIPs[8][50];
 char g_cServerPort[2][100];
 char g_cPort[16];
 
-#define URL_DOWNLOAD "https://cdn.froidgaming.xyz/demo"
+#define URL_DOWNLOAD "http://s3.froidgaming.net/demo"
 char demoname[512] = "No Demo";
 char demoname_upload[512] = "No Demo";
 char demoname_download[512] = "No Demo";
