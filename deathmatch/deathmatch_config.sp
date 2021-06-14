@@ -142,7 +142,7 @@ public Action Timer_Repeat2(Handle hTimer)
 
 public Action Timer_ClosePanel(Handle timer)
 {
-    ShowPanel(" ");
+    ShowPanel("");
 }
 
 stock int GetTotalRoundTime()
@@ -177,14 +177,14 @@ stock bool IsWarmup()
 
 stock void ShowPanel(const char[] sMessage = "")
 {
-    Event newevent = CreateEvent("cs_win_panel_round");
-    newevent.SetString("funfact_token", sMessage);
     for (int i = 1; i < MAXPLAYERS; i++) {
 		if (IsValidClient(i)) {
+            Event newevent = CreateEvent("cs_win_panel_round");
+            newevent.SetString("funfact_token", sMessage);
             newevent.FireToClient(i);
+            newevent.Cancel();
         }
     }
-    // newevent.Cancel();
 }
 
 stock bool IsValidClient(int client, bool alive = false)
