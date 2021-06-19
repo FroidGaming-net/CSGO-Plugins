@@ -1,14 +1,15 @@
-void RandomizeName(int client)
+void RandomizeName(int iClient)
 {
-	char name[MAX_NAME_LENGTH];
-	GetClientName(client, name, sizeof(name));
+	char sName[MAX_NAME_LENGTH];
+	GetClientName(iClient, sName, sizeof(sName));
 
-	int len = strlen(name);
-	g_NewName[client][0] = '\0';
+	int iLength = strlen(sName);
+	g_PlayerData[iClient].sNewName[0] = '\0';
 
-	for (int i = 0; i < len; i++)
+	for (int i = 0; i < iLength; i++)
 	{
-		g_NewName[client][i] = name[GetRandomInt(0, len - 1)];
+		g_PlayerData[iClient].sNewName[i] = sName[GetRandomInt(0, iLength - 1)];
 	}
-	g_NewName[client][len] = '\0';
+
+	g_PlayerData[iClient].sNewName[iLength] = '\0';
 }

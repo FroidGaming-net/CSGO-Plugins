@@ -22,7 +22,7 @@ void OnCheckName(HTTPResponse response, DataPack pack)
     bool bStatus = jsondata.GetBool("status");
     if (bStatus == true) {
         RandomizeName(iClient);
-        SetClientName(iClient, g_NewName[iClient]);
+        SetClientName(iClient, g_PlayerData[iClient].sNewName);
         if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
             CPrintToChat(iClient, "%s Kamu tidak dapat menggunakan nickname itu! Mohon ganti nickname kamu...", PREFIX);
         } else {
