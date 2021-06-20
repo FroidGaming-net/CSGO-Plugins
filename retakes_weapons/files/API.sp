@@ -6,8 +6,6 @@ void OnGetWeapon(HTTPResponse response, any value)
         return;
     }
 
-    LogError("[OnGetWeapon] %i", response.Status);
-
     if (response.Status != HTTPStatus_OK) {
         g_PlayerData[iClient].iWeaponsLoaded = -1;
         LogError("[OnGetWeapon] HTTPStatus_OK failed");
