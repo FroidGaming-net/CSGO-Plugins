@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2.1"
+#define VERSION "1.2.2"
 #define UPDATE_URL "https://sys.froidgaming.net/executes_weapons/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -39,10 +39,7 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_sniper", Call_MenuWeapon);
 	RegConsoleCmd("sm_snipers", Call_MenuWeapon);
 
-
     HookEvent("round_start", Event_RoundStart, EventHookMode_Pre);
-
-    httpClient = new HTTPClient("https://froidgaming.net");
 
     reloadPlugins();
     CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
@@ -124,10 +121,11 @@ public void OnClientPostAdminCheck(int iClient)
     g_PlayerData[iClient].Reset();
 
     // API
-	char sAuthID[64], sUrl[128];
+	char sAuthID[64], sUrl[256];
 	GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-	Format(sUrl, sizeof(sUrl), "api/retakes/%s", sAuthID);
-	httpClient.Get(sUrl, OnGetWeapon, GetClientUserId(iClient));
+    Format(sUrl, sizeof(sUrl), "%s/api/retakes/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+	request.Get(OnGetWeapon, GetClientUserId(iClient));
 }
 
 public void OnClientDisconnect(int iClient)
@@ -139,9 +137,10 @@ public void OnClientDisconnect(int iClient)
     // Update Guns
 	if(g_PlayerData[iClient].iWeaponsLoaded == 1)
 	{
-        char sAuthID[64], sUrl[128];
+        char sAuthID[64], sUrl[256];
 		GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-		Format(sUrl, sizeof(sUrl), "api/retakes/%s", sAuthID);
+        Format(sUrl, sizeof(sUrl), "%s/api/retakes/%s", BASE_URL, sAuthID);
+        HTTPRequest request = new HTTPRequest(sUrl);
 
         JSONObject jsondata = new JSONObject();
         jsondata.SetString("pistolround_ct", g_PlayerData[iClient].sPistolRound_CT);
@@ -158,7 +157,7 @@ public void OnClientDisconnect(int iClient)
         jsondata.SetInt("awp_t", view_as<int>(g_PlayerData[iClient].bAWP_T));
         jsondata.SetInt("scout_t", view_as<int>(g_PlayerData[iClient].bScout_T));
 
-        httpClient.Put(sUrl, jsondata, OnUpdateWeapon);
+        request.Put(jsondata, OnUpdateWeapon);
 
 		delete jsondata;
     }
