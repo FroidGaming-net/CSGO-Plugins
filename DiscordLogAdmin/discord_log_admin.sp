@@ -5,6 +5,9 @@
 
 #pragma semicolon 1
 #pragma newdecls required
+#pragma tabsize 4
+
+#define BASE_URL "http://api.steampowered.com"
 
 public Plugin myinfo =
 {
@@ -15,7 +18,6 @@ public Plugin myinfo =
     url = "http://www.lordfear.ru/"
 };
 
-HTTPClient httpClient;
 char    g_sHostName[256];
 char    g_szApiKey[54];
 char    g_bIgnoreFlag[54];
@@ -25,7 +27,6 @@ bool    g_bTimeCorrect;
 
 public void OnPluginStart()
 {
-    httpClient = new HTTPClient("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002");
     CreateConVar("sm_dal_apikey", "88E56F32817CD873DBADC36F9BD413ED", "Api key https://steamcommunity.com/dev/apikey");
     CreateConVar("sm_dal_ignore", "0", "Игнорировать админов по флагу\n1 - включено");
     CreateConVar("sm_dal_ignore_flag", "z", "Флаг для игнора");
@@ -62,14 +63,15 @@ public Action OnLogAction(Handle source, Identity ident, int iClient, int iTarge
         if(!g_szNotes[iClient][0])
         {
             char cPlayerID[64];
-            char szURL[128];
+            char szURL[512];
             GetClientAuthId(iClient, AuthId_SteamID64, cPlayerID, sizeof(cPlayerID));
-            FormatEx(szURL, sizeof(szURL), "?key=%s&steamids=%s", g_szApiKey, cPlayerID);
+            Format(szURL, sizeof(szURL), "%s/ISteamUser/GetPlayerSummaries/v0002?key=%s&steamids=%s", BASE_URL, g_szApiKey, cPlayerID);
+            HTTPRequest request = new HTTPRequest(szURL);
 
             DataPack hPack = new DataPack();
             hPack.WriteCell(iClient);
             hPack.WriteString(szMessage);
-            httpClient.Get(szURL, OnTodoReceived, hPack);
+            request.Get(OnTodoReceived, hPack);
         }
         else
         {
@@ -132,11 +134,11 @@ public void OnTodoReceived(HTTPResponse response, DataPack hPack)
 
 public int getColor(char[] szMessage)
 {
-    if(StrContains(szMessage, "banned", true) != -1 || StrContains(szMessage, "teleported", true) != -1 || StrContains(szMessage, "slayed", true) != -1) 
+    if(StrContains(szMessage, "banned", true) != -1 || StrContains(szMessage, "teleported", true) != -1 || StrContains(szMessage, "slayed", true) != -1)
         return 0xFF0000;
-    else if(StrContains(szMessage, "slapped", true) != -1 || StrContains(szMessage, "triggered", true) != -1 || StrContains(szMessage, "initiated", true) != -1) 
+    else if(StrContains(szMessage, "slapped", true) != -1 || StrContains(szMessage, "triggered", true) != -1 || StrContains(szMessage, "initiated", true) != -1)
         return 0x00ff00;
-    
+
     return 0xFFFFFF;
 }
 
