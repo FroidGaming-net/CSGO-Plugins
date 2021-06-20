@@ -10,7 +10,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidVeteran/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -29,8 +29,6 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    httpClient = new HTTPClient("https://froidgaming.net");
-
     CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
 
     if (LibraryExists("updater")) {
@@ -71,10 +69,11 @@ public void OnClientPostAdminCheck(int iClient)
     Format(g_PlayerData[iClient].sCountryCode, sizeof(g_PlayerData[].sCountryCode), sCountryCode);
 
     // API
-	char sAuthID[64], sUrl[128];
+	char sAuthID[64], sUrl[256];
 	GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-	Format(sUrl, sizeof(sUrl), "api/profile/%s/rank/pug", sAuthID);
-	httpClient.Get(sUrl, OnGetExp, GetClientUserId(iClient));
+    Format(sUrl, sizeof(sUrl), "%s/api/profile/%s/rank/pug", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+	request.Get(OnGetExp, GetClientUserId(iClient));
 }
 
 void OnCheckPlayer(int iClient)
