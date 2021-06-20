@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.5"
+#define VERSION "1.0.6"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidRedirect/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -32,8 +32,6 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    httpClient = new HTTPClient("https://froidgaming.net");
-
     RegConsoleCmd("sm_server", Call_MenuServers);
     RegConsoleCmd("sm_servers", Call_MenuServers);
 

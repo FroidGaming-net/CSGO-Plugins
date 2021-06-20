@@ -1,1 +1,1 @@
-HTTPClient httpClient;
+#define BASE_URL "https://froidgaming.net"

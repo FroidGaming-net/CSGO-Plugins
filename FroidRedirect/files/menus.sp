@@ -33,9 +33,10 @@ int MenuServersCategory_Callback(Menu hMenu, MenuAction mAction, int iClient, in
 			pack.WriteCell(GetClientUserId(iClient));
 			pack.WriteString(sInfo);
 
-			char sUrl[128];
-    		Format(sUrl, sizeof(sUrl), "api/servers/");
-			httpClient.Get(sUrl, OnGetServers, pack);
+			char sUrl[256];
+			Format(sUrl, sizeof(sUrl), "%s/api/servers/", BASE_URL);
+			HTTPRequest request = new HTTPRequest(sUrl);
+			request.Get(OnGetServers, pack);
 		}
 		case MenuAction_End:
 		{
