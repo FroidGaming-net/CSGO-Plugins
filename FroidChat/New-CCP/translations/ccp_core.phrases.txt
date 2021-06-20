@@ -36,17 +36,17 @@
     // Status: Alive
     "DEF_STATUS_A"
     {
-        "ru"                ""
-        "en"                ""
-        "pl"                ""
+        "ru"                "•"
+        "en"                "•"
+        "pl"                "•"
     }
 
     // Status: Died
     "DEF_STATUS_D"
     {
-        "ru"                "DEAD"
-        "en"                "DEAD"
-        "pl"                "DEAD"
+        "ru"                "•"
+        "en"                "•"
+        "pl"                "•"
     }
 
     // Status: Server
