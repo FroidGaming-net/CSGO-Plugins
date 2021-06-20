@@ -17,7 +17,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidAgents/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -74,8 +74,6 @@ public void OnPluginStart()
 	}
 
 	hGameData.Close();
-
-	httpClient = new HTTPClient("https://froidgaming.net");
 
 	reloadPlugins();
 
@@ -140,10 +138,11 @@ public void OnClientPostAdminCheck(int iClient)
     Format(g_PlayerData[iClient].sCountryCode, sizeof(g_PlayerData[].sCountryCode), sCountryCode);
 
 	// API
-	char sAuthID[64], sUrl[128];
+	char sAuthID[64], sUrl[256];
 	GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-	Format(sUrl, sizeof(sUrl), "api/agent/%s", sAuthID);
-	httpClient.Get(sUrl, OnGetAgent, GetClientUserId(iClient));
+    Format(sUrl, sizeof(sUrl), "%s/api/agent/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+	request.Get(OnGetAgent, GetClientUserId(iClient));
 }
 
 public void OnClientDisconnect(int iClient)
@@ -154,14 +153,15 @@ public void OnClientDisconnect(int iClient)
 
 	// Update Agents
 	if (g_PlayerData[iClient].iAgentLoaded == 1) {
-		char sAuthID[64], sUrl[128];
+		char sAuthID[64], sUrl[256];
 		GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-		Format(sUrl, sizeof(sUrl), "api/agent/%s", sAuthID);
+		Format(sUrl, sizeof(sUrl), "%s/api/agent/%s", BASE_URL, sAuthID);
+		HTTPRequest request = new HTTPRequest(sUrl);
 
 		JSONObject jsondata = new JSONObject();
 		jsondata.SetInt("t_agent", g_PlayerData[iClient].iAgent[0]);
 		jsondata.SetInt("ct_agent", g_PlayerData[iClient].iAgent[1]);
-		httpClient.Put(sUrl, jsondata, OnUpdateAgent);
+		request.Put(jsondata, OnUpdateAgent);
 
 		delete jsondata;
 	}

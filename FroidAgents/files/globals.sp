@@ -1,5 +1,4 @@
-HTTPClient httpClient;
-
+#define BASE_URL "https://froidgaming.net"
 #define LOADOUT_POSITION_SPACER1 38
 
 int g_iAgentsCount = 0;
