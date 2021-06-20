@@ -51,8 +51,8 @@
 #define PLUGIN_AUTHORS "RoadSide Romeo & Wend4r"
 #define PLUGIN_URL "https://github.com/levelsranks/levels-ranks-core"
 #define UPDATE_URL "https://sys.froidgaming.net/levelsranks/updatefile.txt"
+#define BASE_URL "https://froidgaming.net"
 
-HTTPClient httpClient;
 ConVar g_cHostname = null;
 
 #include "levels_ranks/defines.sp"
@@ -138,7 +138,6 @@ public void OnPluginStart()
 	SetSettings();
 	ConnectDB();
 
-	httpClient = new HTTPClient("https://froidgaming.net");
 	if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
@@ -218,8 +217,9 @@ int ResetMenu_Callback(Menu hMenu, MenuAction mAction, int iClient, int itemNum)
 			char sAuthID[32];
 			GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
 
-			char sUrl[128];
-			Format(sUrl, sizeof(sUrl), "api/resetrank/%s", sAuthID);
+			char sUrl[256];
+			Format(sUrl, sizeof(sUrl), "%s/api/resetrank/%s", BASE_URL, sAuthID);
+			HTTPRequest request = new HTTPRequest(sUrl);
 
 			char sHostname[64];
 			g_cHostname.GetString(sHostname, sizeof(sHostname));
@@ -238,7 +238,7 @@ int ResetMenu_Callback(Menu hMenu, MenuAction mAction, int iClient, int itemNum)
 			}else if(StrContains(sHostname, "AWP") > -1){
 				payload.SetString("mode", "awp");
 			}
-			httpClient.Put(sUrl, payload, ResetClientRank, GetClientUserId(iClient));
+			request.Put(payload, ResetClientRank, GetClientUserId(iClient));
 
 			delete payload;
         } else if(StrEqual(info, "no")) {
