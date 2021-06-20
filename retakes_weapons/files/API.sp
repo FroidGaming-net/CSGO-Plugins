@@ -54,11 +54,6 @@ void OnGetWeapon(HTTPResponse response, any value)
 
 void OnUpdateWeapon(HTTPResponse response, any value)
 {
-    // char data[30];
-    // response.GetHeader("Date", data, sizeof(data));
-
-    LogError("[OnUpdateWeapon] %i", response.Status);
-
     if (response.Status != HTTPStatus_OK) {
         LogError("[OnUpdateWeapon] HTTPStatus_OK failed");
         return;
