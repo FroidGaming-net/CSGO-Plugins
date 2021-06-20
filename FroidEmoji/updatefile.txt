@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.0.0"
+		"Latest"	"1.0.1"
 	}
 
-	"Notes"	"Plugin release."
+	"Notes"	"Update."
 }
 
 "Files"

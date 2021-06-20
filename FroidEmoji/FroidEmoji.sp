@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidEmoji/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 #define MAX_ICONS 128
@@ -42,8 +42,6 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_emojis", Call_MenuEmojis);
 	RegConsoleCmd("sm_icon", Call_MenuEmojis);
 	RegConsoleCmd("sm_icons", Call_MenuEmojis);
-
-    httpClient = new HTTPClient("https://froidgaming.net");
 
     reloadPlugins();
     CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
@@ -108,10 +106,11 @@ public void FroidVIP_OnClientLoadedPost(int iClient)
     }
 
     // API
-	char sAuthID[64], sUrl[128];
+	char sAuthID[64], sUrl[256];
 	GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-	Format(sUrl, sizeof(sUrl), "api/emojis/%s", sAuthID);
-	httpClient.Get(sUrl, OnGetEmoji, GetClientUserId(iClient));
+    Format(sUrl, sizeof(sUrl), "%s/api/emojis/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+	request.Get(OnGetEmoji, GetClientUserId(iClient));
 }
 
 public void OnClientDisconnect(int iClient)
@@ -123,13 +122,14 @@ public void OnClientDisconnect(int iClient)
 	// Update Emojis
 	if(g_PlayerData[iClient].iEmojiLoaded == 1)
 	{
-		char sAuthID[64], sUrl[128];
+		char sAuthID[64], sUrl[256];
 		GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-		Format(sUrl, sizeof(sUrl), "api/emojis/%s", sAuthID);
+        Format(sUrl, sizeof(sUrl), "%s/api/emojis/%s", BASE_URL, sAuthID);
+        HTTPRequest request = new HTTPRequest(sUrl);
 
 		JSONObject jsondata = new JSONObject();
         jsondata.SetInt("emoji_id", g_PlayerData[iClient].iEmojiData);
-		httpClient.Put(sUrl, jsondata, OnUpdateEmoji);
+		request.Put(jsondata, OnUpdateEmoji);
 
 		delete jsondata;
 	}

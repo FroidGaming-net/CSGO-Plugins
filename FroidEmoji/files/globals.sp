@@ -1,3 +1,5 @@
+#define BASE_URL "https://froidgaming.net"
+
 enum struct LevelIcon
 {
     char sName[32];
@@ -5,8 +7,6 @@ enum struct LevelIcon
 }
 
 LevelIcon g_LevelIcons[MAX_ICONS];
-
-HTTPClient httpClient;
 
 int g_iLevelIcons = 0;
 int m_iOffset = -1;
