@@ -4,6 +4,7 @@
 
 #define PLUGIN_AUTHOR "RumbleFrog, SourceBans++ Dev Team"
 #define PLUGIN_VERSION "1.7.0"
+#define BASE_URL "http://ip-api.com"
 
 #include <sourcemod>
 #include <sourcebanspp>
@@ -40,8 +41,6 @@ ConVar g_cHostname = null;
 char g_sHostname[64];
 char g_sCountryCode[3], g_sIP[50];
 
-HTTPClient httpClient;
-
 public Plugin myinfo =
 {
 	name = "SourceBans++ Report Plugin",
@@ -66,8 +65,6 @@ public void OnPluginStart()
 
 	Convars[Cooldown].AddChangeHook(OnConvarChanged);
 	Convars[MinLen].AddChangeHook(OnConvarChanged);
-
-	httpClient = new HTTPClient("http://ip-api.com");
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
@@ -133,7 +130,7 @@ public int ReportMenu_Callback(Menu hMenu, MenuAction mAction, int iClient, int 
 		case MenuAction_End:
 		{
 			hMenu.Close();
-		} 
+		}
 	}
 }
 
@@ -145,7 +142,7 @@ public void PlayerMenu(int iClient)
 	Menu PList = new Menu(PlayerMenu_Callback);
 
 	char sName[MAX_NAME_LENGTH], sIndex[4];
-	
+
 	PList.SetTitle("★ Choose a report reason ★");
 	for (int i = 0; i <= MaxClients; i++)
 	{
@@ -174,7 +171,7 @@ public int PlayerMenu_Callback(Menu menu, MenuAction action, int iClient, int iI
 			iTargetCache[iClient] = StringToInt(sIndex);
 
 			bInReason[iClient] = true;
-			
+
 			GetClientIP(iClient, g_sIP, sizeof(g_sIP));
 			GeoipCode2(g_sIP, g_sCountryCode);
 
@@ -218,9 +215,7 @@ public int ServerMenu_Callback(Menu hMenu, MenuAction mAction, int iClient, int 
 	{
 		case MenuAction_Select:
 		{
-			char sInfo[30],
-				 sIP[64],
-				 sUrl[64];
+			char sInfo[30], sIP[64], sUrl[256];
 
 			hMenu.GetItem(iSlot, sInfo, sizeof(sInfo));
 			GetClientIP(iClient, sIP, sizeof(sIP));
@@ -228,8 +223,9 @@ public int ServerMenu_Callback(Menu hMenu, MenuAction mAction, int iClient, int 
 			DataPack pack = new DataPack();
 			pack.WriteCell(GetClientUserId(iClient));
 			pack.WriteString(sInfo);
-			Format(sUrl, sizeof(sUrl), "json/%s", sIP);
-			httpClient.Get(sUrl, OnGetReport, pack);
+			Format(sUrl, sizeof(sUrl), "%s/json/%s", BASE_URL, sIP);
+			HTTPRequest request = new HTTPRequest(sUrl);
+			request.Get(OnGetReport, pack);
 			AddCooldown(iClient);
 			CPrintToChat(iClient, "%s%T", Chat_Prefix, "Report Sent", iClient);
 		}
@@ -243,7 +239,7 @@ public int ServerMenu_Callback(Menu hMenu, MenuAction mAction, int iClient, int 
 		case MenuAction_End:
 		{
 			hMenu.Close();
-		} 
+		}
 	}
 }
 
@@ -403,7 +399,7 @@ public Action OnClientSayCommand(int iClient, const char[] sCommand, const char[
 	Discord_StartMessage();
 	Discord_SetUsername("FroidGaming.net");
 	Discord_SetTitle(NULL_STRING, "★ Player Report ★");
-	
+
 	// All
 	char 	sMapName[64],
 			sDemoName[256] = "No Demo",
