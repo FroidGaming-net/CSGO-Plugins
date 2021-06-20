@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidSkybox/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -36,8 +36,6 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_skyboxs", Call_MenuSkybox);
 
     g_cSkyName = FindConVar("sv_skyname");
-
-    httpClient = new HTTPClient("https://froidgaming.net");
 
     reloadPlugins();
     CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
@@ -84,11 +82,11 @@ public void OnClientPostAdminCheck(int iClient)
     g_PlayerData[iClient].Reset();
 
     // API
-    char sAuthID[64], sUrl[128];
+    char sAuthID[64], sUrl[256];
     GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-    Format(sUrl, sizeof(sUrl), "api/skybox/%s", sAuthID);
-
-    httpClient.Get(sUrl, OnGetSkybox, GetClientUserId(iClient));
+    Format(sUrl, sizeof(sUrl), "%s/api/skybox/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+    request.Get(OnGetSkybox, GetClientUserId(iClient));
 }
 
 public void OnClientDisconnect(int iClient)
@@ -102,11 +100,13 @@ public void OnClientDisconnect(int iClient)
 	{
 		char sAuthID[64], sUrl[128];
 		GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-		Format(sUrl, sizeof(sUrl), "api/skybox/%s", sAuthID);
+        Format(sUrl, sizeof(sUrl), "%s/api/skybox/%s", BASE_URL, sAuthID);
+        HTTPRequest request = new HTTPRequest(sUrl);
+        request.Get(OnGetSkybox, GetClientUserId(iClient));
 
 		JSONObject jsondata = new JSONObject();
         jsondata.SetString("skybox", g_PlayerData[iClient].sSkybox);
-		httpClient.Put(sUrl, jsondata, OnUpdateSkybox);
+		request.Put(jsondata, OnUpdateSkybox);
 
 		delete jsondata;
 	}
