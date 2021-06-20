@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidSkybox/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -98,11 +98,10 @@ public void OnClientDisconnect(int iClient)
     // Update Skybox
 	if(g_PlayerData[iClient].iSkyboxLoaded == 1)
 	{
-		char sAuthID[64], sUrl[128];
+		char sAuthID[64], sUrl[256];
 		GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
         Format(sUrl, sizeof(sUrl), "%s/api/skybox/%s", BASE_URL, sAuthID);
         HTTPRequest request = new HTTPRequest(sUrl);
-        request.Get(OnGetSkybox, GetClientUserId(iClient));
 
 		JSONObject jsondata = new JSONObject();
         jsondata.SetString("skybox", g_PlayerData[iClient].sSkybox);
