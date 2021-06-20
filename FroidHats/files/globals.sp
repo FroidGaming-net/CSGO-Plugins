@@ -1,4 +1,4 @@
-HTTPClient httpClient;
+#define BASE_URL "https://froidgaming.net"
 
 #define HIDE_CROSSHAIR_CSGO 1<<8
 #define HIDE_RADAR_CSGO 1<<12
@@ -24,4 +24,4 @@ enum struct PlayerData
 PlayerData g_PlayerData[MAXPLAYERS + 1];
 
 Handle hTimers[MAXPLAYERS+1];
-Handle hSetModel, mp_forcecamera; 
+Handle hSetModel, mp_forcecamera;

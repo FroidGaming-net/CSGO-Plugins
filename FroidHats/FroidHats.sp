@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidHats/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -63,8 +63,6 @@ public void OnPluginStart()
 
 	hSetModel = DHookCreate(iOffset, HookType_Entity, ReturnType_Void, ThisPointer_CBaseEntity, SetModel);
 	DHookAddParam(hSetModel, HookParamType_CharPtr);
-
-    httpClient = new HTTPClient("https://froidgaming.net");
 
 	reloadPlugins();
     CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
@@ -138,10 +136,11 @@ public void FroidVIP_OnClientLoadedPost(int iClient)
     }
 
     // API
-	char sAuthID[64], sUrl[128];
+	char sAuthID[64], sUrl[256];
 	GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-	Format(sUrl, sizeof(sUrl), "api/hats/%s", sAuthID);
-	httpClient.Get(sUrl, OnGetHat, GetClientUserId(iClient));
+    Format(sUrl, sizeof(sUrl), "%s/api/hats/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+	request.Get(OnGetHat, GetClientUserId(iClient));
 }
 
 public void OnClientDisconnect(int iClient)
@@ -155,11 +154,12 @@ public void OnClientDisconnect(int iClient)
 	{
 		char sAuthID[64], sUrl[128];
 		GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-		Format(sUrl, sizeof(sUrl), "api/hats/%s", sAuthID);
+		Format(sUrl, sizeof(sUrl), "%s/api/hats/%s", BASE_URL, sAuthID);
+		HTTPRequest request = new HTTPRequest(sUrl);
 
 		JSONObject jsondata = new JSONObject();
         jsondata.SetInt("hat_id", g_PlayerData[iClient].iHatNumber);
-		httpClient.Put(sUrl, jsondata, OnUpdateHats);
+		request.Put(jsondata, OnUpdateHats);
 
 		delete jsondata;
 	}
