@@ -13,7 +13,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.5"
+#define VERSION "1.1.6"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidTrusted/updatefile.txt"
 
 #include "files/globals.sp"
@@ -32,8 +32,8 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    httpClient = new HTTPClient("https://froidgaming.net");
-    httpClient2 = new HTTPClient("https://api.steampowered.com");
+    // httpClient = new HTTPClient("https://froidgaming.net");
+    // httpClient2 = new HTTPClient("https://api.steampowered.com");
     reloadPlugins();
     CreateTimer(30.0, Timer_Repeat, _, TIMER_REPEAT);
 
@@ -54,27 +54,32 @@ public Action Timer_Repeat(Handle hTimer)
 {
 	for (int i = 1; i < MAXPLAYERS; i++) {
 		if (IsValidClient(i)) {
-            char sAuthID[64], sUrl[128];
+            char sAuthID[64], sUrl[512];
             GetClientAuthId(i, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
 
 			if (g_PlayerData[i].iBannedLoaded == -1) {
-				Format(sUrl, sizeof(sUrl), "api/banned/%s", sAuthID);
-                httpClient.Get(sUrl, OnCheckBanned, GetClientUserId(i));
+                Format(sUrl, sizeof(sUrl), "%s/api/banned/%s", BASE_URL, sAuthID);
+                HTTPRequest request = new HTTPRequest(sUrl);
+                request.Get(OnCheckBanned, GetClientUserId(i));
 			} else if (g_PlayerData[i].iFACLoaded == -1) {
-				Format(sUrl, sizeof(sUrl), "api/anticheat/%s", sAuthID);
-                httpClient.Get(sUrl, OnCheckAntiCheat, GetClientUserId(i));
+                Format(sUrl, sizeof(sUrl), "%s/api/anticheat/%s", BASE_URL, sAuthID);
+                HTTPRequest request = new HTTPRequest(sUrl);
+                request.Get(OnCheckAntiCheat, GetClientUserId(i));
 			} else if (g_PlayerData[i].iHoursLoaded == -1) {
-                FormatEx(sUrl, sizeof(sUrl), "IPlayerService/GetOwnedGames/v0001?key=26B12AFA10E748B57D135D055FA98808&steamid=%s&appids_filter[0]=730&format=json", sAuthID);
-                httpClient2.Get(sUrl, OnCheckHours, GetClientUserId(i));
+                Format(sUrl, sizeof(sUrl), "%s/IPlayerService/GetOwnedGames/v0001?key=26B12AFA10E748B57D135D055FA98808&steamid=%s&appids_filter[0]=730&format=json", BASE_URL2, sAuthID);
+                HTTPRequest request = new HTTPRequest(sUrl);
+                request.Get(OnCheckHours, GetClientUserId(i));
 			} else if (g_PlayerData[i].iCreatedAtLoaded == -1) {
-				FormatEx(sUrl, sizeof(sUrl), "ISteamUser/GetPlayerSummaries/v0002/?key=26B12AFA10E748B57D135D055FA98808&steamids=%s", sAuthID);
-                httpClient2.Get(sUrl, OnCheckCreateAt, GetClientUserId(i));
+                Format(sUrl, sizeof(sUrl), "%s/ISteamUser/GetPlayerSummaries/v0002/?key=26B12AFA10E748B57D135D055FA98808&steamids=%s", BASE_URL2, sAuthID);
+                HTTPRequest request = new HTTPRequest(sUrl);
+                request.Get(OnCheckCreateAt, GetClientUserId(i));
 			// } else if (g_PlayerData[i].iLevelLoaded == -1) {
                 // FormatEx(sUrl, sizeof(sUrl), "IPlayerService/GetSteamLevel/v1/?key=26B12AFA10E748B57D135D055FA98808&steamid=%s", sAuthID);
                 // httpClient2.Get(sUrl, OnCheckLevel, GetClientUserId(i));
 			} else if (g_PlayerData[i].iPlayerDataLoaded == -1) {
-                Format(sUrl, sizeof(sUrl), "api/player/%s", sAuthID);
-                httpClient.Get(sUrl, OnCheckPlayerData, GetClientUserId(i));
+                Format(sUrl, sizeof(sUrl), "%s/api/player/%s", BASE_URL, sAuthID);
+                HTTPRequest request = new HTTPRequest(sUrl);
+                request.Get(OnCheckPlayerData, GetClientUserId(i));
 			}
         }
     }
@@ -129,7 +134,7 @@ public void FroidVIP_OnClientLoadedPost(int iClient)
     Format(g_PlayerData[iClient].sCountryCode, sizeof(g_PlayerData[].sCountryCode), sCountryCode);
 
     // Function Variable
-    char sAuthID[64], sUrl[128];
+    char sAuthID[64], sUrl[512];
     GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
     // End Variable
 
@@ -151,8 +156,9 @@ public void FroidVIP_OnClientLoadedPost(int iClient)
     // 4. Check CreatedAt (Done)
 
     // Banned Check
-    Format(sUrl, sizeof(sUrl), "api/banned/%s", sAuthID);
-    httpClient.Get(sUrl, OnCheckBanned, GetClientUserId(iClient));
+    Format(sUrl, sizeof(sUrl), "%s/api/banned/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+    request.Get(OnCheckBanned, GetClientUserId(iClient));
     /// End Banned Check
 
     CreateTimer(30.0, Timer_DelayJoin, GetClientUserId(iClient), TIMER_FLAG_NO_MAPCHANGE);
@@ -170,7 +176,8 @@ Action Timer_DelayJoin(Handle timer, any data)
         GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
         // End Variable
 
-        Format(sUrl, sizeof(sUrl), "api/player/%s", sAuthID);
-        httpClient.Get(sUrl, OnCheckPlayerData, GetClientUserId(iClient));
+        Format(sUrl, sizeof(sUrl), "%s/api/player/%s", BASE_URL, sAuthID);
+        HTTPRequest request = new HTTPRequest(sUrl);
+        request.Get(OnCheckPlayerData, GetClientUserId(iClient));
     }
 }

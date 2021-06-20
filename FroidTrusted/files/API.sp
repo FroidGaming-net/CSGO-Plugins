@@ -129,7 +129,7 @@ void OnCheckPlayerData(HTTPResponse response, any value)
     if (bStatus == true) {
         g_PlayerData[iClient].iPlayerDataLoaded = 1;
 
-        char sAuthID[64], sUrl[256];
+        char sAuthID[64], sUrl[512];
         GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
 
         JSONObject jsondata2 = view_as<JSONObject>(jsondata.Get("data"));
@@ -144,8 +144,9 @@ void OnCheckPlayerData(HTTPResponse response, any value)
                     if (iLevel <= 9) {
                         g_PlayerData[iClient].iCSGOLevel = 0;
 
-                        Format(sUrl, sizeof(sUrl), "api/anticheat/%s", sAuthID);
-                        httpClient.Get(sUrl, OnCheckAntiCheat, GetClientUserId(iClient));
+                        Format(sUrl, sizeof(sUrl), "%s/api/anticheat/%s", BASE_URL, sAuthID);
+                        HTTPRequest request = new HTTPRequest(sUrl);
+                        request.Get(OnCheckAntiCheat, GetClientUserId(iClient));
                     } else if(iLevel >= 10) {
                         g_PlayerData[iClient].iCSGOLevel = 1;
                     }
@@ -157,16 +158,18 @@ void OnCheckPlayerData(HTTPResponse response, any value)
                 int tempHours = jsondata2.GetInt("hours");
 
                 if (tempHours == 0) {
-                    FormatEx(sUrl, sizeof(sUrl), "IPlayerService/GetOwnedGames/v0001?key=26B12AFA10E748B57D135D055FA98808&steamid=%s&appids_filter[0]=730&format=json", sAuthID);
-                    httpClient2.Get(sUrl, OnCheckHours, GetClientUserId(iClient));
+                    Format(sUrl, sizeof(sUrl), "%s/IPlayerService/GetOwnedGames/v0001?key=26B12AFA10E748B57D135D055FA98808&steamid=%s&appids_filter[0]=730&format=json", BASE_URL2, sAuthID);
+                    HTTPRequest request = new HTTPRequest(sUrl);
+                    request.Get(OnCheckHours, GetClientUserId(iClient));
                 }
             }
         }
 
          // Jika player masuk dalam kategori Untrusted maka wajib FACEIT AC
         if (CheckCommandAccess(iClient, "sm_froidapp_untrusted", ADMFLAG_CUSTOM1) && !CheckCommandAccess(iClient, "sm_froidapp_admin", ADMFLAG_GENERIC)) {
-            Format(sUrl, sizeof(sUrl), "api/anticheat/%s", sAuthID);
-            httpClient.Get(sUrl, OnCheckAntiCheat, GetClientUserId(iClient));
+            Format(sUrl, sizeof(sUrl), "%s/api/anticheat/%s", BASE_URL, sAuthID);
+            HTTPRequest request = new HTTPRequest(sUrl);
+            request.Get(OnCheckAntiCheat, GetClientUserId(iClient));
         }
 
         delete jsondata2;
@@ -249,10 +252,11 @@ void OnCheckHours(HTTPResponse response, any value)
         return;
     }
 
-    char sAuthID[64], sUrl[256];
+    char sAuthID[64], sUrl[512];
     GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-    FormatEx(sUrl, sizeof(sUrl), "ISteamUser/GetPlayerSummaries/v0002/?key=26B12AFA10E748B57D135D055FA98808&steamids=%s", sAuthID);
-    httpClient2.Get(sUrl, OnCheckCreateAt, GetClientUserId(iClient));
+    Format(sUrl, sizeof(sUrl), "%s/ISteamUser/GetPlayerSummaries/v0002/?key=26B12AFA10E748B57D135D055FA98808&steamids=%s", BASE_URL2, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+    request.Get(OnCheckCreateAt, GetClientUserId(iClient));
 
     delete hGame;
     delete hResponseGames;
@@ -320,9 +324,10 @@ void OnCheckCreateAt(HTTPResponse response, any value)
     delete hResponseRoot;
     delete hResponse;
 
-    char sAuthID[64], sUrl[128];
+    char sAuthID[64], sUrl[512];
     GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-    Format(sUrl, sizeof(sUrl), "api/player/%s", sAuthID);
+    Format(sUrl, sizeof(sUrl), "%s/api/player/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
 
     JSONObject jsondata = new JSONObject();
     jsondata.SetInt("hours", 1);
@@ -331,7 +336,7 @@ void OnCheckCreateAt(HTTPResponse response, any value)
     } else if (g_PlayerData[iClient].iCSGOLevel == 0) {
         jsondata.SetInt("level", 0);
     }
-    httpClient.Put(sUrl, jsondata, OnUpdatePlayerData);
+    request.Put(jsondata, OnUpdatePlayerData);
     delete jsondata;
 
     return;

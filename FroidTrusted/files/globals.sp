@@ -1,5 +1,5 @@
-HTTPClient httpClient;
-HTTPClient httpClient2;
+#define BASE_URL "https://froidgaming.net"
+#define BASE_URL2 "https://api.steampowered.com"
 
 enum struct PlayerData
 {
