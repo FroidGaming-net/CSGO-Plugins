@@ -10,7 +10,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -137,7 +137,7 @@ void UTIL_SendMessage(Handle hMap, const char[] szConfigName, bool bAllowedDefau
     DebugMessage("UTIL_SendMessage(): Added image (%s).", szBuffer)
   }
 
-  // Description
+ // Description
   if (GetTrieString(hMap, "embed_description", SZF(szBuffer))) {
     hJSmsg.SetString("description", szBuffer);
     bAdd = true;
@@ -172,12 +172,9 @@ void UTIL_SendMessage(Handle hMap, const char[] szConfigName, bool bAllowedDefau
     DebugMessage("UTIL_SendMessage(): Installed message %s", szBuffer)
   }
 
-  // httpClient.Post(szWebHook);
-  if (UTIL_StringMapKeyExists(g_hWebHooks, szConfigName)) {
-    GetTrieString(g_hWebHooks, szConfigName, SZF(szBuffer));
-  } else if (bAllowedDefault) {
-    GetTrieString(g_hWebHooks, "default", SZF(szBuffer));
-  } else {
+  HTTPRequest hRequest = UTIL_NewRequest(szConfigName, bAllowedDefault);
+  if (!hRequest)
+  {
     UTIL_Cleanup(hCleanup);
     DebugMessage("UTIL_SendMessage(): Couldn't found configuration %s. Stopping...", szConfigName)
     ThrowNativeError(SP_ERROR_NATIVE, "Couldn't send message: WebHook not configured.");
@@ -185,13 +182,14 @@ void UTIL_SendMessage(Handle hMap, const char[] szConfigName, bool bAllowedDefau
   }
 
   DataPack hPack = new DataPack();
-  g_hHTTPClient.Post(szBuffer, hJSONRoot, OnRequestComplete, hPack);
+  hRequest.Post(hJSONRoot, OnRequestComplete, hPack);
 
   hPack.WriteCell(hJSONRoot);
-  hPack.WriteString(szBuffer);
+  hPack.WriteString(szConfigName);
+  hPack.WriteCell(bAllowedDefault);
 
 #if defined DEBUG_MODE
-  DebugMessage("UTIL_SendMessage(): Request sended to webhook %s (%s)", szConfigName, szBuffer)
+  DebugMessage("UTIL_SendMessage(): Request sended to webhook %s", szConfigName)
   UTIL_JSONDUMP(hJSONRoot);
 #endif
 
@@ -315,6 +313,30 @@ stock void UTIL_JSONDUMP(JSON hJSON) {
   char szBuffer[16384];
   hJSON.ToString(szBuffer, sizeof(szBuffer)); // JSON_INDENT(2)
   PrintToServer(szBuffer);
+}
+
+HTTPRequest UTIL_NewRequest(const char[] szConfigName, bool bAllowedDefault)
+{
+  char szUserAgent[64];
+  FormatEx(SZF(szUserAgent), "SourcePawn (DiscordExtended v%s)", PLUGIN_VERSION);
+  DebugMessage("UTIL_NewRequest(): Generated User-Agent: %s", szUserAgent)
+
+  char szRequestUrl[256];
+  int iPos = strcopy(szRequestUrl, sizeof(szRequestUrl), "https://discord.com/api/webhooks/");
+  if (UTIL_StringMapKeyExists(g_hWebHooks, szConfigName)) {
+    GetTrieString(g_hWebHooks, szConfigName, SZF_POSED(szRequestUrl, iPos));
+  } else if (bAllowedDefault) {
+    GetTrieString(g_hWebHooks, "default", SZF_POSED(szRequestUrl, iPos));
+  } else {
+    DebugMessage("UTIL_NewRequest(): Couldn't found configuration %s.", szConfigName)
+    return null;
+  }
+
+  HTTPRequest hRequest = new HTTPRequest(szRequestUrl);
+  hRequest.SetHeader("User-Agent", szUserAgent);
+  DebugMessage("UTIL_NewRequest(): Created HTTP Request with defined User-Agent.")
+
+  return hRequest;
 }
 
 bool UTIL_AddWebHook(const char[] szWebHookName, const char[] szURL, bool bRewriteIfExists = false) {

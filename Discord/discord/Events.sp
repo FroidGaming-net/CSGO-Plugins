@@ -10,7 +10,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- *
+ * 
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -42,15 +42,15 @@ public APLRes AskPluginLoad2(Handle hMySelf, bool bLate, char[] szError, int iEr
 
   // Setting parameters for message.
   CreateNative("Discord_SetUsername",           API_SetUsername);
-  CreateNative("Discord_SetAvatar",             API_SetAvatar);
+  CreateNative("Discord_SetAvatar",             API_SetAvatar); 
 
   // Content.
   CreateNative("Discord_SetTimestamp",          API_SetTimestamp);
   CreateNative("Discord_SetContent",            API_SetContent);
   CreateNative("Discord_SetColor",              API_SetColor);
   CreateNative("Discord_SetTitle",              API_SetTitle);
-  CreateNative("Discord_AddField",              API_AddField);
   CreateNative("Discord_SetDescription",        API_SetDescription);
+  CreateNative("Discord_AddField",              API_AddField);
 
   // WebHooks.
   CreateNative("Discord_WebHookExists",         API_WebHookExists);
@@ -79,29 +79,7 @@ public void OnPluginStart() {
   RegServerCmd("sm_reloaddiscord", Cmd_ReloadDiscord);
   g_hWebHooks = CreateTrie();
 
-  char szUserAgent[64];
-  FormatEx(SZF(szUserAgent), "SourcePawn (DiscordExtended v%s)", PLUGIN_VERSION);
-  DebugMessage("OnPluginStart(): Generated User-Agent: %s", szUserAgent)
-
-  g_hHTTPClient = new HTTPClient("https://discordapp.com/api/webhooks");
-
-  // This is not required. See https://github.com/CrazyHackGUT/sm-ripext/blob/master/curlapi.cpp#L41 for more details.
-  // g_hHTTPClient.SetHeader("Content-Type", "application/json");
-  g_hHTTPClient.SetHeader("User-Agent",   szUserAgent);
-  DebugMessage("OnPluginStart(): Created HTTP Client with defined Content-Type and User-Agent.")
-
   DebugMessage("Discord Extended Library initialized (version " ... PLUGIN_VERSION ... ", build date "... __DATE__ ... " " ... __TIME__ ... ")")
-
-  if (LibraryExists("updater")) {
-        Updater_AddPlugin(UPDATE_URL);
-  }
-}
-
-public void OnLibraryAdded(const char[] name)
-{
-    if (StrEqual(name, "updater")) {
-        Updater_AddPlugin(UPDATE_URL);
-    }
 }
 
 public void OnMapStart() {
@@ -144,10 +122,18 @@ public void OnRequestComplete(HTTPResponse Response, DataPack hPack, const char[
 
 DataTimer(OnRetryRequest) {
   ResetPack(data);
-  char szRequest[256];
+  char szConfigName[32];
 
   JSONObject hRequest = ReadPackCell(data);
-  ReadPackString(data, szRequest, sizeof(szRequest));
+  ReadPackString(data, SZF(szConfigName));
 
-  g_hHTTPClient.Post(szRequest, hRequest, OnRequestComplete, data);
+  HTTPRequest hHttpRequest = UTIL_NewRequest(szConfigName, view_as<bool>(ReadPackCell(data)));
+  if (!hHttpRequest)
+  {
+    hRequest.Close();
+    CloseHandle(data);
+    return;
+  }
+
+  hHttpRequest.Post(hRequest, OnRequestComplete, data);
 }

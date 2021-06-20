@@ -35,13 +35,10 @@
 #include <textparse>
 #include <adt_trie>
 #include <ripext>
-#undef REQUIRE_PLUGIN
-#include <updater>
 
 #pragma newdecls required
 
 Handle      g_hWebHooks;        // <-- StringMap
-HTTPClient  g_hHTTPClient;      // <-- HTTP Client
 bool        g_bFirstConfigLoad;
 
 #include "discord/Constants.sp"
