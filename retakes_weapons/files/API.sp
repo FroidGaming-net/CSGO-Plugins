@@ -6,6 +6,8 @@ void OnGetWeapon(HTTPResponse response, any value)
         return;
     }
 
+    LogError("[OnGetWeapon] %i", response.Status);
+
     if (response.Status != HTTPStatus_OK) {
         g_PlayerData[iClient].iWeaponsLoaded = -1;
         LogError("[OnGetWeapon] HTTPStatus_OK failed");
@@ -24,7 +26,7 @@ void OnGetWeapon(HTTPResponse response, any value)
         g_PlayerData[iClient].iWeaponsLoaded = 1;
 
         JSONObject jsondata2 = view_as<JSONObject>(jsondata.Get("data"));
-        
+
         // CT
         jsondata2.GetString("pistolround_ct", g_PlayerData[iClient].sPistolRound_CT, sizeof(g_PlayerData[].sPistolRound_T));
 		jsondata2.GetString("primary_ct", g_PlayerData[iClient].sPrimary_CT, sizeof(g_PlayerData[].sPrimary_CT));
@@ -54,10 +56,16 @@ void OnGetWeapon(HTTPResponse response, any value)
 
 void OnUpdateWeapon(HTTPResponse response, any value)
 {
+    // char data[30];
+    // response.GetHeader("Date", data, sizeof(data));
+
+    LogError("[OnUpdateWeapon] %i", response.Status);
+
     if (response.Status != HTTPStatus_OK) {
         LogError("[OnUpdateWeapon] HTTPStatus_OK failed");
         return;
     }
+
     if (response.Data == null) {
         LogError("[OnUpdateWeapon] Invalid JSON Response");
         return;

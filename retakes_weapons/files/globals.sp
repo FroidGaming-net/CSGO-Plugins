@@ -1,5 +1,4 @@
-HTTPClient httpClient;
-
+#define BASE_URL "https://contabo.froidgaming.net"
 #define FULL_ROUND 1
 #define FORCE_ROUND 2
 #define PISTOL_ROUND 3
