@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.3.5"
+#define VERSION "1.3.6"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidChat/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -43,8 +43,6 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_tags", Call_MenuAppearance);
 	RegConsoleCmd("sm_color", Call_MenuAppearance);
 	RegConsoleCmd("sm_colors", Call_MenuAppearance);
-
-    httpClient = new HTTPClient("https://froidgaming.net");
 
 	/// CCP
 	char convarName[PLATFORM_MAX_PATH];
@@ -152,10 +150,11 @@ public void FroidVIP_OnClientLoadedPost(int iClient)
     }
 
     // API
-	char sAuthID[64], sUrl[128];
+	char sAuthID[64], sUrl[256];
 	GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-	Format(sUrl, sizeof(sUrl), "api/chat/%s", sAuthID);
-	httpClient.Get(sUrl, OnGetChat, GetClientUserId(iClient));
+	Format(sUrl, sizeof(sUrl), "%s/api/chat/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
+	request.Get(OnGetChat, GetClientUserId(iClient));
 }
 
 public void OnClientDisconnect(int iClient)
@@ -169,13 +168,14 @@ public void OnClientDisconnect(int iClient)
 	{
 		char sAuthID[64], sUrl[128];
 		GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-		Format(sUrl, sizeof(sUrl), "api/chat/%s", sAuthID);
+        Format(sUrl, sizeof(sUrl), "%s/api/chat/%s", BASE_URL, sAuthID);
+        HTTPRequest request = new HTTPRequest(sUrl);
 
 		JSONObject jsondata = new JSONObject();
         jsondata.SetString("namecolor", g_PlayerData[iClient].sName);
         jsondata.SetString("messagecolor", g_PlayerData[iClient].sMessage);
         jsondata.SetString("clantag", g_PlayerData[iClient].sClanTag);
-		httpClient.Put(sUrl, jsondata, OnUpdateChat);
+		request.Put(jsondata, OnUpdateChat);
 
 		delete jsondata;
 	}

@@ -69,7 +69,11 @@ public Action OnClientSayCommand(int iClient, const char[] sCommand, const char[
 
     JSONObject jsondata = new JSONObject();
     jsondata.SetString("clantag", sArgs);
-    httpClient.Post("api/chat", jsondata, OnCheckChat, pack);
+
+    char sUrl[256];
+	Format(sUrl, sizeof(sUrl), "%s/api/chat", BASE_URL);
+    HTTPRequest request = new HTTPRequest(sUrl);
+    request.Post(jsondata, OnCheckChat, pack);
     delete jsondata;
 
     return Plugin_Handled;

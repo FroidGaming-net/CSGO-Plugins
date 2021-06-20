@@ -1,4 +1,4 @@
-HTTPClient httpClient;
+#define BASE_URL "https://froidgaming.net"
 
 enum struct PlayerData
 {
@@ -20,7 +20,7 @@ enum struct PlayerData
         this.sCountryCode = "EN";
         this.bWaitingForData = false;
     }
-    
+
     void Clear()
     {
         this.sName[0] = 0;
