@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.5"
+#define VERSION "1.1.6"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidVIP/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -37,7 +37,6 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_vip", Call_MenuPremium);
 	RegConsoleCmd("sm_vips", Call_MenuPremium);
 
-    httpClient = new HTTPClient("https://froidgaming.net");
     g_hForward_OnClientLoadedPre = CreateGlobalForward("FroidVIP_OnClientLoadedPre", ET_Event, Param_Cell);
 	g_hForward_OnClientLoadedPost = CreateGlobalForward("FroidVIP_OnClientLoadedPost", ET_Event, Param_Cell);
 
@@ -101,9 +100,10 @@ public void OnClientPostAdminCheck(int iClient)
     // API
     char sAuthID[64], sUrl[128];
     GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-    Format(sUrl, sizeof(sUrl), "api/vip/%s", sAuthID);
+    Format(sUrl, sizeof(sUrl), "%s/api/vip/%s", BASE_URL, sAuthID);
+    HTTPRequest request = new HTTPRequest(sUrl);
 
-    httpClient.Get(sUrl, GetVipInfo, GetClientUserId(iClient));
+    request.Get(GetVipInfo, GetClientUserId(iClient));
 }
 
 public void OnClientDisconnect(int iClient)

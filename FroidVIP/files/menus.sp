@@ -162,12 +162,12 @@ int MenuPremium_Callback(Menu hMenu, MenuAction mAction, int iClient, int iSlot)
 				MenuPremiumPayments(iClient);
 			}else if (StrEqual(sInfo, "mInfo"))
 			{
-				char 	sAuthID[64],
-						sUrl[64];
+				char sAuthID[64], sUrl[256];
 				GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-				Format(sUrl, sizeof(sUrl), "api/vip/%s", sAuthID);
+				Format(sUrl, sizeof(sUrl), "%s/api/vip/%s", BASE_URL, sAuthID);
+				HTTPRequest request = new HTTPRequest(sUrl);
 
-				httpClient.Get(sUrl, MenuPremiumInformation, GetClientUserId(iClient));
+				request.Get(MenuPremiumInformation, GetClientUserId(iClient));
 			}else if (StrEqual(sInfo, "mHow"))
 			{
 				MenuPremiumBuy(iClient);

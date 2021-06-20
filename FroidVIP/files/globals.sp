@@ -1,4 +1,4 @@
-HTTPClient httpClient;
+#define BASE_URL "https://froidgaming.net"
 
 Handle g_hForward_OnClientLoadedPre;
 Handle g_hForward_OnClientLoadedPost;
