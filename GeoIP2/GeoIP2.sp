@@ -8,7 +8,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.8"
+#define VERSION "1.0.9"
 #define UPDATE_URL "https://sys.froidgaming.net/GeoIP2/updatefile.txt"
 
 
