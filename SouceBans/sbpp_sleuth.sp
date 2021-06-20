@@ -10,6 +10,7 @@
 
 #define PLUGIN_VERSION "1.7.1"
 #define UPDATE_URL "https://sys.froidgaming.net/SourceBans/updatefile.txt"
+#define BASE_URL "http://ip-api.com"
 
 #define LENGTH_ORIGINAL 1
 #define LENGTH_CUSTOM 2
@@ -32,8 +33,6 @@ ConVar g_cVar_bypass;
 
 //- Bools -//
 bool CanUseSourcebans = false;
-
-HTTPClient httpClient;
 
 public Plugin myinfo =
 {
@@ -66,8 +65,6 @@ public void OnPluginStart()
 	RegAdminCmd("sm_sleuth_reloadlist", ReloadListCallBack, ADMFLAG_ROOT);
 
 	LoadWhiteList();
-
-	httpClient = new HTTPClient("http://ip-api.com");
 
 	if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
@@ -142,8 +139,7 @@ public void OnClientPostAdminCheck(int client)
 		if (g_hAllowedArray.FindString(steamid) == -1)
 		{
 			///////////////////////////////
-			char sIP[64],
-				 sUrl[64];
+			char sIP[64], sUrl[256];
 
 			GetClientIP(client, sIP, sizeof(sIP));
 
@@ -151,8 +147,9 @@ public void OnClientPostAdminCheck(int client)
 			datapack.WriteCell(GetClientUserId(client));
 			datapack.WriteString(steamid);
 			datapack.WriteString(sIP);
-			Format(sUrl, sizeof(sUrl), "json/%s", sIP);
-			httpClient.Get(sUrl, OnCheckIP, datapack);
+			Format(sUrl, sizeof(sUrl), "%s/json/%s", BASE_URL, sIP);
+			HTTPRequest request = new HTTPRequest(sUrl);
+			request.Get(OnCheckIP, datapack);
 			///////////////////////////////
 		}
 	}
