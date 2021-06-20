@@ -1,11 +1,11 @@
-HTTPClient httpClient;
+#define BASE_URL "https://froidgaming.net"
 
 ConVar g_cHostname = null;
 char g_sHostname[64];
 
 enum struct PlayerData
 {
-    char sName[128];
+    char sName[MAX_NAME_LENGTH];
     char sNewName[MAX_NAME_LENGTH];
     bool bBlockMessage;
     char sCountryCode[3];

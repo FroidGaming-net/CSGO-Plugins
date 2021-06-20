@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.4"
+#define VERSION "1.1.5"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidName/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -32,8 +32,6 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    httpClient = new HTTPClient("https://froidgaming.net");
-
     HookEvent("player_changename", Event_OnPlayerChangeNamePost, EventHookMode_Post);
 
     reloadPlugins();
@@ -87,7 +85,12 @@ public void OnClientPostAdminCheck(int iClient)
 
         JSONObject jsondata = new JSONObject();
         jsondata.SetString("clantag", g_PlayerData[iClient].sName);
-        httpClient.Post("api/chat", jsondata, OnCheckName, pack);
+
+        // API
+        char sUrl[256];
+        Format(sUrl, sizeof(sUrl), "%s/api/chat", BASE_URL);
+        HTTPRequest request = new HTTPRequest(sUrl);
+        request.Post(jsondata, OnCheckName, pack);
         delete jsondata;
     }
 
@@ -178,7 +181,12 @@ public Action Event_OnPlayerChangeNamePost(Event hEvent, const char[] sName, boo
 
             JSONObject jsondata = new JSONObject();
             jsondata.SetString("clantag", g_PlayerData[iClient].sName);
-            httpClient.Post("api/chat", jsondata, OnCheckName, pack);
+
+            // API
+            char sUrl[256];
+            Format(sUrl, sizeof(sUrl), "%s/api/chat", BASE_URL);
+            HTTPRequest request = new HTTPRequest(sUrl);
+            request.Post(jsondata, OnCheckName, pack);
             delete jsondata;
         }
 
