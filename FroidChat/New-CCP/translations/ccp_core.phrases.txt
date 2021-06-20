@@ -1,0 +1,628 @@
+"Phrases"
+{
+    // !!!      All of the parts has value or empty string                          !!!
+    // !!!      Dont delete lines with unnecessary parts                            !!!
+
+    // !!!      All of these values are default and has a priority level of 0       !!!
+
+    // ---------- Status colors: {BIND_STATUS_CO} --------- //
+
+    // if sender Alive
+    "DEF_STATUSCO_A"
+    {
+        "ru"                "{T}"
+        "en"                "{T}"
+        "pl"                "{T}"
+    }
+
+    // if sender died
+    "DEF_STATUSCO_D"
+    {
+        "ru"                "{R}"
+        "en"                "{R}"
+        "pl"                "{R}"
+    }
+
+    // if sender is Server
+    "DEF_STATUSCO_D_S"
+    {
+        "ru"                "{GO}"
+        "en"                "{GO}"
+        "pl"                "{GO}"
+    }
+
+    // ---------- Status: {BIND_STATUS} --------- //
+
+    // Status: Alive
+    "DEF_STATUS_A"
+    {
+        "ru"                ""
+        "en"                ""
+        "pl"                ""
+    }
+
+    // Status: Died
+    "DEF_STATUS_D"
+    {
+        "ru"                "DEAD"
+        "en"                "DEAD"
+        "pl"                "DEAD"
+    }
+
+    // Status: Server
+    "DEF_STATUS_D_S"
+    {
+        "ru"                "•"
+        "en"                "•"
+        "pl"                "•"
+    }
+
+    // ---------- Team colors: {BIND_TEAM_CO} --------- //
+
+        // ------ Team chat: (STP) ----- //
+
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAMCO_STP_B"
+        {
+            "ru"                "{B}"
+            "en"                "{B}"
+            "pl"                "{B}"
+        }
+
+        // if team is Red (Terrorists)
+        "DEF_TEAMCO_STP_R"
+        {
+            "ru"                "{GO}"
+            "en"                "{GO}"
+            "pl"                "{GO}"
+        }
+
+        // if team is Spectator
+        "DEF_TEAMCO_STP_S"
+        {
+            "ru"                "{T}"
+            "en"                "{T}"
+            "pl"                "{T}"
+        }
+
+        // ------ All chat: (STA) ----- //
+
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAMCO_STA_B"
+        {
+            "ru"                "{T}"
+            "en"                "{T}"
+            "pl"                "{T}"
+        }
+
+        // if team is Red (Terrorists)
+        "DEF_TEAMCO_STA_R"
+        {
+            "ru"                "{T}"
+            "en"                "{T}"
+            "pl"                "{T}"
+        }
+
+        // if team is Spectator
+        "DEF_TEAMCO_STA_S"
+        {
+            "ru"                "{T}"
+            "en"                "{T}"
+            "pl"                "{T}"
+        }
+
+        // ------ Radio chat: (RT) ----- //
+
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAMCO_RT_B"
+        {
+            "ru"                "{BA}"
+            "en"                "{BA}"
+            "pl"                "{BA}"
+        }
+
+        // if team is Red (Terrorists)
+        "DEF_TEAMCO_RT_R"
+        {
+            "ru"                "{BA}"
+            "en"                "{BA}"
+            "pl"                "{BA}"
+        }
+
+        // if team is Spectator
+        "DEF_TEAMCO_RT_S"
+        {
+            "ru"                "{BA}"
+            "en"                "{BA}"
+            "pl"                "{BA}"
+        }
+
+        // ------ Server chat: (TM/ST) ----- //
+
+        // TM (https://discord.com/channels/494942123548868609/848514970144342036/848836731796979723)
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAMCO_TM_B"
+        {
+            "ru"                "{GO}"
+            "en"                "{GO}"
+            "pl"                "{GO}"
+        }
+
+        // TM
+        // if team is Red (Terrorists)
+        "DEF_TEAMCO_TM_R"
+        {
+            "ru"                "{GO}"
+            "en"                "{GO}"
+            "pl"                "{GO}"
+        }
+
+        // TM
+        // if team is Spectator
+        "DEF_TEAMCO_TM_S"
+        {
+            "ru"                "{GO}"
+            "en"                "{GO}"
+            "pl"                "{GO}"
+        }
+
+        // ST (https://discord.com/channels/494942123548868609/848514970144342036/848836731796979723)
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAMCO_ST_B"
+        {
+            "ru"                "{GO}"
+            "en"                "{GO}"
+            "pl"                "{GO}"
+        }
+
+        // ST
+        // if team is Red (Terrorists)
+        "DEF_TEAMCO_ST_R"
+        {
+            "ru"                "{GO}"
+            "en"                "{GO}"
+            "pl"                "{GO}"
+        }
+
+        // ST
+        // if team is Spectator
+        "DEF_TEAMCO_ST_S"
+        {
+            "ru"                "{GO}"
+            "en"                "{GO}"
+            "pl"                "{GO}"
+        }
+
+        // ------ Name change: (CN) ----- //
+
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAMCO_CN_B"
+        {
+            "ru"                "{T}"
+            "en"                "{T}"
+            "pl"                "{T}"
+        }
+
+        // if team is Red (Terrorists)
+        "DEF_TEAMCO_CN_R"
+        {
+            "ru"                "{T}"
+            "en"                "{T}"
+            "pl"                "{T}"
+        }
+
+        // if team is Spectator
+        "DEF_TEAMCO_CN_S"
+        {
+            "ru"                "{T}"
+            "en"                "{T}"
+            "pl"                "{T}"
+        }
+
+
+    // ------------ Teams: {BIND_TEAM} ----------- //
+
+        // ------ Team chat: (STP) ----- //
+
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAM_STP_B"
+        {
+            "ru"                "(CT)"
+            "en"                "(CT)"
+            "pl"                "(CT)"
+        }
+
+        // if team is Red (Terrorists)
+        "DEF_TEAM_STP_R"
+        {
+            "ru"                "(T)"
+            "en"                "(T)"
+            "pl"                "(T)"
+        }
+
+        // if team is Spectator
+        "DEF_TEAM_STP_S"
+        {
+            "ru"                "(SPEC)"
+            "en"                "(SPEC)"
+            "pl"                "(SPEC)"
+        }
+
+        // ------ Public chat: (STA) ----- //
+
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAM_STA_B"
+        {
+            "ru"                "(CT)"
+            "en"                "(CT)"
+            "pl"                "(CT)"
+        }
+
+        // if team is Red (Terrorists)
+        "DEF_TEAM_STA_R"
+        {
+            "ru"                "(T)"
+            "en"                "(T)"
+            "pl"                "(T)"
+        }
+
+        // if team is Spectator
+        "DEF_TEAM_STA_S"
+        {
+            "ru"                "(SPEC)"
+            "en"                "(SPEC)"
+            "pl"                "(SPEC)"
+        }
+
+        // ------ Radio chat: (RT) ----- //
+
+        // if team is Blue (Counter-Terrorists)
+        "DEF_TEAM_RT_B"
+        {
+            "ru"                "(RADIO)"
+            "en"                "(RADIO)"
+            "pl"                "(RADIO)"
+        }
+
+        // if team is Red (Terrorists)
+        "DEF_TEAM_RT_R"
+        {
+            "ru"                "(RADIO)"
+            "en"                "(RADIO)"
+            "pl"                "(RADIO)"
+        }
+
+        // if team is Spectator
+        "DEF_TEAM_RT_S"
+        {
+            "ru"                "(RADIO)"
+            "en"                "(RADIO)"
+            "pl"                "(RADIO)"
+        }
+
+        // ------ Server chat: (TM/ST) ----- //
+
+        // // if team is Blue (Counter-Terrorists)
+        // "DEF_TEAM_TM_B"
+        // {
+        //     "ru"                "(RADIO)"
+        //     "en"                "(RADIO)"
+        //     "pl"                "(RADIO)"
+        // }
+
+        // // if team is Red (Terrorists)
+        // "DEF_TEAM_TM_R"
+        // {
+        //     "ru"                "(RADIO)"
+        //     "en"                "(RADIO)"
+        //     "pl"                "(RADIO)"
+        // }
+
+        // TM
+        // if team is Spectator
+        "DEF_TEAM_TM_S"
+        {
+            "ru"                "(SYS)"
+            "en"                "(SYS)"
+            "pl"                "(SYS)"
+        }
+
+        // ST
+        // if team is Spectator
+        "DEF_TEAM_ST_S"
+        {
+            "ru"                "(SYS)"
+            "en"                "(SYS)"
+            "pl"                "(SYS)"
+        }
+
+        // ------ Name change: (CN) ----- //
+
+        // // if team is Blue (Counter-Terrorists)
+        // "DEF_TEAM_C_B"
+        // {
+        //     "ru"                "(SET)"
+        //     "en"                "(SET)"
+        //     "pl"                "(SET)"
+        // }
+
+        // // if team is Red (Terrorists)
+        // "DEF_TEAM_C_R"
+        // {
+        //     "ru"                "(SET)"
+        //     "en"                "(SET)"
+        //     "pl"                "(SET)"
+        // }
+
+        // // if team is Spectator
+        // "DEF_TEAM_C_S"
+        // {
+        //     "ru"                "(SET)"
+        //     "en"                "(SET)"
+        //     "pl"                "(SET)"
+        // }
+
+    // ------------ Prefix color: {BIND_PREFIX_CO} ----------- //
+
+    // if sender is Player
+    "DEF_PREFIXCO_U"
+    {
+        "ru"                ""
+        "en"                ""
+        "pl"                ""
+    }
+
+    // if sender is Server
+    "DEF_PREFIXCO_S"
+    {
+        "ru"                ""
+        "en"                ""
+        "pl"                ""
+    }
+
+    // ------------ Prefix: {BIND_PREFIX} ----------- //
+
+    // if sender is Player
+    "DEF_PREFIX_U"
+    {
+        "ru"                ""
+        "en"                ""
+        "pl"                ""
+    }
+
+    // if sender is Server
+    "DEF_PREFIX_S"
+    {
+        "ru"                ""
+        "en"                ""
+        "pl"                ""
+    }
+
+    // ------------ Name color: {BIND_NAME_CO} ----------- //
+
+    // if sender is Player
+    "DEF_NAMECO_U"
+    {
+        "ru"                "{T}"
+        "en"                "{T}"
+        "pl"                "{T}"
+    }
+
+    // if sender is Server
+    "DEF_NAMECO_S"
+    {
+        "ru"                "{G}"
+        "en"                "{G}"
+        "pl"                "{G}"
+    }
+
+    // ------------ Msg color: {BIND_MSG_CO} ----------- //
+
+    // if sender is Player
+    "DEF_MSGCO_U"
+    {
+        "ru"                "{W}"
+        "en"                "{W}"
+        "pl"                "{W}"
+    }
+
+    // if sender is Server
+    "DEF_MSGCO_S"
+    {
+        "ru"                "{W}"
+        "en"                "{W}"
+        "pl"                "{W}"
+    }
+
+
+    // ------------ Palette ----------- //
+    "{W}"
+    {
+        "ru"                "{W}Белый"
+        "en"                "{W}White"
+        "pl"                "{W}Biały"
+    }
+
+    "{R}"
+    {
+        "ru"                "{R}Красный"
+        "en"                "{R}Red"
+        "pl"                "{R}Czerwony"
+    }
+
+    "{T}"
+    {
+        "ru"                "{T}Командный"
+        "en"                "{T}Team"
+        "pl"                "{T}Team"
+    }
+
+    "{G}"
+    {
+        "ru"                "{G}Зеленый"
+        "en"                "{G}Green"
+        "pl"                "{G}Zielony"
+    }
+
+    "{P}"
+    {
+        "ru"                "{P}Фисташшковый"
+        "en"                "{P}Pistachio"
+        "pl"                "{P}Pistacjowy"
+    }
+
+    "{LG}"
+    {
+        "ru"                "{LG}Светло-зеленый"
+        "en"                "{LG}Light green"
+        "pl"                "{LG}Jasny zielony"
+    }
+
+    "{S}"
+    {
+        "ru"                "{S}Алый"
+        "en"                "{S}Scarlet"
+        "pl"                "{S}Szkarłatny"
+    }
+
+    "{GR}"
+    {
+        "ru"                "{GR}Серый"
+        "en"                "{GR}Grey"
+        "pl"                "{GR}Szary"
+    }
+
+    "{BA}"
+    {
+        "ru"                "{BA}Банановый"
+        "en"                "{BA}Banana"
+        "pl"                "{BA}Bananowy"
+    }
+
+    "{DG}"
+    {
+        "ru"                "{DG}Песочно-серый"
+        "en"                "{DG}Dusty-grey"
+        "pl"                "{DG}Popielaty"
+    }
+
+    "{C}"
+    {
+        "ru"                "{C}Голубой"
+        "en"                "{C}Cyan"
+        "pl"                "{C}Cyjanowy"
+    }
+
+    "{B}"
+    {
+        "ru"                "{B}Синий"
+        "en"                "{B}Blue"
+        "pl"                "{B}Niebieski"
+    }
+
+    "{V}"
+    {
+        "ru"                "{V}Фиалковый"
+        "en"                "{V}Violet"
+        "pl"                "{V}Fioletowy"
+    }
+
+    "{PI}"
+    {
+        "ru"                "{PI}Розовый"
+        "en"                "{PI}Pink"
+        "pl"                "{PI}Różowy"
+    }
+
+    "{CO}"
+    {
+        "ru"                "{CO}Коралловый"
+        "en"                "{CO}Сoralline"
+        "pl"                "{CO}Koralowy"
+    }
+
+    "{GO}"
+    {
+        "ru"                "{GO}Золотой"
+        "en"                "{GO}Gold"
+        "pl"                "{GO}Złoty"
+    }
+
+    // ------------ Template parts ----------- //
+    "{PROTOTYPE}"
+    {
+        "ru"                "Шаблон"
+        "en"                "Template"
+        "pl"                "Szablon"
+    }
+
+    "{STATUSCO}"
+    {
+        "ru"                "Цвет статуса"
+        "en"                "Status сolor"
+        "pl"                "Kolor status"
+    }
+
+    "{STATUS}"
+    {
+        "ru"                "Статус"
+        "en"                "Status"
+        "pl"                "Status"
+    }
+
+    "{TEAMCO}"
+    {
+        "ru"                "Цвет команды"
+        "en"                "Team сolor"
+        "pl"                "Kolor komenda"
+    }
+
+    "{TEAM}"
+    {
+        "ru"                "Команда"
+        "en"                "Team"
+        "pl"                "Komenda"
+    }
+
+    "{PREFIXCO}"
+    {
+        "ru"                "Цвет префикса"
+        "en"                "Chat tag color"
+        "pl"                "Kolor prefiksu"
+    }
+
+    "{PREFIX}"
+    {
+        "ru"                "Префикс"
+        "en"                "Chat tag"
+        "pl"                "Prefiks"
+    }
+
+    "{NAMECO}"
+    {
+        "ru"                "Цвет прозвища"
+        "en"                "Username color"
+        "pl"                "Kolor pseudonimu"
+    }
+
+    "{NAME}"
+    {
+        "ru"                "Прозвище"
+        "en"                "Username"
+        "pl"                "Przezwisko"
+    }
+
+    "{MSGCO}"
+    {
+        "ru"                "Цвет сообщения"
+        "en"                "Message color"
+        "pl"                "Kolor wiadomości"
+    }
+
+    "{MSG}"
+    {
+        "ru"                "Сообщение"
+        "en"                "Message"
+        "pl"                "Wiadomość"
+    }
+}
