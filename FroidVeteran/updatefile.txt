@@ -5,7 +5,7 @@
 		"Latest"	"1.0.2"
 	}
 
-	"Notes"	"Plugin Release."
+	"Notes"	"Update."
 }
 
 "Files"
