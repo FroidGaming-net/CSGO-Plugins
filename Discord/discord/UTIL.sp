@@ -10,7 +10,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -333,8 +333,9 @@ HTTPRequest UTIL_NewRequest(const char[] szConfigName, bool bAllowedDefault)
   }
 
   HTTPRequest hRequest = new HTTPRequest(szRequestUrl);
+  hRequest.SetHeader("Content-Type", "application/json");
   hRequest.SetHeader("User-Agent", szUserAgent);
-  DebugMessage("UTIL_NewRequest(): Created HTTP Request with defined User-Agent.")
+  DebugMessage("UTIL_NewRequest(): Created HTTP Request with defined Content-Type and User-Agent.")
 
   return hRequest;
 }
