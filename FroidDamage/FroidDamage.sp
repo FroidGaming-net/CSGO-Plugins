@@ -8,13 +8,14 @@
 #undef REQUIRE_PLUGIN
 #include <sourcebanspp>
 #include <updater>
+#include <froidmatch>
 
 #pragma semicolon 1
 #pragma newdecls required
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.8"
+#define VERSION "1.2.0"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -32,11 +33,19 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
+	g_cHostname = FindConVar("hostname");
+
     reloadPlugins();
 
 	if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
+}
+
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
+{
+    MarkNativeAsOptional("GetDemoName");
+    return APLRes_Success;
 }
 
 public void OnPluginEnd()
