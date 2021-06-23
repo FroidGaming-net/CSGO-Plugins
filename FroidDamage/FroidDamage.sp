@@ -4,6 +4,7 @@
 #include <sdkhooks>
 #include <cstrike>
 #include <multicolors>
+#include <discord_extended>
 #undef REQUIRE_PLUGIN
 #include <sourcebanspp>
 #include <updater>
@@ -13,7 +14,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.6"
+#define VERSION "1.1.7"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -37,7 +38,8 @@ public void OnPluginStart()
     }
 }
 
-public void OnPluginEnd() {
+public void OnPluginEnd()
+{
     for (int i = 1; i < MAXPLAYERS; i++) {
 		if (IsValidClient(i)) {
 			OnClientDisconnect(i);
@@ -46,12 +48,18 @@ public void OnPluginEnd() {
 }
 
 /// Reload Detected
-public void reloadPlugins() {
+public void reloadPlugins()
+{
 	for (int i = 1; i < MAXPLAYERS; i++) {
 		if (IsValidClient(i)) {
 			OnClientPutInServer(i);
 		}
 	}
+}
+
+public void OnMapStart()
+{
+    Discord_BindWebHook("damage_logs", "https://discord.com/api/webhooks/857219091948503100/3lS7IbZ_Kg24P5BW4jCw_f-I4AxDFUoZEoV7gF42ji4tG0oAi2JOD3nEap35s5dvmk4z");
 }
 
 public void OnClientPutInServer(int iClient)
@@ -99,6 +107,31 @@ public Action OnTakeDamage(int iClient, int &iAttacker, int &iInflictor, float &
                         return Plugin_Continue;
                     }
 
+                    // Discord
+                    Discord_StartMessage();
+                    Discord_SetUsername("FroidGaming.net");
+                    Discord_SetTitle(NULL_STRING, "★ Damage Logs ★");
+                    /// Content
+                    char sAuthid[32], szBody[2][1048];
+                    GetClientAuthId(iClient, AuthId_SteamID64, szBody[0], sizeof(szBody[]));
+                    GetClientName(iClient, szBody[1], sizeof(szBody[]));
+                    EscapeString(szBody[1], sizeof(szBody[]));
+
+                    Format(szBody[0], sizeof(szBody[]), "» [%s](https://steamcommunity.com/profiles/%s/) (%s)", szBody[1], szBody[0], sAuthid);
+                    Discord_AddField("• Player :", szBody[0], false);
+
+                    Format(szBody[0], sizeof(szBody[]), "» %s", sWeapon);
+                    Discord_AddField("• Weapon :", szBody[0], false);
+
+                    Format(szBody[0], sizeof(szBody[]), "» %f", fDamage);
+                    Discord_AddField("• Damage :", szBody[0], false);
+
+                    FormatEx(szBody[0], sizeof(szBody[]), "» <@&583584442287652876>");
+                    Discord_AddField("• Tags :", szBody[0], false);
+                    /// Content
+                    Discord_EndMessage("damage_logs", true);
+                    /// Discord
+
                     CPrintToChat(iAttacker, "{darkred}WARNING: You will be banned from the server if you attack your teammate!!!");
                     g_PlayerData[iClient].fStamina = GetEntPropFloat(iClient, Prop_Send, "m_flStamina");
                     fDamage = 0.0;
@@ -112,10 +145,43 @@ public Action OnTakeDamage(int iClient, int &iAttacker, int &iInflictor, float &
 	return Plugin_Continue;
 }
 
+void EscapeString(char[] string, int maxlen)
+{
+	ReplaceString(string, maxlen, "@", "＠");
+	ReplaceString(string, maxlen, "'", "\'");
+	ReplaceString(string, maxlen, "\"", "＂");
+}
+
 public Action OnTakeDamageAlive(int iClient, int &iAttacker, int &iInflictor, float &fDamage, int &iDamagetype)
 {
     if (iClient != iAttacker && IsValidClient(iAttacker)) {
         if (GetClientTeam(iClient) == GetClientTeam(iAttacker)) {
+
+            // Discord
+            Discord_StartMessage();
+            Discord_SetUsername("FroidGaming.net");
+            Discord_SetTitle(NULL_STRING, "★ Damage Logs ★");
+            /// Content
+            char sAuthid[32], szBody[2][1048];
+            GetClientAuthId(iClient, AuthId_SteamID64, szBody[0], sizeof(szBody[]));
+            GetClientName(iClient, szBody[1], sizeof(szBody[]));
+            EscapeString(szBody[1], sizeof(szBody[]));
+
+            Format(szBody[0], sizeof(szBody[]), "» [%s](https://steamcommunity.com/profiles/%s/) (%s)", szBody[1], szBody[0], sAuthid);
+            Discord_AddField("• Player :", szBody[0], false);
+
+            Format(szBody[0], sizeof(szBody[]), "» Grenade");
+            Discord_AddField("• Weapon :", szBody[0], false);
+
+            Format(szBody[0], sizeof(szBody[]), "» %f", RoundToNearest(fDamage));
+            Discord_AddField("• Damage :", szBody[0], false);
+
+            FormatEx(szBody[0], sizeof(szBody[]), "» <@&583584442287652876>");
+            Discord_AddField("• Tags :", szBody[0], false);
+            /// Content
+            Discord_EndMessage("damage_logs", true);
+            /// Discord
+
             g_PlayerData[iAttacker].iTeamDamage = g_PlayerData[iAttacker].iTeamDamage + RoundToNearest(fDamage);
 
             if (g_PlayerData[iAttacker].iTeamDamage >= 5 && g_PlayerData[iAttacker].iTeamDamage < 150) {
