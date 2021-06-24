@@ -74,6 +74,15 @@ stock void EscapeString(char[] sString, int iMaxlen)
 	ReplaceString(sString, iMaxlen, "\"", "＂");
 }
 
+stock void ResetRoundTeamDamage()
+{
+	for (int i = 1; i < MAXPLAYERS; i++) {
+        if (IsValidClient(i)) {
+            g_PlayerData[i].iRoundTeamDamage = 0;
+        }
+    }
+}
+
 stock int GetRoundCount()
 {
 	return GameRules_GetProp("m_totalRoundsPlayed");

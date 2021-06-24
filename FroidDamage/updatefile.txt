@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.2.0"
+		"Latest"	"1.2.1"
 	}
 
-	"Notes"	"Fix Bugs & Improve Discord Logs [3]."
+	"Notes"	"Improve and Add Auto Ban."
 }
 
 "Files"

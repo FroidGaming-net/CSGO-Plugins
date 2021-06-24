@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2.0"
+#define VERSION "1.2.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -34,6 +34,7 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	g_cHostname = FindConVar("hostname");
+    HookEvent("round_prestart", Event_PreRoundStart);
 
     reloadPlugins();
 
@@ -70,6 +71,23 @@ public void reloadPlugins()
 public void OnMapStart()
 {
     Discord_BindWebHook("damage_logs", "https://discord.com/api/webhooks/857219091948503100/3lS7IbZ_Kg24P5BW4jCw_f-I4AxDFUoZEoV7gF42ji4tG0oAi2JOD3nEap35s5dvmk4z");
+    g_iRoundCount = 0;
+}
+
+public void OnMapEnd()
+{
+    Discord_BindWebHook("damage_logs", "https://discord.com/api/webhooks/857219091948503100/3lS7IbZ_Kg24P5BW4jCw_f-I4AxDFUoZEoV7gF42ji4tG0oAi2JOD3nEap35s5dvmk4z");
+    g_iRoundCount = 0;
+}
+
+public Action Event_PreRoundStart(Event event, const char[] name, bool dontBroadcast)
+{
+    g_iRoundCount++;
+
+    if (g_iRoundCount >= 4) {
+        g_iRoundCount = 0;
+        ResetRoundTeamDamage();
+    }
 }
 
 public void OnClientPutInServer(int iClient)
@@ -117,7 +135,10 @@ public Action OnTakeDamage(int iClient, int &iAttacker, int &iInflictor, float &
                         return Plugin_Continue;
                     }
 
-                    SendDiscord(iAttacker, iClient, RoundToNearest(fDamage), sWeapon);
+                    if (StrContains(sWeapon, "weapon_awp") == -1 || StrContains(sWeapon, "weapon_g3sg1") == -1 || StrContains(sWeapon, "weapon_scar20") == -1 || StrContains(sWeapon, "weapon_mag7") == -1 || StrContains(sWeapon, "weapon_sawedoff") == -1 || StrContains(sWeapon, "weapon_nova") == -1) {
+                        g_PlayerData[iAttacker].iRoundTeamDamage = g_PlayerData[iAttacker].iRoundTeamDamage + RoundToNearest(fDamage);
+                        SendDiscord(iAttacker, iClient, RoundToNearest(fDamage), sWeapon);
+                    }
 
                     CPrintToChat(iAttacker, "{darkred}WARNING: You will be banned from the server if you attack your teammate!!!");
                     g_PlayerData[iClient].fStamina = GetEntPropFloat(iClient, Prop_Send, "m_flStamina");
@@ -148,6 +169,13 @@ public Action OnTakeDamageAlive(int iClient, int &iAttacker, int &iInflictor, fl
                 if (g_PlayerData[iAttacker].iBanned == 0) {
                     g_PlayerData[iAttacker].iBanned = 1;
                     SBPP_BanPlayer(0, iAttacker, 180, "Griefing Attack Teammate");
+                }
+            }
+
+            if (g_PlayerData[iAttacker].iRoundTeamDamage >= 2500) {
+                if (g_PlayerData[iAttacker].iBanned == 0) {
+                    g_PlayerData[iAttacker].iBanned = 1;
+                    SBPP_BanPlayer(0, iAttacker, 180, "Griefing Attack Teammate [2]");
                 }
             }
         }
