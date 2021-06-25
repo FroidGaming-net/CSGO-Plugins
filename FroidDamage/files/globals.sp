@@ -1,6 +1,7 @@
 ConVar g_cHostname = null;
 char g_sHostname[64];
 int g_iRoundCount = 0;
+bool g_bHalfTime = false;
 
 enum struct PlayerData
 {

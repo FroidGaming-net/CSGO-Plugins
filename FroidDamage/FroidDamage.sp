@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2.1"
+#define VERSION "1.2.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -34,7 +34,9 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	g_cHostname = FindConVar("hostname");
+    HookEvent("announce_phase_end", Event_HalfTime);
     HookEvent("round_prestart", Event_PreRoundStart);
+	HookEventEx("cs_win_panel_match", cs_win_panel_match);
 
     reloadPlugins();
 
@@ -71,17 +73,30 @@ public void reloadPlugins()
 public void OnMapStart()
 {
     Discord_BindWebHook("damage_logs", "https://discord.com/api/webhooks/857219091948503100/3lS7IbZ_Kg24P5BW4jCw_f-I4AxDFUoZEoV7gF42ji4tG0oAi2JOD3nEap35s5dvmk4z");
+    g_bHalfTime = false;
     g_iRoundCount = 0;
 }
 
 public void OnMapEnd()
 {
     Discord_BindWebHook("damage_logs", "https://discord.com/api/webhooks/857219091948503100/3lS7IbZ_Kg24P5BW4jCw_f-I4AxDFUoZEoV7gF42ji4tG0oAi2JOD3nEap35s5dvmk4z");
+    g_bHalfTime = false;
     g_iRoundCount = 0;
+}
+
+public Action Event_HalfTime(Event event, const char[] name, bool dontBroadcast)
+{
+    g_bHalfTime = true;
+}
+
+public void cs_win_panel_match(Handle event, const char[] eventname, bool dontBroadcast)
+{
+	g_bHalfTime = true;
 }
 
 public Action Event_PreRoundStart(Event event, const char[] name, bool dontBroadcast)
 {
+    g_bHalfTime = false;
     g_iRoundCount++;
 
     if (g_iRoundCount >= 4) {
@@ -131,6 +146,10 @@ public Action OnTakeDamage(int iClient, int &iAttacker, int &iInflictor, float &
 
                     return Plugin_Changed;
                 } else if (iDamagetype == 4098 || iDamagetype == 1073745922) {
+                    if (g_bHalfTime == true) {
+                        return Plugin_Continue;
+                    }
+
                     if (IsWarmup()) {
                         return Plugin_Continue;
                     }
@@ -157,6 +176,10 @@ public Action OnTakeDamageAlive(int iClient, int &iAttacker, int &iInflictor, fl
 {
     if (iClient != iAttacker && IsValidClient(iAttacker)) {
         if (GetClientTeam(iClient) == GetClientTeam(iAttacker)) {
+            if (g_bHalfTime == true) {
+                return Plugin_Continue;
+            }
+
             SendDiscord(iAttacker, iClient, RoundToNearest(fDamage), "Grenades");
 
             g_PlayerData[iAttacker].iTeamDamage = g_PlayerData[iAttacker].iTeamDamage + RoundToNearest(fDamage);
@@ -172,7 +195,7 @@ public Action OnTakeDamageAlive(int iClient, int &iAttacker, int &iInflictor, fl
                 }
             }
 
-            if (g_PlayerData[iAttacker].iRoundTeamDamage >= 2500) {
+            if (g_PlayerData[iAttacker].iRoundTeamDamage >= 1500) {
                 if (g_PlayerData[iAttacker].iBanned == 0) {
                     g_PlayerData[iAttacker].iBanned = 1;
                     SBPP_BanPlayer(0, iAttacker, 180, "Griefing Attack Teammate [2]");
