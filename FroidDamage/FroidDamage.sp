@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2.3"
+#define VERSION "1.2.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -154,7 +154,7 @@ public Action OnTakeDamage(int iClient, int &iAttacker, int &iInflictor, float &
                         return Plugin_Continue;
                     }
 
-                    if (StrContains(sWeapon, "weapon_awp") == -1 && StrContains(sWeapon, "weapon_g3sg1") == -1 && StrContains(sWeapon, "weapon_scar20") == -1 && StrContains(sWeapon, "weapon_mag7") == -1 && StrContains(sWeapon, "weapon_sawedoff") == -1 && StrContains(sWeapon, "weapon_nova") == -1) {
+                    if (StrContains(sWeapon, "weapon_awp") == -1 && StrContains(sWeapon, "weapon_g3sg1") == -1 && StrContains(sWeapon, "weapon_scar20") == -1) {
                         g_PlayerData[iAttacker].iRoundTeamDamage = g_PlayerData[iAttacker].iRoundTeamDamage + RoundToNearest(fDamage);
                         SendDiscord(iAttacker, iClient, RoundToNearest(fDamage), sWeapon);
                     }
