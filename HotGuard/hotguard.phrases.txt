@@ -1,0 +1,39 @@
+"Phrases"
+{
+    "HOTGUARD_TAGCHAT"
+	{
+		"en"		"{lightred}[FroidAC-HG]{default}"
+		"ru"		"{lightred}[FroidAC-HG]{default}"
+	}
+ 
+	"HOTGUARD_CHATPLAYERCOLOR"
+	{
+		"en"		"{green}%N{default}"
+		"ru"		"{green}%N{default}"
+	}
+	
+	"HOTGUARD_DETECTED"
+	{
+	    "#format"    "{1:s}"
+		"en"		"[DETECTED: {1}]"
+		"ru"		"[Обнаружен: {1}]"
+	}
+	
+	"HOTGUARD_TAGBAN"
+	{
+		"en"		"[FroidAC] "
+		"ru"		"[FroidAC] "
+	}
+	
+	"HOTGUARD_Analyz"
+	{
+		"ru"		"Анализируем Игрока:"
+		"en"		"Analyz Player:"
+	}
+
+	"HOTGUARD_BAN"
+	{
+		"ru"		" Обнаружено запрещенное приложение (ЧИТ)."
+		"en"		" A banned application was detected (HACK)."
+	}
+}
