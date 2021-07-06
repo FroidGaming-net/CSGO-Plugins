@@ -82,6 +82,11 @@ public void OnLibraryAdded(const char[] name)
 	{
 		CanUseSourcebans = true;
 	}
+
+	if (StrEqual(name, "updater"))
+	{
+        Updater_AddPlugin(UPDATE_URL);
+    }
 }
 
 public void OnLibraryRemoved(const char[] name)
@@ -90,11 +95,6 @@ public void OnLibraryRemoved(const char[] name)
 	{
 		CanUseSourcebans = false;
 	}
-
-	if (StrEqual(name, "updater"))
-	{
-        Updater_AddPlugin(UPDATE_URL);
-    }
 }
 
 public void SQL_OnConnect(Database db, const char[] error, any data)
