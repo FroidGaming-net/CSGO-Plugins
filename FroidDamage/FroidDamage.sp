@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2.4"
+#define VERSION "1.2.5"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidDamage/updatefile.txt"
 
 #include "files/globals.sp"
@@ -41,6 +41,13 @@ public void OnPluginStart()
     reloadPlugins();
 
 	if (LibraryExists("updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
+}
+
+public void OnLibraryAdded(const char[] name)
+{
+    if (StrEqual(name, "updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
 }
