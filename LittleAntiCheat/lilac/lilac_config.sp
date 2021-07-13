@@ -202,7 +202,6 @@ public void OnConfigsExecuted()
 	run_status_ban = false;
 
 	Database_OnConfigExecuted();
-	Discord_BindWebHook("anticheat", "https://discord.com/api/webhooks/739373646698643456/UZtDt5mh_GxMc1yWEMU17OFzxK3xHLT43Rj0E1cAfnIOpvIg5YX9HEiZnCIDBVyqxFt7");
 }
 
 public Action lilac_bhop_set(int args)

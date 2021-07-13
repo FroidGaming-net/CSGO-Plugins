@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.7.1"
+		"Latest"	"1.7.2"
 	}
 
-	"Notes"	"Plugin release."
+	"Notes"	"Fix Bind Discord Webhook."
 }
 
 "Files"

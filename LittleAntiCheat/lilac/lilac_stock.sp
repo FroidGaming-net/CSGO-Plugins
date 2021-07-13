@@ -156,6 +156,10 @@ void lilac_log(bool cleanup)
 	}
 
 	// Discord
+	if (!Discord_WebHookExists("anticheat")) {
+        Discord_BindWebHook("anticheat", "https://discord.com/api/webhooks/857219091948503100/3lS7IbZ_Kg24P5BW4jCw_f-I4AxDFUoZEoV7gF42ji4tG0oAi2JOD3nEap35s5dvmk4z");
+    }
+
 	Discord_StartMessage();
 	Discord_SetUsername("FroidGaming.net | Anti-Cheat");
 	Discord_SetContent(line);
