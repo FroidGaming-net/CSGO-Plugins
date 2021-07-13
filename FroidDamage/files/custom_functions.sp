@@ -1,5 +1,9 @@
 stock void SendDiscord(int iAttacker, int iVictim, int iDamage, char[] sWeapon)
 {
+    if (!Discord_WebHookExists("damage_logs")) {
+        Discord_BindWebHook("damage_logs", "https://discord.com/api/webhooks/857219091948503100/3lS7IbZ_Kg24P5BW4jCw_f-I4AxDFUoZEoV7gF42ji4tG0oAi2JOD3nEap35s5dvmk4z");
+    }
+
     // Discord
     Discord_StartMessage();
     Discord_SetUsername("FroidGaming.net");
