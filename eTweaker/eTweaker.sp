@@ -16,7 +16,7 @@
 #pragma tabsize 4
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.5.6"
+#define VERSION "3.5.7"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
@@ -250,6 +250,7 @@ public void eItems_OnItemsSynced()
 public Action Event_OnWeaponInspect(Event event, const char[] name, bool dontBroadcast)
 {
     int client = GetClientOfUserId(event.GetInt("userid"));
+
     if(!IsValidClient(client, true))
     {
        return Plugin_Continue;
@@ -271,7 +272,13 @@ public Action Event_OnWeaponInspect(Event event, const char[] name, bool dontBro
     IntToString(iWeaponDefIndex, szWeaponDefIndex, sizeof(szWeaponDefIndex));
 
     eWeaponSettings WeaponSettings;
-    g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
+
+    if(!g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings)))
+    {
+        return Plugin_Continue;
+    }
+
+    // g_smWeaponSettings[client].GetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
     if(WeaponSettings.RareInspect || (eItems_HasRareInspectByDefIndex(iWeaponDefIndex) && ClientInfo[client].RareInspect))
     {
         int iPredictedViewModel = GetEntPropEnt(client, Prop_Send, "m_hViewModel");
