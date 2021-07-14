@@ -1,0 +1,14 @@
+"Information"
+{
+	"Version"
+	{
+		"Latest"	"1.0.0"
+	}
+
+	"Notes"	"Release."
+}
+
+"Files"
+{
+	"Plugin"	"Path_SM/plugins/API/SourceChatRelay.smx"
+}
