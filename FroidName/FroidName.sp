@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.5"
+#define VERSION "1.1.6"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidName/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -32,7 +32,9 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
+    HookEvent("player_changename", Event_OnPlayerChangeNamePre, EventHookMode_Pre);
     HookEvent("player_changename", Event_OnPlayerChangeNamePost, EventHookMode_Post);
+    HookEvent("player_team", Event_OnPlayerTeam);
 
     reloadPlugins();
 
@@ -45,11 +47,6 @@ public Action Timer_Setting(Handle hTimer)
 {
     g_cHostname = FindConVar("hostname");
     g_cHostname.GetString(g_sHostname, sizeof(g_sHostname));
-
-    if (StrContains(g_sHostname, "Arena") > -1) {
-        HookEvent("player_changename", Event_OnPlayerChangeNamePre, EventHookMode_Pre);
-        HookEvent("player_team", Event_OnPlayerTeam, EventHookMode_Post);
-	}
 }
 
 public void OnLibraryAdded(const char[] name)
@@ -136,10 +133,31 @@ public Action Event_OnPlayerTeam(Handle hEvent, char[] sName, bool bDontBroadcas
 {
 	int iClient = GetClientOfUserId(GetEventInt(hEvent, "userid"));
 
-	if (IsValidClient(iClient) && g_PlayerData[iClient].bBlockMessage) {
-		char sPlayerName[MAX_NAME_LENGTH];
-		GetClientName(iClient, sPlayerName, sizeof(sPlayerName));
+	if (!IsValidClient(iClient)) {
+        return Plugin_Continue;
+    }
 
+    GetClientName(iClient, g_PlayerData[iClient].sName, sizeof(g_PlayerData[].sName));
+
+    /// General Blacklist
+    if (!IsValidChatTag(g_PlayerData[iClient].sName)){
+        if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
+            return Plugin_Continue;
+        }
+
+        g_PlayerData[iClient].bChanged = true;
+
+        SetClientName(iClient, "AKU GAY");
+        if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
+            CPrintToChat(iClient, "%s Kamu tidak dapat menggunakan nickname itu! Mohon ganti nickname kamu...", PREFIX);
+        } else {
+            CPrintToChat(iClient, "%s You cant use that nickname! Please change your nickname...", PREFIX);
+        }
+
+        g_PlayerData[iClient].bBlockMessage = false;
+    }
+
+    if (g_PlayerData[iClient].bBlockMessage) {
         if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
             CPrintToChat(iClient, "%s Kamu tidak dapat menggunakan nickname itu! Mohon ganti nickname kamu...", PREFIX);
         } else {
@@ -148,6 +166,8 @@ public Action Event_OnPlayerTeam(Handle hEvent, char[] sName, bool bDontBroadcas
 
         g_PlayerData[iClient].bBlockMessage = false;
 	}
+
+    return Plugin_Continue;
 }
 
 public Action Event_OnPlayerChangeNamePre(Event hEvent, const char[] sName, bool bDontBroadcast)
@@ -155,6 +175,11 @@ public Action Event_OnPlayerChangeNamePre(Event hEvent, const char[] sName, bool
     int iClient = GetClientOfUserId(GetEventInt(hEvent, "userid"));
 
     if (IsValidClient(iClient)) {
+        if (g_PlayerData[iClient].bChanged == true) {
+            SetEventBroadcast(hEvent, true);
+            return Plugin_Changed;
+        }
+
         if (StrContains(g_sHostname, "Arena") > -1) {
             if (g_PlayerData[iClient].bBlockMessage) {
                 SetEventBroadcast(hEvent, true);
@@ -173,8 +198,26 @@ public Action Event_OnPlayerChangeNamePost(Event hEvent, const char[] sName, boo
     int iClient = GetClientOfUserId(GetEventInt(hEvent, "userid"));
 
     if (IsValidClient(iClient)) {
+        if (g_PlayerData[iClient].bChanged == true) {
+            g_PlayerData[iClient].bChanged = false;
+            return Plugin_Continue;
+        }
+
         if (!CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
-            Format(g_PlayerData[iClient].sName, sizeof(g_PlayerData[].sName), "%N", iClient);
+            GetEventString(hEvent, "newname", g_PlayerData[iClient].sName, sizeof(g_PlayerData[].sName));
+            /// General Blacklist
+            if (!IsValidChatTag(g_PlayerData[iClient].sName)){
+                g_PlayerData[iClient].bChanged = true;
+
+                SetClientName(iClient, "AKU GAY");
+                if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
+                    CPrintToChat(iClient, "%s Kamu tidak dapat menggunakan nickname itu! Mohon ganti nickname kamu...", PREFIX);
+                } else {
+                    CPrintToChat(iClient, "%s You cant use that nickname! Please change your nickname...", PREFIX);
+                }
+
+                return Plugin_Continue;
+            }
 
             DataPack pack = new DataPack();
             pack.WriteCell(GetClientUserId(iClient));

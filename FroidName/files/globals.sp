@@ -8,6 +8,7 @@ enum struct PlayerData
     char sName[MAX_NAME_LENGTH];
     char sNewName[MAX_NAME_LENGTH];
     bool bBlockMessage;
+    bool bChanged;
     char sCountryCode[3];
 
     void Reset()
@@ -15,6 +16,7 @@ enum struct PlayerData
         this.sName = "Default";
         this.sNewName = "Default";
         this.bBlockMessage = false;
+        this.bChanged = false;
         this.sCountryCode = "EN";
     }
 }

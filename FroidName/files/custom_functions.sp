@@ -13,3 +13,11 @@ void RandomizeName(int iClient)
 
 	g_PlayerData[iClient].sNewName[iLength] = '\0';
 }
+
+stock bool IsValidChatTag(const char[] Tag)
+{
+	if((StrContains(Tag, "admin", false) != -1) || (StrContains(Tag, "owner", false) != -1) || (StrContains(Tag, "staff", false) != -1) || (StrContains(Tag, "sevente", false) != -1) || (StrContains(Tag, "moderator", false) != -1))
+		return false;
+
+	return true;
+}

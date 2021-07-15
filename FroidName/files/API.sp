@@ -21,6 +21,7 @@ void OnCheckName(HTTPResponse response, DataPack pack)
     JSONObject jsondata = view_as<JSONObject>(response.Data);
     bool bStatus = jsondata.GetBool("status");
     if (bStatus == true) {
+        g_PlayerData[iClient].bChanged = true;
         RandomizeName(iClient);
         SetClientName(iClient, g_PlayerData[iClient].sNewName);
         if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
