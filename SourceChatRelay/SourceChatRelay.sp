@@ -12,7 +12,7 @@
 
 /* Plugin Info */
 #define VERSION "1.0.0"
-#define UPDATE_URL "https://sys.froidgaming.net/FroidAgents/updatefile.txt"
+#define UPDATE_URL "https://sys.froidgaming.net/SourceChatRelay/updatefile.txt"
 
 #include "files/globals.sp"
 #include "files/client.sp"
