@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.3"
+#define VERSION "1.1.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidBlock/updatefile.txt"
 
 #include "files/client.sp"
@@ -49,6 +49,7 @@ public void OnPluginStart()
 
 	AddCommandListener(Command_Block, "getout");
 	AddCommandListener(Command_Block, "sorry");
+	AddCommandListener(PlayerRadio, "playerradio");
 	/// Block
 
     if (LibraryExists("updater")) {
@@ -61,6 +62,25 @@ public void OnLibraryAdded(const char[] name)
     if (StrEqual(name, "updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
+}
+
+public Action PlayerRadio(int iClient, const char[] sCommand, int iArgc)
+{
+	if (!IsClientValid(iClient)) {
+        return Plugin_Continue;
+    }
+
+    if (iClient > 0 && iArgc == 2) {
+        char sBuffer[10];
+        GetCmdArg(1, sBuffer, sizeof(sBuffer));
+
+        if(StrEqual(sBuffer, "deathcry", false))
+        {
+            return Plugin_Handled;
+        }
+    }
+
+    return Plugin_Continue;
 }
 
 public Action Command_Block(int iClient, const char[] sCommand, int iArgc)
