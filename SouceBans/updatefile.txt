@@ -2,7 +2,7 @@
 {
 	"Version"
 	{
-		"Latest"	"1.7.1"
+		"Latest"	"1.7.2"
 	}
 
 	"Notes"	"Update Sleuth."

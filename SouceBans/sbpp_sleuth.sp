@@ -8,7 +8,7 @@
 #include <sourcebanspp>
 #include <ripext>
 
-#define PLUGIN_VERSION "1.7.1"
+#define PLUGIN_VERSION "1.7.2"
 #define UPDATE_URL "https://sys.froidgaming.net/SourceBans/updatefile.txt"
 #define BASE_URL "http://ip-api.com"
 
@@ -28,8 +28,10 @@ ConVar g_cVar_actions;
 ConVar g_cVar_banduration;
 ConVar g_cVar_sbprefix;
 ConVar g_cVar_bansAllowed;
+ConVar g_cVar_bantype;
 ConVar g_cVar_bypass;
-// ConVar g_cVar_excludeTime;
+ConVar g_cVar_excludeOld;
+ConVar g_cVar_excludeTime;
 
 //- Bools -//
 bool CanUseSourcebans = false;
@@ -53,12 +55,14 @@ public void OnPluginStart()
 	g_cVar_banduration = CreateConVar("sm_sleuth_duration", "0", "Required: sm_sleuth_actions 1: Bantime to ban player if we got a match (0 = permanent (defined in minutes) )", 0);
 	g_cVar_sbprefix = CreateConVar("sm_sleuth_prefix", "sb", "Prexfix for sourcebans tables: Default sb", 0);
 	g_cVar_bansAllowed = CreateConVar("sm_sleuth_bansallowed", "0", "How many active bans are allowed before we act", 0);
+	g_cVar_bantype = CreateConVar("sm_sleuth_bantype", "0", "0 - ban all type of lengths, 1 - ban only permanent bans", 0, true, 0.0, true, 1.0);
 	g_cVar_bypass = CreateConVar("sm_sleuth_adminbypass", "0", "0 - Inactivated, 1 - Allow all admins with ban flag to pass the check", 0, true, 0.0, true, 1.0);
-	// g_cVar_excludeTime = CreateConVar("sm_sleuth_excludetime", "259200", "Amount of time in seconds to allow old bans to be excluded from ban check", 0, true, 1.0, false);
+	g_cVar_excludeOld = CreateConVar("sm_sleuth_excludeold", "1", "0 - Inactivated, 1 - Allow old bans to be excluded from ban check", 0, true, 0.0, true, 1.0);
+	g_cVar_excludeTime = CreateConVar("sm_sleuth_excludetime", "604800", "Amount of time in seconds to allow old bans to be excluded from ban check", 0, true, 1.0, false);
 
 	g_hAllowedArray = new ArrayList(256);
 
-	AutoExecConfig(true, "Sm_SourceSleuth2");
+	AutoExecConfig(true, "sbpp_sleuth");
 
 	Database.Connect(SQL_OnConnect, "sourcebans");
 
@@ -195,7 +199,8 @@ void OnCheckIP(HTTPResponse response, DataPack pack)
 
 			// FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d AND length = 0", Prefix, sIP, GetTime() - g_cVar_excludeTime.IntValue);
 			// FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d AND length = 0", Prefix, sIP, GetTime() - 604800);
-			FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d", Prefix, sIP, GetTime() - 604800);
+			// FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND ends > %d", Prefix, sIP, GetTime() - 604800);
+			FormatEx(query, sizeof(query), "SELECT * FROM %s_bans WHERE ip='%s' AND RemoveType IS NULL AND (ends > %d OR ((1 = %d AND length = 0 AND ends > %d) OR (0 = %d AND length = 0)))", Prefix, sIP, g_cVar_bantype.IntValue == 0 ? GetTime() : 0, g_cVar_excludeOld.IntValue, GetTime() - g_cVar_excludeTime.IntValue, g_cVar_excludeOld.IntValue);
 			DataPack datapack = new DataPack();
 
 			datapack.WriteCell(GetClientUserId(iClient));
