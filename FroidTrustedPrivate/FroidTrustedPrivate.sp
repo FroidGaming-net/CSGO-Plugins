@@ -64,11 +64,13 @@ public void OnClientPostAdminCheck(int iClient)
 
     g_PlayerData[iClient].Reset();
 
-    char sAuthID[64], sUrl[512];
-    GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-    Format(sUrl, sizeof(sUrl), "%s/api/anticheat2/%s", BASE_URL, sAuthID);
-    HTTPRequest request = new HTTPRequest(sUrl);
-    request.Get(OnCheckAntiCheat, GetClientUserId(iClient));
+    if (!CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_ROOT)) {
+        char sAuthID[64], sUrl[512];
+        GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
+        Format(sUrl, sizeof(sUrl), "%s/api/anticheat2/%s", BASE_URL, sAuthID);
+        HTTPRequest request = new HTTPRequest(sUrl);
+        request.Get(OnCheckAntiCheat, GetClientUserId(iClient));
+    }
 }
 
 public void OnClientDisconnect(int iClient)
