@@ -54,11 +54,6 @@ void OnCheckAntiCheat(HTTPResponse response, any value)
         return;
     }
 
-    if (CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_ROOT)) {
-        g_PlayerData[iClient].iFACLoaded = 1;
-        return;
-    }
-
     if (response.Status != HTTPStatus_OK) {
         g_PlayerData[iClient].iFACLoaded = -1;
         LogError("[OnCheckAntiCheat] HTTPStatus_OK failed");
