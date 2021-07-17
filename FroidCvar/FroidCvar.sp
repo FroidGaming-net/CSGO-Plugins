@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.8"
+#define VERSION "1.1.9"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -91,8 +91,8 @@ public Action Timer_Setting(Handle hTimer)
     SetConVarInt(g_Cvar_UserRandomSeed, 0, true);
 
     // PUG / 5v5 / Retakes / Executes
-    if(StrContains(g_sServerName, "PUG") > -1 || StrContains(g_sServerName, "Retakes") > -1 || StrContains(g_sServerName, "5v5") > -1 || StrContains(g_sServerName, "Executes") > -1){
-        if(StrContains(g_sServerName, "Retakes") > -1 || StrContains(g_sServerName, "Executes") > -1){
+    if(StrContains(g_sServerName, "PUG", false) > -1 || StrContains(g_sServerName, "Retakes", false) > -1 || StrContains(g_sServerName, "5v5", false) > -1 || StrContains(g_sServerName, "Executes", false) > -1){
+        if(StrContains(g_sServerName, "Retakes", false) > -1 || StrContains(g_sServerName, "Executes", false) > -1){
             SetConVarInt(g_Cvar_LoserBonus, 0);
         }
 
@@ -106,7 +106,7 @@ public Action Timer_Setting(Handle hTimer)
     }
 
     // Practice
-    if(StrContains(g_sServerName, "Practice") > -1){
+    if(StrContains(g_sServerName, "Practice", false) > -1){
         SetConVarInt(g_Cvar_FriendlyFire, 1, true);
         SetConVarInt(g_Cvar_GrenadeRadio, 1, true);
         SetConVarInt(g_Cvar_PlayerCash, 0, true);
@@ -114,7 +114,7 @@ public Action Timer_Setting(Handle hTimer)
     }
 
     // FFA Deathmatch
-    if(StrContains(g_sServerName, "FFA") > -1){
+    if(StrContains(g_sServerName, "FFA", false) > -1){
         SetConVarInt(g_Cvar_FriendlyFire, 1, true);
         SetConVarInt(g_Cvar_IgnoreWin, 0, true);
         SetConVarInt(g_Cvar_WarmupPeriod, 0, true);
@@ -127,7 +127,7 @@ public Action Timer_Setting(Handle hTimer)
         SetConVarInt(g_Cvar_SolidTeam, 1, true);
     }
     // FFA Deathmatch
-    if(StrContains(g_sServerName, "AWP") > -1){
+    if(StrContains(g_sServerName, "AWP", false) > -1){
         SetConVarInt(g_Cvar_TimeLimit, 25, true);
         SetConVarInt(g_Cvar_EquipmentReset, 1, true);
         SetConVarInt(g_Cvar_MaxRounds, 0, true);
@@ -144,7 +144,15 @@ public Action Timer_Setting(Handle hTimer)
     }
 
     // Multi1v1
-    if(StrContains(g_sServerName, "Arena") > -1){
+    if(StrContains(g_sServerName, "Arena", false) > -1){
+        SetConVarInt(g_Cvar_Radar, 1);
+        SetConVarInt(g_Cvar_GrenadeRadio, 1, true);
+        SetConVarInt(g_Cvar_PlayerCash, 0, true);
+        SetConVarInt(g_Cvar_TeamCash, 0, true);
+    }
+
+    // Multi1v1
+    if(StrContains(g_sServerName, "Surf", false) > -1){
         SetConVarInt(g_Cvar_Radar, 1);
         SetConVarInt(g_Cvar_GrenadeRadio, 1, true);
         SetConVarInt(g_Cvar_PlayerCash, 0, true);
