@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.9"
+#define VERSION "1.1.10"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -157,5 +157,6 @@ public Action Timer_Setting(Handle hTimer)
         SetConVarInt(g_Cvar_GrenadeRadio, 1, true);
         SetConVarInt(g_Cvar_PlayerCash, 0, true);
         SetConVarInt(g_Cvar_TeamCash, 0, true);
+        SetConVarInt(g_Cvar_SolidTeam, 2, true);
     }
 }
