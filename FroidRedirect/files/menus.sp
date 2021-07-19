@@ -13,6 +13,8 @@ void MenuServersCategory(int iClient)
 	hMenu.AddItem("arena", "• Arena 1v1");
 	hMenu.AddItem("awp", "• AWP Bhop");
 	hMenu.AddItem("practice", "• Practice Mode");
+	hMenu.AddItem("surf", "• SURF");
+	hMenu.AddItem("prophunt", "• Prophunt / Hide and Seek");
     hMenu.Display(iClient, MENU_TIME_FOREVER);
 }
 
