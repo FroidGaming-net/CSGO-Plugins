@@ -85,11 +85,9 @@ public void PH_OnHiderSpawn(int iClient)
 
 public Action PH_OnBuyShopItem(int iClient, char[] sName, int &iPoints)
 {
-	if(GetClientTeam(iClient) != CS_TEAM_T)
-		return Plugin_Continue;
-
-	if(StrEqual(sName, PENTAGRAM))
+	if(StrEqual(sName, PENTAGRAM)) {
 		return Plugin_Handled;
+	}
 
 	if(g_fPentagramTrapTime[iClient] > GetGameTime())
 	{
@@ -102,8 +100,9 @@ public Action PH_OnBuyShopItem(int iClient, char[] sName, int &iPoints)
 
 public void PH_OnBuyShopItemPost(int iClient, char[] sName, int iPoints)
 {
-	if(StrEqual(sName, PENTAGRAM))
+	if(StrEqual(sName, PENTAGRAM)) {
 		StartPentagram(iClient);
+	}
 }
 
 void StartPentagram(int iClient)
