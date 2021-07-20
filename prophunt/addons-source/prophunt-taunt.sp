@@ -99,7 +99,7 @@ public void OnClientDisconnect(int iClient)
 
 bool HasVIP(int iClient)
 {
-	return Client_HasAdminFlags(iClient, ADMFLAG_CUSTOM1) || Client_HasAdminFlags(iClient, ADMFLAG_ROOT);
+	return Client_HasAdminFlags(iClient, ADMFLAG_CUSTOM5) || Client_HasAdminFlags(iClient, ADMFLAG_ROOT);
 }
 
 public OnClientPostAdminCheck(int iClient)

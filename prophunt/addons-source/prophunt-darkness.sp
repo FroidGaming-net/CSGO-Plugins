@@ -85,6 +85,7 @@ public void OnMapStart()
 {
 	Fog_Reset();
 	Fog_Start();
+	PH_RegisterShopItem("Reset Darkness", CS_TEAM_CT, 100, 3, 110, false);
 }
 
 public Action Event_OnRoundStart(Handle event, const char[] name, bool dontBroadcast)
