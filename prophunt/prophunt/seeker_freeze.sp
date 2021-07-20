@@ -12,16 +12,24 @@ void StartBlindTimer()
 
 public Action Timer_BlindSeeker(Handle timer, int data)
 {
-	if(!Ready())
+	if (!Ready()) {
 		return Plugin_Continue;
-	
+	}
+
 	LoopClients(iClient)
 	{
-		if(!IsClientInGame(iClient))
+		if (!IsClientInGame(iClient)) {
 			g_bBlinded[iClient] = false; // Reset
-		else Seeker_Blind(iClient); // Update status
+		} else {
+			// Seeker_Blind(iClient); // Update status
+			if (float(GetTime() - g_iRoundStart) < g_cvHideTime.FloatValue && GetClientTeam(iClient) == CS_TEAM_CT && IsPlayerAlive(iClient)) {
+				Seeker_Blind(iClient, true, true);
+			} else {
+				Seeker_Blind(iClient, true, false);
+			}
+		}
 	}
-	
+
 	return Plugin_Continue;
 }
 
@@ -29,15 +37,16 @@ void Seeker_Blind(int iClient, bool force = false, bool blind = false)
 {
 	if (iClient < 1 || !IsClientInGame(iClient))
 		return;
-	
+
 	// No override: Freezetime active for seekers, is CT side & alive
-	if (!force && float(GetTime() - g_iRoundStart) < g_cvHideTime.FloatValue && GetClientTeam(iClient) == CS_TEAM_CT && IsPlayerAlive(iClient))
+	if (!force && float(GetTime() - g_iRoundStart) < g_cvHideTime.FloatValue && GetClientTeam(iClient) == CS_TEAM_CT && IsPlayerAlive(iClient)) {
 		blind = true;
-	
+	}
+
 	if(blind || blind != g_bBlinded[iClient])
 	{
 		g_bBlinded[iClient] = blind;
-		
+
 		Client_Blind(iClient, blind);
 		Client_BlockControls(iClient, blind);
 		SetEntityMoveType(iClient, blind ? MOVETYPE_NONE : MOVETYPE_WALK);
