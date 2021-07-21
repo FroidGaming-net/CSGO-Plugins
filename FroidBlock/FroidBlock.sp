@@ -12,6 +12,9 @@
 #define VERSION "1.1.4"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidBlock/updatefile.txt"
 
+ConVar g_cHostname;
+char g_sHostname[64];
+
 #include "files/client.sp"
 
 public Plugin myinfo =
@@ -28,8 +31,32 @@ public void OnPluginStart()
     PTaH(PTaH_ConsolePrintPre, Hook, ConsolePrint);
 	PTaH(PTaH_ExecuteStringCommandPre, Hook, ExecuteStringCommand);
 
+    if (LibraryExists("updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
+}
+
+public void OnLibraryAdded(const char[] name)
+{
+    if (StrEqual(name, "updater")) {
+        Updater_AddPlugin(UPDATE_URL);
+    }
+}
+
+public void OnConfigsExecuted() {
+	CreateTimer(10.0, Timer_Setting);
+}
+
+public Action Timer_Setting(Handle hTimer)
+{
+	g_cHostname = FindConVar("hostname");
+	g_cHostname.GetString(g_sHostname, sizeof(g_sHostname));
+
+
     /// Block
-	AddCommandListener(Command_Block, "kill");
+	if (StrContains(g_sHostname, "SURF") == -1){
+		AddCommandListener(Command_Block, "kill");
+	}
 	AddCommandListener(Command_Block, "killvector");
     AddCommandListener(Command_Block, "killserver");
 	AddCommandListener(Command_Block, "explode");
@@ -51,17 +78,6 @@ public void OnPluginStart()
 	AddCommandListener(Command_Block, "sorry");
 	AddCommandListener(PlayerRadio, "playerradio");
 	/// Block
-
-    if (LibraryExists("updater")) {
-        Updater_AddPlugin(UPDATE_URL);
-    }
-}
-
-public void OnLibraryAdded(const char[] name)
-{
-    if (StrEqual(name, "updater")) {
-        Updater_AddPlugin(UPDATE_URL);
-    }
 }
 
 public Action PlayerRadio(int iClient, const char[] sCommand, int iArgc)
