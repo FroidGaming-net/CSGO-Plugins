@@ -104,7 +104,7 @@ public Action Timer_Setting(Handle hTimer)
 {
 	g_cHostname = FindConVar("hostname");
 	g_cHostname.GetString(g_sHostname, sizeof(g_sHostname));
-	if(StrContains(g_sHostname, "FFA") > -1 || StrContains(g_sHostname, "Practice") > -1){
+	if(StrContains(g_sHostname, "FFA") > -1 || StrContains(g_sHostname, "Practice") > -1 || StrContains(g_sHostname, "SURF") > -1){
 		CreateTimer(60.0, Timer_SendRewardMatchEndDrops, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 	}
 }
