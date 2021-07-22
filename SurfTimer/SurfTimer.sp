@@ -1786,9 +1786,7 @@ public void OnMapStart()
 
 	// Debug Logging
 	char path[PLATFORM_MAX_PATH];
-	char buffer[PLATFORM_MAX_PATH];
-	Format(buffer, sizeof(buffer), "logs/surftimer");
-	BuildPath(Path_SM, path, sizeof(path), buffer);
+	BuildPath(Path_SM, path, sizeof(path), "logs/surftimer");
 
 	if (!DirExists(path))
 		CreateDirectory(path, 511);
