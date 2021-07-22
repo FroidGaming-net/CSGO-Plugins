@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"3.5.7"
+		"Latest"	"3.5.8"
 	}
 
-	"Notes"	"Fix Invalid Handle"
+	"Notes"	"Fix Bug"
 }
 
 "Files"

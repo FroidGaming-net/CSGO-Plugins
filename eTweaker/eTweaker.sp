@@ -16,7 +16,7 @@
 #pragma tabsize 4
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.5.7"
+#define VERSION "3.5.8"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
@@ -352,7 +352,7 @@ public Action Event_OnPlayerSpawn(Event event, const char[] name, bool dontBroad
 
     if(!IsValidClient(client, true))
     {
-        return Plugin_Handled;
+        return Plugin_Continue;
     }
 
     eTweaker_EquipGloves(client);
