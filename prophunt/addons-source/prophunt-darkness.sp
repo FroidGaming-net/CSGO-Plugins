@@ -38,15 +38,18 @@ int g_iFogController = -1;
 
 Handle g_hTimer_Fog = null;
 
-float g_fFogStartDistance;
-float g_fFogEndDistance;
-float g_fFogDensity;
+float g_fFogStartDistance[MAXPLAYERS + 1];
+float g_fFogEndDistance[MAXPLAYERS + 1];
+float g_fFogDensity[MAXPLAYERS + 1];
 
-float g_fFogStartDistanceStep;
-float g_fFogEndDistanceStep;
-float g_fFogDensityStep;
+float g_fFogStartDistanceStep[MAXPLAYERS + 1];
+float g_fFogEndDistanceStep[MAXPLAYERS + 1];
+float g_fFogDensityStep[MAXPLAYERS + 1];
 
-float g_fFogStartTime;
+float g_fFogStartTime[MAXPLAYERS + 1];
+// bool g_bShowFog[MAXPLAYERS + 1] = false;
+
+#define DARKNESS "Reset Darkness"
 
 public void OnPluginStart()
 {
@@ -78,109 +81,187 @@ public void OnPluginStart()
 
 	HookEvent("round_start", Event_OnRoundStart);
 
-	Fog_Start();
+	OnMapStart();
 }
 
 public void OnMapStart()
 {
-	Fog_Reset();
-	Fog_Start();
-	PH_RegisterShopItem("Reset Darkness", CS_TEAM_CT, 100, 3, 110, false);
+	if(g_hTimer_Fog != null)
+	{
+		delete g_hTimer_Fog;
+		g_hTimer_Fog = null;
+	}
+
+	if (g_hTimer_Fog == null) {
+		g_hTimer_Fog = CreateTimer(g_cvFogUpdateInterval.FloatValue, Timer_Fog, 0, TIMER_REPEAT);
+	}
+	PH_RegisterShopItem(DARKNESS, CS_TEAM_CT, 100, 3, 110, false);
 }
+
+public Action PH_OnBuyShopItem(int iClient, char[] sName, int &iPoints)
+{
+	if(StrEqual(sName, DARKNESS)) {
+		return Plugin_Handled;
+	}
+
+	return Plugin_Continue;
+}
+
+public void PH_OnBuyShopItemPost(int iClient, char[] sName, int iPoints)
+{
+	if(StrEqual(sName, DARKNESS)) {
+		Fog_Start(iClient);
+	}
+}
+
+// public void OnClientPutInServer(int iClient)
+// {
+// 	if (IsFakeClient(iClient)) {
+// 		return;
+// 	}
+
+// 	if (IsClientSourceTV(iClient)) {
+// 		return;
+// 	}
+
+// 	SDKHook(iClient, SDKHook_SetTransmit, Hook_SetTransmit);
+// 	g_bShowFog[iClient] = false;
+// }
 
 public Action Event_OnRoundStart(Handle event, const char[] name, bool dontBroadcast)
 {
-	Fog_Start();
+	for (int i = 1; i < MAXPLAYERS; i++) {
+		if (IsValidClient(i, true)) {
+			Fog_Start(i);
+		}
+	}
 
 	return Plugin_Continue;
 }
 
 public Action Timer_Fog(Handle timer, any data)
 {
-	Fog_Update();
+	for (int i = 1; i < MAXPLAYERS; i++) {
+		if (IsValidClient(i, true)) {
+			if (GetClientTeam(i) == CS_TEAM_CT) {
+				Fog_Update(i);
+			}
+		}
+	}
 
 	return Plugin_Continue;
 }
 
-void Fog_Reset()
+void Fog_Reset(int iClient)
 {
-	g_fFogStartDistance = g_cvFogStartDistance1.FloatValue;
-	g_fFogEndDistance = g_cvFogEndDistance1.FloatValue;
-	g_fFogDensity = g_cvFogDensity1.FloatValue;
+	g_fFogStartDistance[iClient] = g_cvFogStartDistance1.FloatValue;
+	g_fFogEndDistance[iClient] = g_cvFogEndDistance1.FloatValue;
+	g_fFogDensity[iClient] = g_cvFogDensity1.FloatValue;
 
-	Fog_Update();
+	Fog_Update(iClient);
+}
 
-	if(g_hTimer_Fog != null)
-	{
-		delete g_hTimer_Fog;
-		g_hTimer_Fog = null;
+void Fog_Start(int iClient)
+{
+	Fog_Reset(iClient);
+	Fog_Update(iClient);
+
+	// g_bShowFog[iClient] = false;
+	g_fFogStartTime[iClient] = GetGameTime();
+
+	g_fFogStartDistanceStep[iClient] = (g_cvFogUpdateInterval.FloatValue / g_cvTime.FloatValue) * (g_cvFogStartDistance1.FloatValue - g_cvFogStartDistance2.FloatValue);
+	g_fFogEndDistanceStep[iClient] = (g_cvFogUpdateInterval.FloatValue / g_cvTime.FloatValue) * (g_cvFogEndDistance1.FloatValue - g_cvFogEndDistance2.FloatValue);
+	g_fFogDensityStep[iClient] = (g_cvFogUpdateInterval.FloatValue / g_cvTime.FloatValue) * (g_cvFogDensity2.FloatValue - g_cvFogDensity1.FloatValue);
+}
+
+void Fog_Update(int iClient)
+{
+	if (!g_cvFogEnable.BoolValue) {
+		return;
 	}
-}
 
-void Fog_Start()
-{
-	Fog_Reset();
-	Fog_Update();
-
-	g_fFogStartTime = GetGameTime();
-
-	g_hTimer_Fog = CreateTimer(g_cvFogUpdateInterval.FloatValue, Timer_Fog, 0, TIMER_REPEAT);
-
-	g_fFogStartDistanceStep = (g_cvFogUpdateInterval.FloatValue / g_cvTime.FloatValue) * (g_cvFogStartDistance1.FloatValue - g_cvFogStartDistance2.FloatValue);
-	g_fFogEndDistanceStep = (g_cvFogUpdateInterval.FloatValue / g_cvTime.FloatValue) * (g_cvFogEndDistance1.FloatValue - g_cvFogEndDistance2.FloatValue);
-	g_fFogDensityStep = (g_cvFogUpdateInterval.FloatValue / g_cvTime.FloatValue) * (g_cvFogDensity2.FloatValue - g_cvFogDensity1.FloatValue);
-}
-
-void Fog_Update()
-{
-	g_iFogController = FindEntityByClassname(-1, "env_fog_controller");
-
-	if(g_cvTimeWait.FloatValue < GetGameTime() - g_fFogStartTime)
-	{
+	if (g_cvTimeWait.FloatValue < GetGameTime() - g_fFogStartTime[iClient]) {
+		PrintToChatAll("Darkness Start");
+		// if (g_bShowFog[iClient] == false) {
+		// 	PrintToChatAll("Set ShowFog to True");
+		// 	g_bShowFog[iClient] = true;
+		// }
 		// Start distance
-		if(g_fFogStartDistance > g_cvFogStartDistance2.FloatValue)
-			g_fFogStartDistance -= g_fFogStartDistanceStep;
+		if(g_fFogStartDistance[iClient] > g_cvFogStartDistance2.FloatValue)
+			g_fFogStartDistance[iClient] -= g_fFogStartDistanceStep[iClient];
 
-		if(g_fFogStartDistance < g_cvFogStartDistance2.FloatValue)
-			g_fFogStartDistance = g_cvFogStartDistance2.FloatValue;
+		if(g_fFogStartDistance[iClient] < g_cvFogStartDistance2.FloatValue)
+			g_fFogStartDistance[iClient] = g_cvFogStartDistance2.FloatValue;
 
 		// End distance
-		if(g_fFogEndDistance > g_cvFogEndDistance2.FloatValue)
-			g_fFogEndDistance -= g_fFogEndDistanceStep;
+		if(g_fFogEndDistance[iClient] > g_cvFogEndDistance2.FloatValue)
+			g_fFogEndDistance[iClient] -= g_fFogEndDistanceStep[iClient];
 
-		if(g_fFogEndDistance < g_cvFogEndDistance2.FloatValue)
-			g_fFogEndDistance = g_cvFogEndDistance2.FloatValue;
+		if(g_fFogEndDistance[iClient] < g_cvFogEndDistance2.FloatValue)
+			g_fFogEndDistance[iClient] = g_cvFogEndDistance2.FloatValue;
 
 		// Density
-		if(g_fFogDensity < g_cvFogDensity2.FloatValue)
-			g_fFogDensity += g_fFogDensityStep;
+		if(g_fFogDensity[iClient] < g_cvFogDensity2.FloatValue)
+			g_fFogDensity[iClient] += g_fFogDensityStep[iClient];
 
-		if(g_fFogDensity >= g_cvFogDensity2.FloatValue)
-			g_fFogDensity = g_cvFogDensity2.FloatValue;
+		if(g_fFogDensity[iClient] >= g_cvFogDensity2.FloatValue)
+			g_fFogDensity[iClient] = g_cvFogDensity2.FloatValue;
+
+		// Fog controller
+		PrintToChatAll("Create Entity");
+
+		g_iFogController = CreateEntityByName("env_fog_controller");
+		if(IsValidEntity(g_iFogController))
+		{
+			AcceptEntityInput(g_iFogController, "kill");
+			PrintToChatAll("Entity Valid / Updated");
+			DispatchKeyValue(g_iFogController, "targetname", "personalFog");
+			DispatchKeyValue(g_iFogController, "fogenable", "1");
+			DispatchKeyValue(g_iFogController, "fogblend",  "0");
+			DispatchKeyValue(g_iFogController, "spawnflags", "1");
+
+			DispatchKeyValueFloat(g_iFogController, "fogstart", g_fFogStartDistance[iClient]);
+			DispatchKeyValueFloat(g_iFogController, "fogend", g_fFogEndDistance[iClient]);
+			DispatchKeyValueFloat(g_iFogController, "fogmaxdensity", g_fFogDensity[iClient]);
+
+			char sColor[128];
+
+			Format(sColor, sizeof(sColor), "%d %d %d", g_cvColor1[0].IntValue, g_cvColor1[1].IntValue, g_cvColor1[2].IntValue);
+			DispatchKeyValue(g_iFogController, "fogcolor", sColor);
+
+			Format(sColor, sizeof(sColor), "%d %d %d", g_cvColor2[0].IntValue, g_cvColor2[1].IntValue, g_cvColor2[2].IntValue);
+			DispatchKeyValue(g_iFogController, "fogcolor2", sColor);
+
+			DispatchSpawn(g_iFogController);
+
+			AcceptEntityInput(g_iFogController, "TurnOn");
+		}
+
+		if (IsValidClient(iClient, true)) {
+			if (GetClientTeam(iClient) == CS_TEAM_CT) {
+				PrintToChatAll("Set to Client");
+				SetVariantString("personalFog");
+				AcceptEntityInput(iClient, "SetFogController");
+			}
+		}
 	}
+	// SDKHook(g_iFogController, SDKHook_SetTransmit, Hook_SetTransmit);
+}
 
-	if(!g_cvFogEnable.BoolValue)
-		return;
+// public Action Hook_SetTransmit(int iEntity, int iClient)
+// {
+// 	if (GetEdictFlags(g_iFogController) & FL_EDICT_ALWAYS) {
+// 		SetEdictFlags(g_iFogController, GetEdictFlags(g_iFogController) ^ FL_EDICT_ALWAYS);
+// 	}
 
-	// Fog controller
+// 	if(g_bShowFog[iClient]) {
+// 		return Plugin_Handled;
+// 	}
 
-	if(g_iFogController != -1)
-	{
-		DispatchKeyValue(g_iFogController, "fogenable", "1");
-		DispatchKeyValue(g_iFogController, "fogblend",  "0");
+// 	return Plugin_Continue;
+// }
 
-		DispatchKeyValueFloat(g_iFogController, "fogstart", g_fFogStartDistance);
-		DispatchKeyValueFloat(g_iFogController, "fogend", g_fFogEndDistance);
-		DispatchKeyValueFloat(g_iFogController, "fogmaxdensity", g_fFogDensity);
-
-		char sColor[128];
-
-		Format(sColor, sizeof(sColor), "%d %d %d", g_cvColor1[0].IntValue, g_cvColor1[1].IntValue, g_cvColor1[2].IntValue);
-		DispatchKeyValue(g_iFogController, "fogcolor", sColor);
-
-		Format(sColor, sizeof(sColor), "%d %d %d", g_cvColor2[0].IntValue, g_cvColor2[1].IntValue, g_cvColor2[2].IntValue);
-		DispatchKeyValue(g_iFogController, "fogcolor2", sColor);
-
-		AcceptEntityInput(g_iFogController, "TurnOn");
-	}
+stock bool IsValidClient(int client, bool alive = false)
+{
+    return (0 < client && client <= MaxClients && IsClientInGame(client) && IsFakeClient(client) == false && (alive == false || IsPlayerAlive(client)));
 }
