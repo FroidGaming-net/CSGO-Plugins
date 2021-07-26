@@ -2,10 +2,10 @@
 {
 	"Version"
 	{
-		"Latest"	"1.1.10"
+		"Latest"	"1.1.11"
 	}
 
-	"Notes"	"Add SURF Cvar."
+	"Notes"	"Update Cvar."
 }
 
 "Files"

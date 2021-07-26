@@ -9,7 +9,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.10"
+#define VERSION "1.1.11"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidCvar/updatefile.txt"
 
 #include "files/globals.sp"
@@ -93,6 +93,7 @@ public Action Timer_Setting(Handle hTimer)
     // PUG / 5v5 / Retakes / Executes
     if(StrContains(g_sServerName, "PUG", false) > -1 || StrContains(g_sServerName, "Retakes", false) > -1 || StrContains(g_sServerName, "5v5", false) > -1 || StrContains(g_sServerName, "Executes", false) > -1){
         if(StrContains(g_sServerName, "Retakes", false) > -1 || StrContains(g_sServerName, "Executes", false) > -1){
+            SetConVarInt(g_Cvar_MaxRounds, 30, true);
             SetConVarInt(g_Cvar_LoserBonus, 0);
         }
 
