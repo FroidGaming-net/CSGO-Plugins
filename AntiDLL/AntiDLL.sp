@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.5"
+#define VERSION "1.0.6"
 #define UPDATE_URL "https://sys.froidgaming.net/AntiDLL/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -42,7 +42,7 @@ public void OnLibraryAdded(const char[] name)
 public void AD_OnCheatDetected(const int client)
 {
     SBPP_BanPlayer(0, client, 0, "[FroidAC] Cheat Detected");
-    PrintToChatAll("%s {lightred}%N{default} Banned by FroidAC", PREFIX);
+    PrintToChatAll("%s {lightred}%N{default} Banned by FroidAC", PREFIX, client);
 }
 
 // public void HG_WhenPlayerPunished(int iClient, int iTime, const char[] szReason)
