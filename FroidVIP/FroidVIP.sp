@@ -11,7 +11,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.6"
+#define VERSION "1.1.7"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidVIP/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 

@@ -40,7 +40,7 @@ void MenuPremiumFeatures(int iClient)
 	hMenu.AddItem("2", "» [Multi1v1] !join (Join on Multi1v1)", ITEMDRAW_DISABLED);
 	hMenu.AddItem("3", "» [Multi1v1] 2-rounds Cooldown on Arena Challenge", ITEMDRAW_DISABLED);
 	hMenu.AddItem("4", "» [AWP] 5.000 Credits in-game to buy !shop Items", ITEMDRAW_DISABLED);
-	hMenu.AddItem("5", "» [All] !maks command for use a mask/hats", ITEMDRAW_DISABLED);
+	hMenu.AddItem("5", "» [All] !mask command for use a face mask/hats", ITEMDRAW_DISABLED);
 	hMenu.AddItem("6", "» [All] !tag command for customize name color, message color & tag", ITEMDRAW_DISABLED);
 	hMenu.AddItem("7", "» [All] Reserved slots", ITEMDRAW_DISABLED);
 	hMenu.AddItem("8", "» [All] Non Prime Join", ITEMDRAW_DISABLED);
@@ -83,7 +83,7 @@ void MenuPremiumPlusFeatures(int iClient)
 	hMenu.AddItem("23", "» [AWP] Zeus Tracers", ITEMDRAW_DISABLED);
 	hMenu.AddItem("24", "» [AWP] 20.000 Credits in-game to buy !shop Items", ITEMDRAW_DISABLED);
 	hMenu.AddItem("25", "» [All] !emoji command for use a scoreboard emoji", ITEMDRAW_DISABLED);
-	hMenu.AddItem("26", "» [All] !maks command for use a mask/hats", ITEMDRAW_DISABLED);
+	hMenu.AddItem("26", "» [All] !mask command for use a face mask/hats", ITEMDRAW_DISABLED);
 	hMenu.AddItem("27", "» [All] !tag command for customize name color, message color & tag", ITEMDRAW_DISABLED);
 	hMenu.AddItem("28", "» [All] !rankreset command for reset rank", ITEMDRAW_DISABLED);
 	hMenu.AddItem("29", "» [All] Reserved slots", ITEMDRAW_DISABLED);
