@@ -3,6 +3,8 @@
 #include <cstrike>
 #include <multicolors>
 #include <geoip>
+#include <sdkhooks>
+#include <sdktools>
 #undef REQUIRE_PLUGIN
 #include <updater>
 #include <pugsetup>
@@ -13,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.5"
+#define VERSION "1.1.6"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -35,6 +37,8 @@ public void OnPluginStart()
 {
     PlayerCooldown = new StringMap();
     PlayerConnect = new StringMap();
+    PlayerRoundSpectator = new StringMap();
+    PlayerRoundGhost = new StringMap();
 
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
@@ -55,15 +59,42 @@ public Action Timer_Setting(Handle hTimer)
     g_cServerName = FindConVar("hostname");
     g_cServerName.GetString(g_sServerName, sizeof(g_sServerName));
 
-    if(StrContains(g_sServerName, "PUG") > -1 || StrContains(g_sServerName, "5v5") > -1){
+    if (StrContains(g_sServerName, "PUG") > -1 || StrContains(g_sServerName, "5v5") > -1) {
         HookEvent("round_start", Event_RoundStart, EventHookMode_PostNoCopy);
         RegConsoleCmd("sm_start", Command_Start, "Forcestart PUG");
         AddCommandListener(altJoin, "jointeam");
+
+        g_cDisableRadar = FindConVar("sv_disable_radar");
+        CreateTimer(3.0, Timer_Repeat, _, TIMER_REPEAT);
         // CreateTimer(120.0, Timer_Repeat, _, TIMER_REPEAT);
     } else if (StrContains(g_sServerName, "AWP") > -1) {
         AddCommandListener(altJoin, "jointeam");
         // CreateTimer(120.0, Timer_Repeat, _, TIMER_REPEAT);
     }
+}
+
+public Action Timer_Repeat(Handle hTimer)
+{
+    for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
+		if (IsValidClient(iClient)) {
+			if (GetClientTeam(iClient) == CS_TEAM_SPECTATOR) {
+                if (g_PlayerData[iClient].bMakeBlind == true) {
+                    SetClientViewEntity(iClient, 0);
+                    SDKHook(iClient, SDKHook_SetTransmit, DontSee);
+                    g_cDisableRadar.ReplicateToClient(iClient, "1");
+                }
+			} else {
+                SetClientViewEntity(iClient, iClient);
+                SDKUnhook(iClient, SDKHook_SetTransmit, DontSee);
+				g_cDisableRadar.ReplicateToClient(iClient, "0");
+            }
+        }
+    }
+}
+
+public Action DontSee(int client, int entity)
+{
+    return Plugin_Continue;
 }
 
 public void FroidJoin_OnClientReplaced(int iClient)
@@ -81,29 +112,35 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
 		if (IsValidClient(iClient)) {
             if (g_PlayerData[iClient].iVIPLoaded == 1) {
                 if (GetClientTeam(iClient) == CS_TEAM_SPECTATOR) {
-                    if (!CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5)) {
-                        if (PugSetup_GetGameState() == GameState_Live) {
-                            if (g_PlayerData[iClient].iReplaced == 0) {
-                                g_PlayerData[iClient].iRoundSpectator++;
-                                if (g_PlayerData[iClient].iRoundSpectator >= 2) {
-                                    int iCooldown;
-                                    char sAuthID[64];
-                                    GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-                                    if (!PlayerConnect.GetValue(sAuthID, iCooldown)) {
-                                        PlayerConnect.SetValue(sAuthID, 1);
-                                    }
+                    if (PugSetup_GetGameState() == GameState_Live) {
+                        g_PlayerData[iClient].iRoundSpectator++;
+                        // PrintToConsole(iClient, "==================================");
+                        // PrintToConsole(iClient, "Your Current Round Spectator : %i", g_PlayerData[iClient].iRoundSpectator);
+                        // PrintToConsole(iClient, "==================================");
+                        if (g_PlayerData[iClient].iRoundSpectator >= 2) {
+                            int iCooldown;
+                            if (!PlayerConnect.GetValue(g_PlayerData[iClient].sAuthID, iCooldown)) {
+                                PlayerConnect.SetValue(g_PlayerData[iClient].sAuthID, 1);
+                            }
 
-                                    if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
-                                        KickClient(iClient, "Kamu tidak bisa masuk Spectator saat PUG sudah LIVE! Kamu hanya bisa masuk Spectator saat WARMUP atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
-                                    } else {
-                                        KickClient(iClient, "You can't join Spectator when PUG is LIVE! You can only join Spectator during WARMUP or buy Premium/Premium Plus now at froidgaming.net/store");
-                                    }
+                            if (CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5)) {
+                                g_PlayerData[iClient].bMakeBlind = true;
+                            } else if(g_PlayerData[iClient].iReplaced == 1) {
+                                g_PlayerData[iClient].bMakeBlind = true;
+                            } else {
+                                if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
+                                    KickClient(iClient, "Kamu tidak bisa masuk Spectator saat PUG sudah LIVE! Kamu hanya bisa masuk Spectator saat WARMUP atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
+                                } else {
+                                    KickClient(iClient, "You can't join Spectator when PUG is LIVE! You can only join Spectator during WARMUP or buy Premium/Premium Plus now at froidgaming.net/store");
                                 }
                             }
                         }
                     }
                 } else if (GetClientTeam(iClient) == CS_TEAM_NONE) {
                     g_PlayerData[iClient].iRoundGhost++;
+                    // PrintToConsole(iClient, "==================================");
+                    // PrintToConsole(iClient, "Your Current Round Ghost : %i", g_PlayerData[iClient].iRoundGhost);
+                    // PrintToConsole(iClient, "==================================");
                     if (g_PlayerData[iClient].iRoundGhost >= 2) {
                         if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
                             KickClient(iClient, "Kamu tidak bisa menjadi Ghost (Unassigned Team)");
@@ -186,9 +223,7 @@ Action altJoin(int iClient, const char[] sCommand, int iArgc)
 				return Plugin_Continue;
 			} else {
                 int iCooldown;
-                char sAuthID[64];
-                GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-                if (PlayerCooldown.GetValue(sAuthID, iCooldown)) {
+                if (PlayerCooldown.GetValue(g_PlayerData[iClient].sAuthID, iCooldown)) {
                     if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
 						CPrintToChat(iClient, "%s {default}Mohon tunggu selama 2 menit.", PREFIX);
 					} else {
@@ -197,7 +232,7 @@ Action altJoin(int iClient, const char[] sCommand, int iArgc)
 
                     return Plugin_Handled;
                 } else {
-                    PlayerCooldown.SetValue(sAuthID, 1);
+                    PlayerCooldown.SetValue(g_PlayerData[iClient].sAuthID, 1);
                     CreateTimer(120.0, Timer_RemoveCooldown, GetClientUserId(iClient), TIMER_FLAG_NO_MAPCHANGE);
 
                     return Plugin_Continue;
@@ -220,9 +255,7 @@ Action Timer_RemoveCooldown(Handle timer, any data)
 	int iClient = GetClientOfUserId(data);
 
     if (IsValidClient(iClient)) {
-        char sAuthID[64];
-        GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-        PlayerCooldown.Remove(sAuthID);
+        PlayerCooldown.Remove(g_PlayerData[iClient].sAuthID);
     }
 }
 
@@ -237,10 +270,8 @@ Action Timer_DelayJoin(Handle timer, any data)
             if (GetClientTeam(iClient) == CS_TEAM_SPECTATOR) {
                 if (!CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5)) {
                     int iCooldown;
-                    char sAuthID[64];
-                    GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-                    if (!PlayerConnect.GetValue(sAuthID, iCooldown)) {
-                        PlayerConnect.SetValue(sAuthID, 1);
+                    if (!PlayerConnect.GetValue(g_PlayerData[iClient].sAuthID, iCooldown)) {
+                        PlayerConnect.SetValue(g_PlayerData[iClient].sAuthID, 1);
                     }
 
                     if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
@@ -258,12 +289,16 @@ public void OnMapStart()
 {
 	PlayerCooldown.Clear();
     PlayerConnect.Clear();
+    PlayerRoundSpectator.Clear();
+    PlayerRoundGhost.Clear();
 }
 
 public void OnMapEnd()
 {
 	PlayerCooldown.Clear();
     PlayerConnect.Clear();
+    PlayerRoundSpectator.Clear();
+    PlayerRoundGhost.Clear();
 }
 
 public void OnClientPostAdminCheck(int iClient)
@@ -273,6 +308,23 @@ public void OnClientPostAdminCheck(int iClient)
     }
 
     g_PlayerData[iClient].Reset();
+
+    GetClientAuthId(iClient, AuthId_SteamID64, g_PlayerData[iClient].sAuthID, sizeof(g_PlayerData[].sAuthID));
+
+    int iTempRoundSpectator;
+    if (PlayerRoundSpectator.GetValue(g_PlayerData[iClient].sAuthID, iTempRoundSpectator)) {
+        g_PlayerData[iClient].iRoundSpectator = iTempRoundSpectator;
+    }
+
+    int iTempRoundGhost;
+    if (PlayerRoundGhost.GetValue(g_PlayerData[iClient].sAuthID, iTempRoundGhost)) {
+        g_PlayerData[iClient].iRoundGhost = iTempRoundGhost;
+    }
+
+    // PrintToConsole(iClient, "==================================");
+    // PrintToConsole(iClient, "Your Current Round Ghost : %i", g_PlayerData[iClient].iRoundGhost);
+    // PrintToConsole(iClient, "Your Current Round Spectator : %i", g_PlayerData[iClient].iRoundSpectator);
+    // PrintToConsole(iClient, "==================================");
 
     // GeoIP
     char sIP[64], sCountryCode[3];
@@ -292,9 +344,7 @@ public void FroidVIP_OnClientLoadedPost(int iClient)
     if (!CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5)) {
         if (IsFullTeam()) {
             int iCooldown;
-            char sAuthID[64];
-            GetClientAuthId(iClient, AuthId_SteamID64, sAuthID, sizeof(sAuthID));
-            if (PlayerConnect.GetValue(sAuthID, iCooldown)) {
+            if (PlayerConnect.GetValue(g_PlayerData[iClient].sAuthID, iCooldown)) {
                 if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
                     KickClient(iClient, "Jika kamu sudah terkena kick sebelumnya, kamu tidak bisa join lagi! Silahkan masuk kembali ketika kedua team tidak full atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
                 }else{
@@ -311,6 +361,8 @@ public void OnClientDisconnect(int iClient)
     if (!IsValidClient(iClient)) {
         return;
     }
+
+    PlayerRoundGhost.SetValue(g_PlayerData[iClient].sAuthID, g_PlayerData[iClient].iRoundGhost);
 
     g_PlayerData[iClient].Reset();
 }
