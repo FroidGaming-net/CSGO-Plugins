@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.6"
+#define VERSION "1.1.7"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -123,10 +123,13 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
                                 PlayerConnect.SetValue(g_PlayerData[iClient].sAuthID, 1);
                             }
 
-                            if (CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5)) {
+                            if (CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5) || g_PlayerData[iClient].iReplaced == 1) {
                                 g_PlayerData[iClient].bMakeBlind = true;
-                            } else if(g_PlayerData[iClient].iReplaced == 1) {
-                                g_PlayerData[iClient].bMakeBlind = true;
+                                if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
+                                    KickClient(iClient, "Kamu terlalu lama di Spectator!!! Anti-Ghosting di Aktifkan.");
+                                } else {
+                                    KickClient(iClient, "You've been in Spectator too long!!! Anti-Ghosting is Activated.");
+                                }
                             } else {
                                 if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
                                     KickClient(iClient, "Kamu tidak bisa masuk Spectator saat PUG sudah LIVE! Kamu hanya bisa masuk Spectator saat WARMUP atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
