@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.8"
+#define VERSION "1.1.9"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -65,6 +65,7 @@ public Action Timer_Setting(Handle hTimer)
         AddCommandListener(altJoin, "jointeam");
 
         g_cDisableRadar = FindConVar("sv_disable_radar");
+        g_cForceCamera = FindConVar("mp_forcecamera");
         CreateTimer(3.0, Timer_Repeat, _, TIMER_REPEAT);
         // CreateTimer(120.0, Timer_Repeat, _, TIMER_REPEAT);
     } else if (StrContains(g_sServerName, "AWP") > -1) {
@@ -82,11 +83,13 @@ public Action Timer_Repeat(Handle hTimer)
                     SetClientViewEntity(iClient, 0);
                     SDKHook(iClient, SDKHook_SetTransmit, DontSee);
                     g_cDisableRadar.ReplicateToClient(iClient, "1");
+                    g_cForceCamera.ReplicateToClient(iClient, "2");
                 }
 			} else {
                 SetClientViewEntity(iClient, iClient);
                 SDKUnhook(iClient, SDKHook_SetTransmit, DontSee);
 				g_cDisableRadar.ReplicateToClient(iClient, "0");
+                g_cForceCamera.ReplicateToClient(iClient, "1");
             }
         }
     }
@@ -114,9 +117,11 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
                 if (GetClientTeam(iClient) == CS_TEAM_SPECTATOR) {
                     if (PugSetup_GetGameState() == GameState_Live) {
                         g_PlayerData[iClient].iRoundSpectator++;
-                        // PrintToConsole(iClient, "==================================");
-                        // PrintToConsole(iClient, "Your Current Round Spectator : %i", g_PlayerData[iClient].iRoundSpectator);
-                        // PrintToConsole(iClient, "==================================");
+                        if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
+                            PrintToConsole(iClient, "==================================");
+                            PrintToConsole(iClient, "Your Current Round Spectator : %i", g_PlayerData[iClient].iRoundSpectator);
+                            PrintToConsole(iClient, "==================================");
+                        }
                         if (g_PlayerData[iClient].iRoundSpectator >= 2) {
                             int iCooldown;
                             if (!PlayerConnect.GetValue(g_PlayerData[iClient].sAuthID, iCooldown)) {
@@ -141,9 +146,11 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
                     }
                 } else if (GetClientTeam(iClient) == CS_TEAM_NONE) {
                     g_PlayerData[iClient].iRoundGhost++;
-                    // PrintToConsole(iClient, "==================================");
-                    // PrintToConsole(iClient, "Your Current Round Ghost : %i", g_PlayerData[iClient].iRoundGhost);
-                    // PrintToConsole(iClient, "==================================");
+                    if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
+                        PrintToConsole(iClient, "==================================");
+                        PrintToConsole(iClient, "Your Current Round Ghost : %i", g_PlayerData[iClient].iRoundGhost);
+                        PrintToConsole(iClient, "==================================");
+                    }
                     if (g_PlayerData[iClient].iRoundGhost >= 2) {
                         if(StrEqual(g_PlayerData[iClient].sCountryCode, "ID")){
                             KickClient(iClient, "Kamu tidak bisa menjadi Ghost (Unassigned Team)");
@@ -324,10 +331,13 @@ public void OnClientPostAdminCheck(int iClient)
         g_PlayerData[iClient].iRoundGhost = iTempRoundGhost;
     }
 
-    // PrintToConsole(iClient, "==================================");
-    // PrintToConsole(iClient, "Your Current Round Ghost : %i", g_PlayerData[iClient].iRoundGhost);
-    // PrintToConsole(iClient, "Your Current Round Spectator : %i", g_PlayerData[iClient].iRoundSpectator);
-    // PrintToConsole(iClient, "==================================");
+
+    if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
+        PrintToConsole(iClient, "==================================");
+        PrintToConsole(iClient, "Your Current Round Ghost : %i", g_PlayerData[iClient].iRoundGhost);
+        PrintToConsole(iClient, "Your Current Round Spectator : %i", g_PlayerData[iClient].iRoundSpectator);
+        PrintToConsole(iClient, "==================================");
+    }
 
     // GeoIP
     char sIP[64], sCountryCode[3];

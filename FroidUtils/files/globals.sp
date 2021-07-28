@@ -1,5 +1,6 @@
 ConVar g_cServerName = null;
 ConVar g_cDisableRadar;
+ConVar g_cForceCamera;
 char g_sServerName[64];
 
 StringMap PlayerCooldown;
