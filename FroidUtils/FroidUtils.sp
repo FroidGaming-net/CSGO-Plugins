@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.7"
+#define VERSION "1.1.8"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -126,9 +126,9 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
                             if (CheckCommandAccess(iClient, "sm_froidapp_premium", ADMFLAG_CUSTOM5) || g_PlayerData[iClient].iReplaced == 1) {
                                 g_PlayerData[iClient].bMakeBlind = true;
                                 if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
-                                    KickClient(iClient, "Kamu terlalu lama di Spectator!!! Anti-Ghosting di Aktifkan.");
+                                    CPrintToChat(iClient, "%s {default}Kamu terlalu lama di Spectator!!! Anti-Ghosting di Aktifkan.", PREFIX);
                                 } else {
-                                    KickClient(iClient, "You've been in Spectator too long!!! Anti-Ghosting is Activated.");
+                                    CPrintToChat(iClient, "%s {default}You've been in Spectator too long!!! Anti-Ghosting is Activated.", PREFIX);
                                 }
                             } else {
                                 if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
