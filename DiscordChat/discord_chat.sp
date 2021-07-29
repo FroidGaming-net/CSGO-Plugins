@@ -12,7 +12,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 #define UPDATE_URL "https://sys.froidgaming.net/DiscordChat/updatefile.txt"
 
 #include "files/globals.sp"
@@ -281,8 +281,8 @@ void DiscordMessage(const char[] sData)
         Discord_BindWebHook("idexecutes", "https://discord.com/api/webhooks/836534918828785694/fL2yUzhsH_Q13zoq6CjQB3zQdtTn3MvhQwnmrVFhpE21H5N43efy0WwDCgK6CXGRkZfs");
         Discord_EndMessage("idexecutes", true);
     }else if(StrContains(g_sHostname, "Prophunt / Hide and Seek | ID") > -1 || StrContains(g_sHostname, "Prophunt / Hide and Seek | SEA") > -1){
-        Discord_BindWebHook("idexecutes", "https://discord.com/api/webhooks/870301096223051816/lR2hPXslKewHCM0II1MHy0yZPiGY_LdsKEBiBosUpj4ZMNOP0t573HMIKS3H40P5u7kE");
-        Discord_EndMessage("idexecutes", true);
+        Discord_BindWebHook("idprophunt", "https://discord.com/api/webhooks/870301096223051816/lR2hPXslKewHCM0II1MHy0yZPiGY_LdsKEBiBosUpj4ZMNOP0t573HMIKS3H40P5u7kE");
+        Discord_EndMessage("idprophunt", true);
     }else if(StrContains(g_sHostname, "Easy Surf [Tier 1/2] | ID") > -1 || StrContains(g_sHostname, "Easy Surf [Tier 1/2] | SEA") > -1){
         Discord_BindWebHook("idsurf", "https://discord.com/api/webhooks/870301349965865013/sO4_YBC_4Io0IPz7BJpjKcy5W7sIIaxfJtJdxuJK0s7aJ4KhIEWYuQ0cBeW181VbjyRv");
         Discord_EndMessage("idsurf", true);
