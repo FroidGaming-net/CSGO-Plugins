@@ -47,9 +47,6 @@ public void OnPluginStart()
 
 	AutoExecConfig(true, "SourceServerRelay");
 
-	AddCommandListener(Say_Event, "say");
-    AddCommandListener(SayTeam_Event, "say_team");
-
 	if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
     }
@@ -142,18 +139,6 @@ public void OnConfigsExecuted()
 		// Stop. The map start event will emit on authentication reply packet
 		return;
 	}
-
-	// If socket is already connected, emit map start
-	char sMap[64], sData[MAX_COMMAND_LENGTH];
-
-	// Map Name
-	GetCurrentMap(sMap, sizeof sMap);
-
-	// Data
-	FormatEx(sData, sizeof(sData), "**------------ Map Start - %s ------------**", sMap);
-
-	// Send to Discord
-	ChatMessage(IdentificationSteam, "0", "System", sData).Dispatch();
 }
 
 void ConnectRelay()
@@ -286,21 +271,6 @@ public void HandlePackets(const char[] sBuffer, int iSize)
 				SetFailState("Server denied our token. Stopping.");
 
 			PrintToServer("Source Chat Relay: Successfully authenticated");
-
-			// If socket wasn't connected prior, do time check see if we are close to map start
-			if (GetGameTime() <= 20.0)
-			{
-				char sMap[64], sData[MAX_COMMAND_LENGTH];
-
-				// Map Name
-				GetCurrentMap(sMap, sizeof sMap);
-
-				// Data
-				FormatEx(sData, sizeof(sData), "**------------ Map Start - %s ------------**", sMap);
-
-				// Send to Discord
-				ChatMessage(IdentificationSteam, "0", "System", sData).Dispatch();
-			}
 		}
 		default:
 		{
@@ -309,185 +279,6 @@ public void HandlePackets(const char[] sBuffer, int iSize)
 	}
 
 	base.Close();
-}
-
-public void OnClientConnected(int iClient)
-{
-	char sAuthID[64], sName[128], sData[MAX_COMMAND_LENGTH];
-
-	// Steam Name
-	if (!GetClientName(iClient, sName, sizeof(sName)))
-	{
-		return;
-	}
-
-	// SteamID64
-	if (!GetClientAuthId(iClient, AuthId_Steam2, sAuthID, sizeof(sAuthID)))
-	{
-		return;
-	}
-
-	// Data
-	FormatEx(sData, sizeof(sData), "**------------ Player Connected - %s (%s) ------------**", sName, sAuthID);
-
-	// Send to Discord
-	ChatMessage(IdentificationSteam, "0", "System", sData).Dispatch();
-}
-
-public void OnClientDisconnect(int iClient)
-{
-	char sAuthID[64], sName[128], sData[MAX_COMMAND_LENGTH];
-
-	// Steam Name
-	if (!GetClientName(iClient, sName, sizeof(sName)))
-	{
-		return;
-	}
-
-	// SteamID64
-	if (!GetClientAuthId(iClient, AuthId_Steam2, sAuthID, sizeof(sAuthID)))
-	{
-		return;
-	}
-
-	// Data
-	FormatEx(sData, sizeof(sData), "**------------ Player Disconnected - %s (%s) ------------**", sName, sAuthID);
-
-	// Send to Discord
-	ChatMessage(IdentificationSteam, "0", "System", sData).Dispatch();
-}
-
-public void OnMapEnd()
-{
-	char sMap[64], sData[MAX_COMMAND_LENGTH];
-
-	// Map Name
-	GetCurrentMap(sMap, sizeof sMap);
-
-	// Data
-	FormatEx(sData, sizeof(sData), "**------------ Map Ended - %s ------------**", sMap);
-
-	// Send to Discord
-	ChatMessage(IdentificationSteam, "0", "System", sData).Dispatch();
-}
-
-public Action Say_Event(int iClient, const char[] sCmd, int iArgc)
-{
-	if (!Client_IsValid(iClient)) {
-		return Plugin_Continue;
-	}
-
-	if (!SocketIsConnected(g_hSocket)) {
-		return Plugin_Continue;
-	}
-
-	char sMsg[MAX_COMMAND_LENGTH], sAuthID[64], sName[128], sTeam[10];
-
-	// SteamID64
-	GetClientAuthId(iClient, AuthId_Steam2, sAuthID, sizeof(sAuthID));
-	// Steam Name
-	GetClientName(iClient, sName, sizeof(sName));
-	// Team
-	switch(GetClientTeam(iClient)) {
-		case CS_TEAM_CT:
-		{
-			sTeam = "CT";
-		}
-		case CS_TEAM_T:
-		{
-			sTeam = "T";
-		}
-		case CS_TEAM_SPECTATOR:
-		{
-			sTeam = "Spectator";
-		}
-		case CS_TEAM_NONE:
-		{
-			sTeam = "Ghost";
-		}
-		default:
-		{
-			sTeam = "Ghost";
-		}
-	}
-	// Message
-	GetCmdArgString(sMsg, sizeof(sMsg));
-	StripQuotes(sMsg);
-
-	if (strlen(sMsg) <= 0) {
-		return Plugin_Continue;
-	}
-
-	// Send to Discord
-	DiscordMessage(sAuthID, sName, sMsg, sTeam, false);
-
-	return Plugin_Continue;
-}
-
-public Action SayTeam_Event(int iClient, const char[] sCmd, int iArgc)
-{
-	if (!Client_IsValid(iClient)) {
-		return Plugin_Continue;
-	}
-
-	if (!SocketIsConnected(g_hSocket)) {
-		return Plugin_Continue;
-	}
-
-	char sMsg[MAX_COMMAND_LENGTH], sAuthID[64], sName[128], sTeam[10];
-
-	// SteamID64
-	GetClientAuthId(iClient, AuthId_Steam2, sAuthID, sizeof(sAuthID));
-	// Steam Name
-	GetClientName(iClient, sName, sizeof(sName));
-	// Team
-	switch(GetClientTeam(iClient)) {
-		case CS_TEAM_CT:
-		{
-			sTeam = "CT";
-		}
-		case CS_TEAM_T:
-		{
-			sTeam = "T";
-		}
-		case CS_TEAM_SPECTATOR:
-		{
-			sTeam = "Spectator";
-		}
-		case CS_TEAM_NONE:
-		{
-			sTeam = "Ghost";
-		}
-		default:
-		{
-			sTeam = "None";
-		}
-	}
-	// Message
-	GetCmdArgString(sMsg, sizeof(sMsg));
-	StripQuotes(sMsg);
-
-	if (strlen(sMsg) <= 0) {
-		return Plugin_Continue;
-	}
-
-	// Send to Discord
-	DiscordMessage(sAuthID, sName, sMsg, sTeam, true);
-
-	return Plugin_Continue;
-}
-
-void DiscordMessage(const char[] sAuthID, const char[] sName, const char[] sMessage, const char[] sTeam, bool bTeamChat = false)
-{
-	char sData[MAX_COMMAND_LENGTH];
-
-	if (bTeamChat) {
-		FormatEx(sData, sizeof(sData), "**[%s] (%s Team) %s :** %s", sAuthID, sTeam, sName, sMessage);
-	} else {
-		FormatEx(sData, sizeof(sData), "**[%s] (%s All) %s :** %s", sAuthID, sTeam, sName, sMessage);
-	}
-
-	ChatMessage(IdentificationSteam, "0", "System", sData).Dispatch();
 }
 
 void DispatchMessage(int iClient, const char[] sMessage)
