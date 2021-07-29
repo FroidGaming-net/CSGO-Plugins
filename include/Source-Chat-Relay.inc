@@ -83,8 +83,8 @@ public __pl_Source_Chat_Relay_SetNTVOptional()
 
 public SharedPlugin __pl_Source_Chat_Relay =
 {
-	name = "Source-Chat-Relay",
-	file = "Source-Chat-Relay.smx",
+	name = "SourceChatRelay",
+	file = "SourceChatRelay.smx",
 	#if defined REQUIRE_PLUGIN
 	required = 1,
 	#else
