@@ -22,6 +22,11 @@ public void PTaH_OnGiveNamedItemPost(int client, const char[] szClassname, const
         return;
     }
 
+    if(ClientInfo[client].IsGunsLoaded == false)
+    {
+        return;
+    }
+
     int iPrevOwner = GetEntProp(iEnt, Prop_Send, "m_hPrevOwner");
     if(iPrevOwner != -1)
     {
@@ -46,18 +51,18 @@ public Action PTaH_OnGiveNamedItemPre(int client, char szClassName[64], CEconIte
     {
         if(!eItems_IsDefIndexKnife(iSelectedKnife))
         {
-           return Plugin_Continue; 
+           return Plugin_Continue;
         }
 
         if(!g_cvDangerZoneKnives.BoolValue && eTweaker_IsDangerZoneKnife(iSelectedKnife))
         {
-            return Plugin_Continue; 
+            return Plugin_Continue;
         }
 
         IgnoredCEconItemView = true;
 
         eItems_GetWeaponClassNameByDefIndex(iSelectedKnife, szClassName, sizeof(szClassName));
-        
+
         return Plugin_Changed;
     }
 

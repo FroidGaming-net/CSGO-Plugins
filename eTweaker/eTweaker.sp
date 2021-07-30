@@ -16,7 +16,7 @@
 #pragma tabsize 4
 
 #define AUTHOR "ESK0, FroidGaming.net"
-#define VERSION "3.5.8"
+#define VERSION "3.5.9"
 #define UPDATE_URL "https://sys.froidgaming.net/eTweaker/updatefile.txt"
 #define TAG_NCLR "[eTweaker]"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
@@ -257,6 +257,11 @@ public Action Event_OnWeaponInspect(Event event, const char[] name, bool dontBro
     }
 
     if(ClientInfo[client].Key == -1)
+    {
+        return Plugin_Continue;
+    }
+
+    if(ClientInfo[client].IsGunsLoaded == false)
     {
         return Plugin_Continue;
     }

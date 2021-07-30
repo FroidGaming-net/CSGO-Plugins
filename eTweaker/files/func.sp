@@ -5,6 +5,16 @@ public void eTweaker_UpdateClientWeapon(int client, int iWeapon)
         return;
     }
 
+    if(ClientInfo[client].Key == -1)
+    {
+        return;
+    }
+
+    if(ClientInfo[client].IsGunsLoaded == false)
+    {
+        return;
+    }
+
     if(!eItems_IsValidWeapon(iWeapon))
     {
         return;
@@ -231,6 +241,10 @@ stock bool eTweaker_IsDangerZoneKnife(int iKnifeDefIndex)
 
 stock void eTweaker_EquipKnife(int client)
 {
+    if(!IsValidClient(client))
+    {
+        return;
+    }
 
     int iKnifeDefIndex = eTwekaer_GetClientTeamKnife(client);
     char szClassName[48];
@@ -571,7 +585,17 @@ stock bool eTweaker_RefreshVM(int client)
 
 stock void eTweaker_EquipGloves(int client, bool bRemoveGloves = false)
 {
+    if(!IsValidClient(client))
+    {
+        return;
+    }
+
     if(!IsPlayerAlive(client))
+    {
+        return;
+    }
+
+    if(ClientInfo[client].Key == -1)
     {
         return;
     }
@@ -644,6 +668,11 @@ public void eTwekaer_OnMapWeaponEquip(DataPack datapack)
 
 stock void eTweaker_EquipMusicKit(int client, int iMusicKitDef)
 {
+    if(ClientInfo[client].Key == -1)
+    {
+        return;
+    }
+
     char szMusicKitDisplayName[48];
     eItems_GetMusicKitDisplayNameByDefIndex(iMusicKitDef, szMusicKitDisplayName, sizeof(szMusicKitDisplayName));
     ClientInfo[client].MusicKit = iMusicKitDef;

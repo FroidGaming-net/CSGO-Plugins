@@ -298,6 +298,7 @@ public void _Database_OnClientWeaponSettingsFetched(Database db, DBResultSet dbR
 
         g_smWeaponSettings[client].SetArray(szWeaponDefIndex, WeaponSettings, sizeof(eWeaponSettings));
     }
+    ClientInfo[client].IsGunsLoaded = true;
 }
 
 public void Databse_SaveClientData(int client)

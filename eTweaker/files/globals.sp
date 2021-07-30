@@ -149,6 +149,7 @@ enum struct eClientInfo
     int StickerSetStored;
     char StoredSkinName[48];
     char SteamID64[18];
+    bool IsGunsLoaded;
 
     bool Reset()
     {
@@ -175,6 +176,7 @@ enum struct eClientInfo
         this.MenuCategorySelection = -1;
         strcopy(this.StoredSkinName, sizeof(eClientInfo::StoredSkinName), "");
         strcopy(this.SteamID64, sizeof(eClientInfo::SteamID64), "");
+        this.IsGunsLoaded = false;
     }
 
     bool Alive()
