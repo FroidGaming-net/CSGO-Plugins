@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.1.9"
+#define VERSION "1.2.0"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -39,6 +39,7 @@ public void OnPluginStart()
     PlayerConnect = new StringMap();
     PlayerRoundSpectator = new StringMap();
     PlayerRoundGhost = new StringMap();
+    PlayerBlind = new StringMap();
 
     if (LibraryExists("updater")) {
         Updater_AddPlugin(UPDATE_URL);
@@ -136,6 +137,7 @@ public Action CS_OnTerminateRound(float &delay, CSRoundEndReason &reason)
                                     CPrintToChat(iClient, "%s {default}You've been in Spectator too long!!! Anti-Ghosting is Activated.", PREFIX);
                                 }
                             } else {
+                                g_PlayerData[iClient].bMakeBlind = true;
                                 if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
                                     KickClient(iClient, "Kamu tidak bisa masuk Spectator saat PUG sudah LIVE! Kamu hanya bisa masuk Spectator saat WARMUP atau beli Premium/Premium Plus sekarang juga di froidgaming.net/store");
                                 } else {
@@ -250,7 +252,17 @@ Action altJoin(int iClient, const char[] sCommand, int iArgc)
             }
         } else if ((iTeamLeave == CS_TEAM_NONE && iTeamLeave == CS_TEAM_SPECTATOR)) {
             if (PugSetup_GetGameState() == GameState_Live) {
-				CreateTimer(20.0, Timer_DelayJoin, GetClientUserId(iClient), TIMER_FLAG_NO_MAPCHANGE);
+                if (g_PlayerData[iClient].iRoundSpectator >= 2) {
+                    if (!IsFullTeam()) {
+                        if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
+                            KickClient(iClient, "Kamu terlalu lama di Spectator!!! Silahkan masuk CT atau T Team.");
+                        } else {
+                            KickClient(iClient, "You've been in Spectator too long!!! Please Join CT or T Team.");
+                        }
+                    }
+                } else {
+                    CreateTimer(20.0, Timer_DelayJoin, GetClientUserId(iClient), TIMER_FLAG_NO_MAPCHANGE);
+                }
 			} else {
 				return Plugin_Continue;
 			}
@@ -301,6 +313,7 @@ public void OnMapStart()
     PlayerConnect.Clear();
     PlayerRoundSpectator.Clear();
     PlayerRoundGhost.Clear();
+    PlayerBlind.Clear();
 }
 
 public void OnMapEnd()
@@ -309,6 +322,7 @@ public void OnMapEnd()
     PlayerConnect.Clear();
     PlayerRoundSpectator.Clear();
     PlayerRoundGhost.Clear();
+    PlayerBlind.Clear();
 }
 
 public void OnClientPostAdminCheck(int iClient)
@@ -331,11 +345,16 @@ public void OnClientPostAdminCheck(int iClient)
         g_PlayerData[iClient].iRoundGhost = iTempRoundGhost;
     }
 
+    bool iTempBlind;
+    if (PlayerBlind.GetValue(g_PlayerData[iClient].sAuthID, iTempBlind)) {
+        g_PlayerData[iClient].bMakeBlind = iTempBlind;
+    }
 
     if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
         PrintToConsole(iClient, "==================================");
         PrintToConsole(iClient, "Your Current Round Ghost : %i", g_PlayerData[iClient].iRoundGhost);
         PrintToConsole(iClient, "Your Current Round Spectator : %i", g_PlayerData[iClient].iRoundSpectator);
+        PrintToConsole(iClient, "Your Current Blind Status : %s", g_PlayerData[iClient].bMakeBlind == true ? "true" : "false");
         PrintToConsole(iClient, "==================================");
     }
 
@@ -375,7 +394,9 @@ public void OnClientDisconnect(int iClient)
         return;
     }
 
+    PlayerRoundSpectator.SetValue(g_PlayerData[iClient].sAuthID, g_PlayerData[iClient].iRoundSpectator);
     PlayerRoundGhost.SetValue(g_PlayerData[iClient].sAuthID, g_PlayerData[iClient].iRoundGhost);
+    PlayerBlind.SetValue(g_PlayerData[iClient].sAuthID, g_PlayerData[iClient].bMakeBlind);
 
     g_PlayerData[iClient].Reset();
 }

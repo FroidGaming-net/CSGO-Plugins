@@ -7,6 +7,7 @@ StringMap PlayerCooldown;
 StringMap PlayerConnect;
 StringMap PlayerRoundSpectator;
 StringMap PlayerRoundGhost;
+StringMap PlayerBlind;
 
 enum struct PlayerData
 {
