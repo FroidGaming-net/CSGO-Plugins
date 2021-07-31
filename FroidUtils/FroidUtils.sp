@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2.1"
+#define VERSION "1.2.2"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -77,20 +77,22 @@ public Action Timer_Setting(Handle hTimer)
 
 public Action Timer_Repeat(Handle hTimer)
 {
-    for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
-		if (IsValidClient(iClient)) {
-			if (GetClientTeam(iClient) == CS_TEAM_SPECTATOR) {
-                if (g_PlayerData[iClient].bMakeBlind == true) {
-                    SetClientViewEntity(iClient, 0);
-                    SDKHook(iClient, SDKHook_SetTransmit, DontSee);
-                    g_cDisableRadar.ReplicateToClient(iClient, "1");
-                    g_cForceCamera.ReplicateToClient(iClient, "2");
+    if (PugSetup_GetGameState() == GameState_Live) {
+        for (int iClient = 1; iClient < MAXPLAYERS; iClient++) {
+            if (IsValidClient(iClient)) {
+                if (GetClientTeam(iClient) == CS_TEAM_SPECTATOR) {
+                    if (g_PlayerData[iClient].bMakeBlind == true) {
+                        SetClientViewEntity(iClient, 0);
+                        SDKHook(iClient, SDKHook_SetTransmit, DontSee);
+                        g_cDisableRadar.ReplicateToClient(iClient, "1");
+                        g_cForceCamera.ReplicateToClient(iClient, "2");
+                    }
+                } else {
+                    SetClientViewEntity(iClient, iClient);
+                    SDKUnhook(iClient, SDKHook_SetTransmit, DontSee);
+                    g_cDisableRadar.ReplicateToClient(iClient, "0");
+                    g_cForceCamera.ReplicateToClient(iClient, "1");
                 }
-			} else {
-                SetClientViewEntity(iClient, iClient);
-                SDKUnhook(iClient, SDKHook_SetTransmit, DontSee);
-				g_cDisableRadar.ReplicateToClient(iClient, "0");
-                g_cForceCamera.ReplicateToClient(iClient, "1");
             }
         }
     }
@@ -252,6 +254,15 @@ Action altJoin(int iClient, const char[] sCommand, int iArgc)
             }
         } else if ((iTeamLeave == CS_TEAM_NONE && iTeamLeave == CS_TEAM_SPECTATOR)) {
             if (PugSetup_GetGameState() == GameState_Live) {
+                // By Default sudah aktif maka langsung kasih warning saat join Spectator saat LIVE
+                if (g_PlayerData[iClient].bMakeBlind == true) {
+                    if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
+                        CPrintToChat(iClient, "%s {default}Kamu terlalu lama di Spectator!!! Anti-Ghosting di Aktifkan.", PREFIX);
+                    } else {
+                        CPrintToChat(iClient, "%s {default}You've been in Spectator too long!!! Anti-Ghosting is Activated.", PREFIX);
+                    }
+                }
+
                 if (g_PlayerData[iClient].iRoundSpectator >= 2) {
                     if (!IsFullTeam()) {
                         if (StrEqual(g_PlayerData[iClient].sCountryCode, "ID")) {
@@ -351,6 +362,9 @@ public void OnClientPostAdminCheck(int iClient)
     if (PlayerBlind.GetValue(g_PlayerData[iClient].sAuthID, iTempBlind)) {
         g_PlayerData[iClient].bMakeBlind = iTempBlind;
     }
+
+    // By Default set Blind for Spectator
+    g_PlayerData[iClient].bMakeBlind = true;
 
     if (CheckCommandAccess(iClient, "sm_froidapp_root", ADMFLAG_ROOT)) {
         PrintToConsole(iClient, "==================================");
