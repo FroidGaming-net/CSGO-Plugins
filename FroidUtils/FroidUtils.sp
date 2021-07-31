@@ -15,7 +15,7 @@
 #pragma tabsize 4
 
 /* Plugin Info */
-#define VERSION "1.2.0"
+#define VERSION "1.2.1"
 #define UPDATE_URL "https://sys.froidgaming.net/FroidUtils/updatefile.txt"
 #define PREFIX "{default}[{lightblue}FroidGaming.net{default}]"
 
@@ -259,6 +259,8 @@ Action altJoin(int iClient, const char[] sCommand, int iArgc)
                         } else {
                             KickClient(iClient, "You've been in Spectator too long!!! Please Join CT or T Team.");
                         }
+                    } else {
+                        CreateTimer(20.0, Timer_DelayJoin, GetClientUserId(iClient), TIMER_FLAG_NO_MAPCHANGE);
                     }
                 } else {
                     CreateTimer(20.0, Timer_DelayJoin, GetClientUserId(iClient), TIMER_FLAG_NO_MAPCHANGE);
