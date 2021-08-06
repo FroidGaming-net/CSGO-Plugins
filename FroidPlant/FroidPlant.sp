@@ -111,6 +111,10 @@ public void OnClientDisconnect(int iClient)
 
 public void Event_BombBeginPlant(Event event, const char[] name, bool dontBroadcast)
 {
+    if (!Retakes_Live()) {
+        return;
+    }
+
     int iClient = GetClientOfUserId(GetEventInt(event, "userid"));
 
     if (!IsValidClient(iClient)) {
@@ -122,6 +126,10 @@ public void Event_BombBeginPlant(Event event, const char[] name, bool dontBroadc
 
 public Action Timer_DelayPlant(Handle timer, any data)
 {
+    if (!Retakes_Live()) {
+        return;
+    }
+
 	int iClient = GetClientOfUserId(data);
 
 	if (!IsValidClient(iClient)) {
@@ -157,6 +165,10 @@ public Action Timer_DelayPlant(Handle timer, any data)
 
 public void Event_BombPlanted(Event event, const char[] name, bool dontBroadcast)
 {
+    if (!Retakes_Live()) {
+        return;
+    }
+
     for (int i = 1; i <= MaxClients; i++) {
         if (IsValidClient(i)) {
             Retakes_SetRoundPoints(i, 0);
