@@ -181,12 +181,20 @@ enum struct eClientInfo
 
     bool Alive()
     {
-        return IsPlayerAlive(this.edict);
+        if (IsValidClient(this.edict)) {
+            return IsPlayerAlive(this.edict);
+        } else {
+            return false;
+        }
     }
 
     int Team()
     {
-        return GetClientTeam(this.edict);
+        if (IsValidClient(this.edict)) {
+            return GetClientTeam(this.edict);
+        } else {
+            return CS_TEAM_NONE;
+        }
     }
 
 }
