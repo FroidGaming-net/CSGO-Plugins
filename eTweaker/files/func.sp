@@ -509,40 +509,61 @@ stock void eTwekaer_SetClientTeamGloves(int client, int iGlovesDefIndex, int iSk
 
 stock void eTweaker_AttachGloveSkin(int client, int iGlovesDefIndex, int iSkinDefIndex)
 {
-    eTweaker_RemoveClientGloves(client);
+    // eTweaker_RemoveClientGloves(client);
+
+    int iEnt = GetEntPropEnt(client, Prop_Send, "m_hMyWearables");
+    if(iEnt != -1)
+    {
+        AcceptEntityInput(iEnt, "KillHierarchy");
+    }
+
+    FixCustomArms(client);
 
     int iGloves = CreateEntityByName("wearable_item");
     if(iGloves != -1 && iGlovesDefIndex != -1 && iSkinDefIndex != -1)
     {
-        char szGloveWorldModel[PLATFORM_MAX_PATH];
-        eItems_GetGlovesWorldModelByDefIndex(iGlovesDefIndex, szGloveWorldModel, sizeof(szGloveWorldModel));
+        // char szGloveWorldModel[PLATFORM_MAX_PATH];
+        // eItems_GetGlovesWorldModelByDefIndex(iGlovesDefIndex, szGloveWorldModel, sizeof(szGloveWorldModel));
         // int iGloveModelIndex = PrecacheModel(szGloveWorldModel, true);
 
-        SetEntProp(iGloves, Prop_Send, "m_bInitialized", 1);
+        // KGNS Gloves
+        SetEntProp(iGloves, Prop_Send, "m_iItemIDLow", -1);
         SetEntProp(iGloves, Prop_Send, "m_iItemDefinitionIndex", iGlovesDefIndex);
+        SetEntProp(iGloves, Prop_Send, "m_nFallbackPaintKit", iSkinDefIndex);
+        SetEntPropFloat(iGloves, Prop_Send, "m_flFallbackWear", 0.0001);
+        SetEntPropEnt(iGloves, Prop_Send, "m_hOwnerEntity", client);
+        SetEntPropEnt(iGloves, Prop_Data, "m_hParent", client);
+        SetEntPropEnt(iGloves, Prop_Data, "m_hMoveParent", client);
+        SetEntProp(iGloves, Prop_Send, "m_bInitialized", 1);
+        DispatchSpawn(iGloves);
+        SetEntPropEnt(client, Prop_Send, "m_hMyWearables", iGloves);
+        SetEntProp(client, Prop_Send, "m_nBody", 1);
+        // SetEntityModel(iGloves, szGloveWorldModel);
+
+        // Custom
         SetEntProp(iGloves, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
         SetEntProp(iGloves, Prop_Send, "m_iItemIDHigh", 0);
         SetEntProp(iGloves, Prop_Send, "m_OriginalOwnerXuidLow", 0);
         SetEntProp(iGloves, Prop_Send, "m_OriginalOwnerXuidHigh", 0);
-        SetEntProp(iGloves, Prop_Send, "m_iItemIDLow", -1);
-        SetEntProp(iGloves, Prop_Send, "m_nFallbackPaintKit", iSkinDefIndex);
         SetEntProp(iGloves, Prop_Send, "m_iEntityQuality", 4);
-        SetEntPropFloat(iGloves, Prop_Send, "m_flFallbackWear", 0.0001);
-        SetEntPropEnt(iGloves, Prop_Send, "m_hOwnerEntity", client);
         // SetEntProp(iGloves, Prop_Send, "m_nModelIndex", iGloveModelIndex);
-        SetEntPropEnt(iGloves, Prop_Data, "m_hParent", client);
-        SetEntPropEnt(iGloves, Prop_Data, "m_hOwnerEntity", client);
-        SetEntPropEnt(iGloves, Prop_Data, "m_hMoveParent", client);
-        SetEntProp(client, Prop_Send, "m_nBody", 1);
-        SetEntityModel(iGloves, szGloveWorldModel);
         SetEntProp(iGloves, Prop_Send, "m_iTeamNum", GetClientTeam(client));
-        SetEntProp(client, Prop_Send, "m_nBody", 1);
-        SetEntPropString(client, Prop_Send, "m_szArmsModel", "");
-        SDKCall(g_hGiveWearableCall, client, iGloves);
+
+        // SDKCall(g_hGiveWearableCall, client, iGloves);
         eTweaker_RefreshVM(client);
         ClientInfo[client].GlovesEntReference = EntIndexToEntRef(iGloves);
         //SDKHook(iGloves, SDKHook_SetTransmit, EventSDK_SetTransmit);
     }
+}
+
+stock void FixCustomArms(int client)
+{
+	char temp[2];
+	GetEntPropString(client, Prop_Send, "m_szArmsModel", temp, sizeof(temp));
+	if(temp[0])
+	{
+		SetEntPropString(client, Prop_Send, "m_szArmsModel", "");
+	}
 }
 
 stock void eTweaker_RemoveClientGloves(int client)
@@ -559,7 +580,7 @@ stock void eTweaker_RemoveClientGloves(int client)
         ClientInfo[client].GlovesEntReference = INVALID_ENT_REFERENCE;
     }
 
-    SDKCall(g_hRemoveWearableCall, client);
+    // SDKCall(g_hRemoveWearableCall, client);
     SetEntPropString(client, Prop_Send, "m_szArmsModel", "");
     eTweaker_RefreshVM(client);
 }
@@ -605,11 +626,11 @@ stock void eTweaker_EquipGloves(int client, bool bRemoveGloves = false)
     //     return;
     // }
 
-    if(bRemoveGloves)
-    {
-        eTweaker_RemoveClientGloves(client);
-        return;
-    }
+    // if(bRemoveGloves)
+    // {
+    //     eTweaker_RemoveClientGloves(client);
+    //     return;
+    // }
 
     int iGloveDefIndex = -1;
     int iSkinDefIndex = -1;

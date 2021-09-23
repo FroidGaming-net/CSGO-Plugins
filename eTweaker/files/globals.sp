@@ -11,8 +11,8 @@ int g_iStickersSetsCount;
 int g_iStickersCount;
 int g_iPatchesCount;
 
-Handle g_hGiveWearableCall;
-Handle g_hRemoveWearableCall;
+// Handle g_hGiveWearableCall;
+// Handle g_hRemoveWearableCall;
 
 Database g_hDatabase = null;
 int g_iDatabaseVersion = -1;

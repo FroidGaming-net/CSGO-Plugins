@@ -29,6 +29,7 @@ public Action Command_Gloves(int client, int args)
     //     return Plugin_Handled;
     // }
 
+    // CPrintToChat(client, "%s Maintenance!", PREFIX);
     Gloves_BuildMainMenu(client);
     return Plugin_Handled;
 }

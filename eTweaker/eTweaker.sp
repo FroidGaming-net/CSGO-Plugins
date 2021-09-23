@@ -77,16 +77,16 @@ public void OnPluginStart()
         SetFailState("gamedata/eTweaker.txt missing");
     }
 
-    int iEquipOffset = hConfig.GetOffset("EquipWearable");
-    StartPrepSDKCall(SDKCall_Player);
-    PrepSDKCall_SetVirtual(iEquipOffset);
-    PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
-    g_hGiveWearableCall = EndPrepSDKCall();
+    // int iEquipOffset = hConfig.GetOffset("EquipWearable");
+    // StartPrepSDKCall(SDKCall_Player);
+    // PrepSDKCall_SetVirtual(iEquipOffset);
+    // PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
+    // g_hGiveWearableCall = EndPrepSDKCall();
 
-    int iRemoveOffset = hConfig.GetOffset("RemoveAllWearables");
-    StartPrepSDKCall(SDKCall_Player);
-    PrepSDKCall_SetVirtual(iRemoveOffset);
-    g_hRemoveWearableCall = EndPrepSDKCall();
+    // int iRemoveOffset = hConfig.GetOffset("RemoveAllWearables");
+    // StartPrepSDKCall(SDKCall_Player);
+    // PrepSDKCall_SetVirtual(iRemoveOffset);
+    // g_hRemoveWearableCall = EndPrepSDKCall();
 
     PTaH(PTaH_GiveNamedItemPre,     Hook, PTaH_OnGiveNamedItemPre);
     PTaH(PTaH_WeaponCanUsePre,      Hook, PTaH_OnWeaponCanUsePre);
@@ -346,7 +346,7 @@ public Action Event_OnPlayerDeath(Event event, const char[] name, bool dontBroad
         }
     }
 
-    eTweaker_RemoveClientGloves(victim);
+    // eTweaker_RemoveClientGloves(victim);
 
     return Plugin_Continue;
 }
